@@ -1,6 +1,6 @@
 ## JMVP : javascript model view presenter  
 
-Is a playground project to explore MPV architectural approach. JMVP object can be found on the global scope and offers basically three functions that returns an objectFactory.
+Is a playground project to explore MVP architectural approach. JMVP object can be found on the global scope and offers basically three functions that returns an objectFactory.
 
 ---
 
