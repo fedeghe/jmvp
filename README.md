@@ -2,6 +2,15 @@
 
 Is a playground project to explore MVP architectural approach. JMVP object can be found on the global scope and offers basically three functions that returns an objectFactory.
 
+## Install
+
+`> npm i`
+
+## Build & run  
+`> npm start`
+
+let the build watch for changes on the source folder; navigate to a basic _w.i.p._ sample on http://localhost:3001
+
 ---
 
 ## Models  
@@ -53,9 +62,9 @@ That's all about _models_.
 ---
 
 ## Views  
-The View
+... todo
 
 ---
 
 ## Presenters 
-The Presenter
+... todo
