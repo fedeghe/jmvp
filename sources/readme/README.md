@@ -138,8 +138,8 @@ var pFact1 = JMVP.Presenter(),
 presenter1.render(trg);
 ```
 
-All good but there is one important thing to remember, the _presenter_ is responsible to pass a handler to the view which will offer for example the onButtonClick on his interface; the _presenter will update the _model_ adding an item to the numbers array and then telling tha view to updated the list through a methoid that have to be defined in the view... to do that, remember that the _presenter_ has two references to the _view_ and the _model_ and also a `init` method to be implemented that will be calle right after rendering.  
-Then seen that we could separate a bit as follows:  
+All good, but there is one important thing to remember, the _presenter_ is responsible to pass a handler to the view which will offer for example the onButtonClick on his interface; the _presenter will update the _model_ adding an item to the numbers array and then will tell the view to update the list through a method that have to be defined in the view... to do that, remembering that the _presenter_ has two references to the _view_ and the _model_, it allows to define an `init` method that will be called right after rendering.  
+Then we could do better as follows:  
 
 ``` js
 // Model
