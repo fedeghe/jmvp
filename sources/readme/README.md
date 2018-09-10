@@ -39,7 +39,7 @@ var model1 = mFact1({
 //
 model1.setEmail('federico.ghedina@gmail.com'); // fixed 
 ```
-the only method available (excluding shipped setters & getters) is `defineMethod` that allow to add a method to all models created calling `mFact1` :
+the only method available (excluding shipped setters & getters) is `defineMethod` that allow to add a method to **all** models created calling `mFact1` :
 ``` js
 model1.defineMethod('summarize', function () {
     // here the context is the model
