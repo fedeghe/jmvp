@@ -1,6 +1,7 @@
 
 // a target node for the samples below
-var trg = document.getElementById('trg');
+var trg = document.getElementById('trg'),
+    trg2 = document.getElementById('trg2');
 /**
  * MODEL
  */
@@ -21,9 +22,9 @@ var v = JMVP.View(),
     <span>{name}:</span>
     <span> {number}</span>
     <span> clicks</span>
-    <hr>
+    <br>
     <span>{name} - {surname}</span>
-    <hr>
+    <br>
     <span>{surname}</span>
     <ul></ul>
 </div>
@@ -180,6 +181,6 @@ p1.render(trg);
 
     // finallly render
     //
-    presenter.render(trg);
+    presenter.render(trg2);
 
 })();
