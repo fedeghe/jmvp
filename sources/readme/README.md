@@ -195,3 +195,5 @@ presenter.init = function () {
 //
 presenter.render(trg);
 ```
+
+That's all for the moment.
