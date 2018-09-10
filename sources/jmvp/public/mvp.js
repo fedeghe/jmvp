@@ -28,17 +28,17 @@ NS.View = function (tpl) {
 /**
  * Presenter
  */
-NS.Presenter = function (viewObj, modelObj) {
-    function presenter(v, m) {
-        this.view = v;
+NS.Presenter = function (modelObj, viewObj) {
+    function presenter(m, v) {
         this.model = m;
+        this.view = v;
     };
     jmvp.extends(presenter, Presenter);
-    return function _presenter(v, m) {
-        v = v || viewObj;
+    return function _presenter(m, v) {
         m = m || modelObj;
-        var ret = new presenter(v, m);
-        presenter.super(ret, v, m);
+        v = v || viewObj;
+        var ret = new presenter(m, v);
+        presenter.super(ret, m, v);
         return ret;
     };
 };

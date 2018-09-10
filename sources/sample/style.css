@@ -1,6 +1,6 @@
 body {
-    background-color:#555;
-    color:#aaa;
+    background-color:#fff;
+    color:#555;
     font-family:verdana;
 
 }
@@ -11,6 +11,10 @@ div{
     cursor:pointer;
     color:green;
     font-weight:bold;
+}
+a {
+    color:blue;
+    text-decoration:none;
 }
 
 .not-selectable {
