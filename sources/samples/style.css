@@ -1,0 +1,13 @@
+body {
+    background-color:#fff;
+    color:#555;
+    font-family:verdana;
+    margin:2em;
+}
+a{
+    color:#00f;
+    text-decoration: none;
+}
+a:hover{
+    color:#080;
+}

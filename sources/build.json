@@ -1,10 +1,10 @@
 {
     "EXE": [
-        "rm -rf sample",
-        "mkdir sample"
+        "rm -rf samples",
+        "mkdir samples"
     ],
-    "sources/sample/index.html": "sample -plugins=malta-browser-refresh[files:\"*\"]...malta-dev-srv[folder:\"sample\"]",
-    "sources/jmvp/jmvp.js": "sample -plugins=malta-millijs -vars=sources/vars.json",
+    "sources/jmvp/jmvp.js": "samples -plugins=malta-millijs -vars=sources/vars.json",
     "sources/readme/build.json" : true,
-    "sources/sample/build.json": true
+
+    "sources/samples/build.json": true
 }

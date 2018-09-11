@@ -29,9 +29,9 @@ View.prototype._refs = function () {
 View.prototype.setModel = function (model) {
     (function dig(node) {
         var i = 0,
-        childs = node.childNodes,
-        l = childs.length,
-        tmp, vname;
+            childs = node.childNodes,
+            l = childs.length,
+            tmp, vname;
         if (node.nodeName === '#text') {
             while(tmp = node.textContent.match(/{([^}]*)}/)) {
                 vname = tmp && tmp[1];
@@ -62,6 +62,7 @@ View.prototype.defineMethod = function (name, func) {
     this[name] = func.bind(this);
 };
 
+// what about memoization?
 View.prototype.getNode = function () {
     var a = [].slice.call(arguments),
         ret = this,

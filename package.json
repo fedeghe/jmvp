@@ -13,7 +13,7 @@
   "devDependencies": {
     "malta": "^3.8.12",
     "malta-browser-refresh": "^1.2.1",
-    "malta-dev-srv": "^1.0.4",
+    "malta-dev-srv": "^1.0.5",
     "malta-js-obfuscator": "^1.0.8",
     "malta-millijs": "^1.0.2"
   }

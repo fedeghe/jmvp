@@ -1,0 +1,5 @@
+{
+    "sources/samples/index.html": "samples -plugins=malta-browser-refresh[files:\"*\"]...malta-dev-srv[folder:\"samples\"]",
+    "sources/samples/script.js": "samples",
+    "sources/samples/style.css": "samples"
+}

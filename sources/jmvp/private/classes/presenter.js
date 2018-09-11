@@ -9,7 +9,7 @@ Presenter.prototype.setModel = function (model) {
     this.model = model;
 };
 Presenter.prototype.setView = function (view) {
-    this.model = view;
+    this.view = view;
 };
 
 Presenter.prototype.setHandler = function () {
