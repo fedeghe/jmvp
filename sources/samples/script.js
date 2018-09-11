@@ -21,19 +21,27 @@
         </div>`),
 
         listModel2 = modelListF({
-            defaultTitle: 'Some more examples',
-            title: 'Some examples',
+            title: 'Some more examples',
             examples: [{
                 label: 'first more example',
                 link: 'sample3/'
             }, {
                 label: 'second more example',
                 link: 'sample4/'
+            }, {
+                label: 'third more example',
+                link: 'sample5/'
+            }, {
+                label: 'fourth more example',
+                link: 'sample6/'
+            }, {
+                label: 'fifth more example',
+                link: 'sample7/'
             }]
         }),
         listView2 = viewListF(`<div>
-            <h2>$[title] xxx</h2>
-            <ul></ul>
+            <h2 class="red">$[title]</h2>
+            <ul class="nolist"></ul>
             <span>back</span>
         </div>`),
 
