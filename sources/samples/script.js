@@ -21,6 +21,7 @@
         </div>`),
 
         listModel2 = modelListF({
+            defaultTitle: 'Some more examples',
             title: 'Some more examples',
             examples: [{
                 label: 'first more example',
@@ -55,6 +56,7 @@
         var item = document.createElement('li'),
             a = document.createElement('a');
         a.setAttribute('href', el.link);
+        a.setAttribute('target', '_blank');
         a.innerHTML = el.label;
         item.appendChild(a);
         this.getNode([1]).appendChild(item);
@@ -80,17 +82,18 @@
             },
             init: function () {
                 this.init = function () {
-                    console.log('INIT')
-                    console.log('---')
+                    console.log('first App')
+                    
                     var self = this;
                     
                     this.loadList();
-
-                    this.setHandler([1], 'mouseout', function (e) {
+                    
+                    this.setHandler([1], 'mouseout', function () {
                         self.model.setTitle(self.model.getDefaultTitle());
                         self.view.setTitle(self.model.getTitle());
                     });
-                    this.setHandler([2], 'click', function (e) {
+
+                    this.setHandler([2], 'click', function () {
                         App('second');
                     });
 
@@ -115,8 +118,8 @@
             model: listModel2,
             init: function () {
                 this.init = function () {
-                    console.log('INIT2')
-                    console.log('---')
+
+                    console.log('second App');
                     this.loadList();
                     this.setHandler([2], 'click', function (e) {
                         App('init');

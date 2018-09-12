@@ -13,7 +13,6 @@ Presenter.prototype.setView = function (view) {this.view = view;};
 Presenter.prototype.setModel = function (model) {this.model = model;};
 
 Presenter.prototype.reset = function (resetDefined) {
-    // this.init = function (){};
     if (resetDefined) {
         this._resetDefineMethod();
     }
@@ -34,7 +33,7 @@ Presenter.prototype.setHandler = function () {
 };
 
 Presenter.prototype.getNode = function () {
-    return this.view.node;
+    return this.view.getNode.apply(this.view, arguments);
 };
 
 Presenter.prototype._resetDefineMethod = function () {
