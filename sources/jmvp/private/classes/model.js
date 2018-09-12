@@ -45,7 +45,6 @@ Model.prototype.getData = function(){ return this._data;};
 
 Model.prototype.defineMethod = function (name, func){
     notValidModel(name, 'method');
-    
     this.constructor.prototype[name] = func;
 };
 

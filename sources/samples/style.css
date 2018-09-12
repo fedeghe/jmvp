@@ -11,3 +11,9 @@ a{
 a:hover{
     color:#080;
 }
+.red {
+    color:red;
+}
+.nolist{
+    list-style-type: lower-greek;    
+}
