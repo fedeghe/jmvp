@@ -1,0 +1,1 @@
+$$public/polyfills/object.assign.js$$

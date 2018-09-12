@@ -71,7 +71,9 @@
         init: {
             view: listView,
             model: listModel,
-            defs: function () {
+            defs: function (params) {
+                console.log('first App defs');
+                console.log(params);
                 this.defineMethod('loadList', function () {
                     this.view.resetList();
                     var examples = this.model.getExamples();
@@ -80,9 +82,10 @@
                     }
                 });
             },
-            init: function () {
+            init: function (params) {
                 this.init = function () {
-                    console.log('first App')
+                    console.log('first App init');
+                    console.log(params);
                     
                     var self = this;
                     
@@ -94,7 +97,7 @@
                     });
 
                     this.setHandler([2], 'click', function () {
-                        App('second');
+                        App('second', {number:1, name:'fede'});
                     });
 
                     this.setHandler([1], 'mouseover', function (e) {
@@ -116,19 +119,21 @@
         second: {
             view: listView2,
             model: listModel2,
-            init: function () {
+            init: function (params) {
                 this.init = function () {
-
-                    console.log('second App');
+                    console.log('second App init');
+                    console.log(params);
                     this.loadList();
-                    this.setHandler([2], 'click', function (e) {
-                        App('init');
+                    this.setHandler([2], 'click', function () {
+                        App('init', {int: 4, surname:'ghedina', address: 'kudam 74'});
                     });
                 }
             }
         }
-    })
+    });
 
-    App('init', document.getElementById('trg'));
+    App('init', {
+        trg: document.getElementById('trg')
+    });
     
 })();

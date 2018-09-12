@@ -1,0 +1,9 @@
+{
+    "EXE": [
+        "rm -rf samples/sample1",
+        "mkdir -p samples/sample1"
+    ],
+    "sources/samples/sample1/index.html": "samples/sample1 -plugins=malta-browser-refresh[files:\"*\"]",
+    "sources/samples/sample1/script.js": "samples/sample1",
+    "sources/samples/sample1/style.css": "samples/sample1"
+}

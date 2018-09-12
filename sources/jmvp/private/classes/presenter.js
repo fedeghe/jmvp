@@ -58,11 +58,10 @@ Presenter.prototype.render = function (trg) {
 };
 
 Presenter.prototype.getSetupsManager = function (setups) {
-    var self = this,
-        mode = null;
-    this._setups = setups;
-    return function(setupName, trg){
-        self.trg = trg || self.trg;
+    var self = this;
+    this._setups = Object.assign(this._setups, setups);
+    return function(setupName, params){
+        self.trg = (params && params.trg) || self.trg;
         var mode, gotDefs, gotInit;
         if (setupName in self._setups) {
             
@@ -75,8 +74,8 @@ Presenter.prototype.getSetupsManager = function (setups) {
             self.setView(mode.view);
             
             mode.view.model == null && mode.view.setModel(mode.model);
-            gotDefs && self._setups[setupName].defs.call(self);
-            gotInit && self._setups[setupName].init.call(self);
+            gotDefs && self._setups[setupName].defs.call(self, params);
+            gotInit && self._setups[setupName].init.call(self, params);
             self.render();
             return true;
         }
