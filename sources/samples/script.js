@@ -67,8 +67,12 @@
     });
 
 
-    var App = listPresenter.getSetupsManager({
-        init: {
+    var App = listPresenter.getSetupsManager('init', {
+        init: function () {
+            
+        },
+        first: {
+            route: '/',
             view: listView,
             model: listModel,
             defs: function (params) {
@@ -97,7 +101,7 @@
                     });
 
                     this.setHandler([2], 'click', function () {
-                        App('second', {number:1, name:'fede'});
+                        App.second({number:1, name:'fede'});
                     });
 
                     this.setHandler([1], 'mouseover', function (e) {
@@ -117,6 +121,7 @@
             
         },
         second: {
+            route: '/second',
             view: listView2,
             model: listModel2,
             init: function (params) {
@@ -125,15 +130,16 @@
                     console.log(params);
                     this.loadList();
                     this.setHandler([2], 'click', function () {
-                        App('init', {int: 4, surname:'ghedina', address: 'kudam 74'});
+                        App.first({int: 4, surname:'ghedina', address: 'kudam 74'});
                     });
                 }
             }
         }
     });
 
-    App('init', {
-        trg: document.getElementById('trg')
+    App.first({
+        trg: document.getElementById('trg'),
+        name: 'Federico'
     });
     
 })();

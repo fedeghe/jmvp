@@ -1,11 +1,11 @@
-function Presenter() {
-    this.model = null;
-    this.view = null;
+function Presenter(model, view) {
+    this.model = model || null;
+    this.view = view || null;
     this.trg = null;
-    this._definedOnes = {};
-
+    this._definedMethods = {};
     this._setups= {};
     this._handlersResetFuncs = [];
+    this.defaultRoute = null;
 };
 
 Presenter.prototype.init = function () {};
@@ -13,13 +13,18 @@ Presenter.prototype.setView = function (view) {this.view = view;};
 Presenter.prototype.setModel = function (model) {this.model = model;};
 
 Presenter.prototype.reset = function (resetDefined) {
-    if (resetDefined) {
-        this._resetDefineMethod();
+    try {
+        if (resetDefined) {
+            this._resetDefineMethod();
+        }
+        this._resetHandlers();
+        this.model = null;
+        this.view = null;
+        this.trg.innerHTML = '';
+    } catch (e) {
+        return false;
     }
-    this._resetHandlers();
-    this.model = null;
-    this.view = null;
-    this.trg.innerHTML = '';
+    return true
 };
 
 Presenter.prototype._resetHandlers = function () {
@@ -37,19 +42,22 @@ Presenter.prototype.getNode = function () {
 };
 
 Presenter.prototype._resetDefineMethod = function () {
-    for (var k in this._definedOnes) {
-        delete this._definedOnes[k];
+    for (var k in this._definedMethods) {
+        delete this._definedMethods[k];
     }
-    this._definedOnes = {};
+    this._definedMethods = {};
 };
 Presenter.prototype.defineMethod = function (name, func) {
     // this[name] = func.bind(this);
     this.constructor.prototype[name] = func;
-    this._definedOnes[name] = true;
+    this._definedMethods[name] = true;
 };
 
 Presenter.prototype.render = function (trg) {
     if (trg) this.trg = trg;
+    if (!this.view) {
+        throw 'ERROR: presenter with no view'
+    }
     if (!this.view.model) {
         throw 'ERROR: view with no model'
     }
@@ -57,29 +65,23 @@ Presenter.prototype.render = function (trg) {
     this.trg && this.trg.appendChild(this.getNode());
 };
 
-Presenter.prototype.getSetupsManager = function (setups) {
-    var self = this;
+Presenter.prototype.getSetupsManager = function (defaultRoute, setups) {
+    this.defaultRoute = defaultRoute;
     this._setups = Object.assign(this._setups, setups);
-    return function(setupName, params){
-        self.trg = (params && params.trg) || self.trg;
-        var mode, gotDefs, gotInit;
-        if (setupName in self._setups) {
-            
-            mode = self._setups[setupName];
-            gotDefs = 'defs' in mode;
-            gotInit = 'init' in mode;
-            
-            self.reset(gotDefs);
-            self.setModel(mode.model);
-            self.setView(mode.view);
-            
-            mode.view.model == null && mode.view.setModel(mode.model);
-            gotDefs && self._setups[setupName].defs.call(self, params);
-            gotInit && self._setups[setupName].init.call(self, params);
-            self.render();
-            return true;
-        }
-        return false;
-    }
+    return new App(this, setups);
 };
 
+function getRouteApp(setups) {
+    var ret = {
+            route: {},
+            app: {},
+        },
+        app;
+    for (app in setups) {
+        if (setups.hasOwnProperty(app)) {
+            ret.route[setups[app].route] = app;
+            ret.app[app] = setups[app].route;
+        }
+    }
+    return ret;
+}

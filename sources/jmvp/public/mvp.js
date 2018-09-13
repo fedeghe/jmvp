@@ -1,7 +1,6 @@
 /**
  * Model
  */
-
 NS.Model = function (data) {
     function model(d) { this._data = d || data; };
     jmvp.extends(model, Model);
@@ -42,8 +41,3 @@ NS.Presenter = function (modelObj, viewObj) {
         return ret;
     };
 };
-
-
-
-
-
