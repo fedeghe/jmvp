@@ -67,9 +67,9 @@
     });
 
 
-    var App = listPresenter.getSetupsManager('init', {
+    var App = listPresenter.getSetupsManager({
         init: function () {
-            
+            console.log('Started');
         },
         first: {
             route: '/',

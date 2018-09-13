@@ -5,7 +5,6 @@ function Presenter(model, view) {
     this._definedMethods = {};
     this._setups= {};
     this._handlersResetFuncs = [];
-    this.defaultRoute = null;
 };
 
 Presenter.prototype.init = function () {};
@@ -65,8 +64,7 @@ Presenter.prototype.render = function (trg) {
     this.trg && this.trg.appendChild(this.getNode());
 };
 
-Presenter.prototype.getSetupsManager = function (defaultRoute, setups) {
-    this.defaultRoute = defaultRoute;
+Presenter.prototype.getSetupsManager = function (setups) {
     this._setups = Object.assign(this._setups, setups);
     return new App(this, setups);
 };
