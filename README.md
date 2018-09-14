@@ -42,8 +42,8 @@ model1.setEmail('federico.ghedina@gmail.com'); // fixed
 the only method available (excluding shipped setters & getters) is `defineMethod` that allow to add a method to **all** models created calling `mFact1` :
 ``` js
 model1.defineMethod('summarize', function () {
-    // here the context is the model
-    return `${this.getName()[0]}.${this.getSurame()[0]}. <${this.getEmail()}>`;
+    // here use model1 for the context
+    return `${model1.getName()[0]}.${model1.getSurame()[0]}. <${model1.getEmail()}>`;
 });
 ```
 now let's try to call it in a different model we create from mFact1
@@ -71,7 +71,7 @@ var vFact1 = JMVP.View(),
         <div>
             <ul></ul>
             <p>An empty list there</p>
-            <p>{name} please ...</p>
+            <p>$[name] please ...</p>
             <button>add a ramdon number</button>
         </div>
     `);
@@ -200,5 +200,50 @@ presenter.init = function () {
 //
 presenter.render(trg);
 ```
+---
+## App
 
-That's all for the moment.
+A single _Presenter_ can manage dynamically the _view_ and the _model_ , so a presenter instance offers a `getSetupsManager` mathod that allows to setup completely one or more MVP setting, reusing the Presenter, but still allowing to rerun the _init_ function:
+
+``` js
+// ...
+// assume factories method already set
+var model1 = modelF({
+        title: 'Tha cat',
+        description: 'The cat jumps in the lake'
+        }),
+    model2 = modelF({author: 'Federico Ghedina'}),
+    view1 = viewF(`<div>
+        <h1>$[title]</h1>
+        <p>$[description]</p>
+        <span>move on</span>
+    </div>`, model1), /// oh, sure u can also pass it there as second param
+    view2 = viewF(`<div>$[author]</div>`, model2),
+    presenter = presenterF();
+
+    var App = presenter.getSetupsManager({
+        initialize: function () {
+            console.log('Called anyway (context the presenter)')
+        },
+        firstSection: {
+            view: view1,
+            // model: model1, // not needed since already set ~10 line above
+            route: '/', //optional, just to show a different url (not reloadable)
+
+            // first define some methods if needed in the presenter
+            defs: function (params) {
+                this.defineMethod('scramble', function () {
+                    this.model.scramble();
+                    this.view.setDescription(this.model.getDescription())
+                });
+            },
+
+            init: function (params) {
+
+            }
+        },
+        secondSection: function (params) {
+            // same structure here
+        }
+    });
+```
