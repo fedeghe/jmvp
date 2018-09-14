@@ -14,12 +14,14 @@ NS.Model = function (data) {
 /**
  * View
  */
-NS.View = function (tpl) {
-    function view(t) { this.tpl = t || tpl; };
+NS.View = function (tpl, model) {
+    function view(t) {
+        this.tpl = t || tpl;
+    };
     jmvp.extends(view, View);
-    return function _view(t) {
-        var ret = new view(t || tpl);
-        view.super(ret, t || tpl);
+    return function _view(t, m) {
+        var ret = new view(t || tpl, m);
+        view.super(ret, t || tpl, m);
         return ret;
     };
 };

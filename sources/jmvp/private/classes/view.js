@@ -1,10 +1,11 @@
-function View(tpl) {
+function View(tpl, model) {
     this.cnt = document.createElement('div');
     this.tpl = tpl.replace(/\r?\n|\r|\t|\s\s/gm, '');
     this.cnt.innerHTML  = this.tpl;
     this.node = this.cnt.childNodes[0];
     this.childs = [];
-    this.model = null;
+    this.model = model || null;
+    model && this.setModel(model);
 };
 
 View.prototype._refs = function () {
