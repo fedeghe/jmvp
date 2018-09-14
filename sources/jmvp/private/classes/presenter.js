@@ -8,7 +8,9 @@ function Presenter(model, view) {
 };
 
 Presenter.prototype.init = function () {};
+
 Presenter.prototype.setView = function (view) {this.view = view;};
+
 Presenter.prototype.setModel = function (model) {this.model = model;};
 
 Presenter.prototype.reset = function (resetDefined) {
@@ -31,6 +33,7 @@ Presenter.prototype._resetHandlers = function () {
         this._handlersResetFuncs[i]();
     }
 };
+
 Presenter.prototype.setHandler = function () {
     var t = this.view.setHandler.apply(this.view, arguments);
     t && this._handlersResetFuncs.push(t);
@@ -46,9 +49,9 @@ Presenter.prototype._resetDefineMethod = function () {
     }
     this._definedMethods = {};
 };
+
 Presenter.prototype.defineMethod = function (name, func) {
-    // this[name] = func.bind(this);
-    this.constructor.prototype[name] = func;
+    this.constructor.prototype[name] = func; //no bind
     this._definedMethods[name] = true;
 };
 

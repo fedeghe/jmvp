@@ -45,11 +45,11 @@ Model.prototype.getData = function(){ return this._data;};
 
 Model.prototype.defineMethod = function (name, func){
     notValidModel(name, 'method');
-    this.constructor.prototype[name] = func;
+    this.constructor.prototype[name] = func; // no bind!!!
 };
 
 function notValidModel(n, type){
     if (n.match(/_setter|_getter|_data|_auto|defineMethod/)) {
-        throw 'Forbidden ' + type + ' `' + n + '`';
+        throw 'Forbidden ' + type + ' "' + n + '"';
     }
 }

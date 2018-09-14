@@ -138,7 +138,7 @@ var pFact1 = JMVP.Presenter(),
 presenter1.render(trg);
 ```
 
-All good, but there is one important thing to remember, the _presenter_ is responsible to pass a handler to the view which will offer for example the onButtonClick on his interface; the _presenter will update the _model_ adding an item to the numbers array and then will tell the view to update the list through a method that have to be defined in the view... to do that, remembering that the _presenter_ has two references to the _view_ and the _model_, it allows to define an `init` method that will be called right after rendering.  
+All good, but there is one important thing to remember, the _presenter_ is responsible to pass a handler to the view which will offer for example the `onButtonClickSetHandler` on his interface; when the user clicks the button the view will call the handler and  the _presenter will update the _model_ adding an item to the numbers array and then will tell the view to update the list through a method that have to be defined in the view... to do that, remembering that the _presenter_ has two references to the _view_ and the _model_, it allows to define an `init` method that will be called right after rendering.  
 Then we could do better as follows:  
 
 ``` js
@@ -157,9 +157,9 @@ var mFact1 = JMVP.Model(),
 var vFact1 = JMVP.View(),
     view = vFact1(`
     <div>
+        <p>A list of numbers</p>
         <ul></ul>
-        <p>An empty list there</p>
-        <p>{name} {surname} please ...</p>
+        <p>{name} $[surname] please ...</p>
         <button>add random</button>
     </div>
 `);
@@ -168,10 +168,13 @@ var vFact1 = JMVP.View(),
 view.setModel(model);
 
 // define add Random 
+view.defineMethod('onButtonClickSetHandler', function (handler) {
+    this.setHandler([3], 'click', handler);
+})
 view.defineMethod('addRandom', function (number) {
     var newNode = document.createElement('li');
     newNode.appendChild(document.createTextNode(number));
-    this.getNode([0]).appendChild(newNode); // ? wtf ? ... wait
+    this.getNode([0]).appendChild(newNode);
 });
 
 // Presenter
@@ -181,14 +184,16 @@ var pFact1 = JMVP.Presenter(),
 
 presenter.defineMethod('add', function () {
     var elements = this.model.getList(),
-        newValue = Math.random();
+        newValue = Math.random().toFixed(3);
     elements.push(newValue);
+    //update model
     this.model.setList(elements);
+    //and view
     this.view.addRandom(newValue);
 })
 
 presenter.init = function () {
-    this.view.setHandler([3], 'click', this.add);
+    this.view.onButtonClickSetHandler(this.add);
 };
 
 // finally render

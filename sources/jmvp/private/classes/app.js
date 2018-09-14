@@ -24,10 +24,7 @@ App.prototype._initPopState = function () {
 };
 
 App.prototype._addSetup = function (_setupName, _setup) {
-    console.log(`setting up ${_setupName}`, _setup);
-
     var presenter = this.presenter;
-
     App.prototype[_setupName] = function (params) {
         var gotDefs = 'defs' in _setup,
             gotInit = 'init' in _setup;

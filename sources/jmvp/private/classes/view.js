@@ -51,8 +51,7 @@ View.prototype.setHandler = function(nodePath, ev, handler) {
 };
 
 View.prototype.defineMethod = function (name, func) {
-    // this[name] = func.bind(this);
-    this.constructor.prototype[name] = func;
+    this.constructor.prototype[name] = func; // no bind!!!
 };
 
 // what about memoization?
@@ -64,7 +63,9 @@ View.prototype.getNode = function () {
         
     for (null; i < l; i++) {
         ret = childs[a[i]]; 
-        if (!ret) throw a + ' not found, handler not settable';
+        if (!ret) {
+            throw a + ' not found, handler not settable';
+        }
         childs = ret.childs;
     }
     return ret && ret.node;
