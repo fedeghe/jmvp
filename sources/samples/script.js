@@ -48,7 +48,6 @@
 
         listPresenter = presenterListF();
 
-
     listView.defineMethod('resetList', function (el) {
         this.getNode([1]).innerHTML = '';
     });
@@ -68,7 +67,7 @@
 
 
     var App = listPresenter.getSetupsManager({
-        init: function () {
+        initialize: function () {
             console.log('Started');
         },
         first: {
@@ -76,8 +75,6 @@
             view: listView,
             model: listModel,
             defs: function (params) {
-                console.log('first App defs');
-                console.log(params);
                 this.defineMethod('loadList', function () {
                     this.view.resetList();
                     var examples = this.model.getExamples();
@@ -87,36 +84,33 @@
                 });
             },
             init: function (params) {
-                this.init = function () {
-                    console.log('first App init');
-                    console.log(params);
-                    
-                    var self = this;
-                    
-                    this.loadList();
-                    
-                    this.setHandler([1], 'mouseout', function () {
-                        self.model.setTitle(self.model.getDefaultTitle());
-                        self.view.setTitle(self.model.getTitle());
-                    });
+                console.log('first App init');
+                console.log(params);
+                
+                var self = this;
+                
+                this.loadList();
+                
+                this.setHandler([1], 'mouseout', function () {
+                    self.model.setTitle(self.model.getDefaultTitle());
+                    self.view.setTitle(self.model.getTitle());
+                });
 
-                    this.setHandler([2], 'click', function () {
-                        App.second({number:1, name:'fede'});
-                    });
+                this.setHandler([2], 'click', function () {
+                    App.second({number:1, name:'fede'});
+                });
 
-                    this.setHandler([1], 'mouseover', function (e) {
-                        var trg = e.target,
-                            name = trg.nodeName;
-                        switch (name) {
-                            case 'A':
-                                self.model.setTitle('Open `' + trg.innerHTML + '`');
-                                self.view.setTitle(self.model.getTitle());
-                                break;
-                            default: break;
-                        }
-                    });
-
-                };
+                this.setHandler([1], 'mouseover', function (e) {
+                    var trg = e.target,
+                        name = trg.nodeName;
+                    switch (name) {
+                        case 'A':
+                            self.model.setTitle('Open `' + trg.innerHTML + '`');
+                            self.view.setTitle(self.model.getTitle());
+                            break;
+                        default: break;
+                    }
+                });
             }
             
         },
@@ -125,14 +119,12 @@
             view: listView2,
             model: listModel2,
             init: function (params) {
-                this.init = function () {
-                    console.log('second App init');
-                    console.log(params);
-                    this.loadList();
-                    this.setHandler([2], 'click', function () {
-                        App.first({int: 4, surname:'ghedina', address: 'kudam 74'});
-                    });
-                }
+                console.log('second App init');
+                console.log(params);
+                this.loadList();
+                this.setHandler([2], 'click', function () {
+                    App.first({int: 4, surname:'ghedina', address: 'kudam 74'});
+                });
             }
         }
     });
