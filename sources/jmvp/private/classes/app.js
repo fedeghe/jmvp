@@ -6,8 +6,8 @@ function App(presenter, _setups) {
             this._addSetup(i, _setups[i]);
         }
     }
-    if ('init' in _setups){
-        _setups['init'].call(this.presenter);
+    if ('initialize' in _setups){
+        _setups['initialize'].call(this.presenter);
     }
     this._setups = _setups;
     this._routesApp = getRouteApp(_setups);
@@ -34,12 +34,17 @@ App.prototype._addSetup = function (_setupName, _setup) {
         _setup.route && window.history.pushState(params, null, _setup.route);
 
         presenter.reset(gotDefs);
-        presenter.setModel(_setup.model);
+        
+        _setup.model && presenter.setModel(_setup.model);
         presenter.setView(_setup.view);
 
         _setup.view.model == null && _setup.view.setModel(_setup.model);
+        presenter.model || presenter.setModel(presenter.view.model);
         gotDefs && _setup.defs.call(presenter, params);
-        gotInit && _setup.init.call(presenter, params);
+        // gotInit && _setup.init.call(presenter, params);
+        if (gotInit) presenter.init = function () {
+            _setup.init.call(presenter, params);
+        };
         presenter.render();
         return true;
     }
