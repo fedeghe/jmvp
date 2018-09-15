@@ -1,9 +1,9 @@
 {
     "EXE": [
         "rm -rf samples",
-        "mkdir samples"
+        "mkdir -p samples/x"
     ],
-    "sources/jmvp/jmvp.js": "samples -plugins=malta-js-uglify -vars=sources/vars.json",
+    "sources/jmvp/jmvp.js": "samples -vars=sources/vars.json",
     "sources/readme/build.json" : true,
     "sources/samples/build.json": true
 }
