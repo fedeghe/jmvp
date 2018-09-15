@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Sample 2: GitHub Widget</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="style.css" rel="stylesheet">
+        <script src="../jmvp.js"></script>
+    </head>
+    <body>
+        <div id="trg"></div>
+        <script src="script.js"></script>
+        <script>
+            (function () {
+                var trg = document.getElementById('trg');
+                App.init({trg: trg});
+            })();
+        </script>
+    </body>
+</html>
