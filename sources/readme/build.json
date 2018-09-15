@@ -1,3 +1,4 @@
 {
-    "sources/readme/README.md": ". -options=showPath:false"
+    "sources/readme/README.md": ". -options=showPath:false",
+    "sources/readme/*.js": "readme"
 }
