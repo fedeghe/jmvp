@@ -10,7 +10,7 @@
                 label: 'first example',
                 link: 'sample1/'
             }, {
-                label: 'second example',
+                label: 'github widget',
                 link: 'sample2/'
             }]
         }),
