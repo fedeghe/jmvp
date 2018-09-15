@@ -2,5 +2,6 @@
     "sources/samples/index.html": "samples -plugins=malta-browser-refresh[files:\"*\"]...malta-dev-srv[folder:\"samples\"]",
     "sources/samples/script.js": "samples",
     "sources/samples/style.css": "samples",
-    "sources/samples/sample1/build.json": true
+    "sources/samples/sample1/build.json": true,
+    "sources/samples/sample2/build.json": true
 }
