@@ -1,4 +1,4 @@
-## JMVP : javascript model view presenter  
+# JMVP : javascript model view presenter  
 
 Is a playground project to explore MVP architectural approach. JMVP object can be found on the global scope and offers basically three functions that returns an objectFactory.
 
@@ -203,47 +203,95 @@ presenter.render(trg);
 ---
 ## App
 
-A single _Presenter_ can manage dynamically the _view_ and the _model_ , so a presenter instance offers a `getSetupsManager` mathod that allows to setup completely one or more MVP setting, reusing the Presenter, but still allowing to rerun the _init_ function:
+A single _Presenter_ can manage dynamically the _view_ and the _model_ , so a presenter instance offers a `getSetupsManager` method that allows to setup completely one or more MVP setting, reusing the Presenter, but still allowing to rerun the _init_ function:
 
 ``` js
-// ...
-// assume factories method already set
+var modelF = JMVP.Model(),
+    viewF = JMVP.View(),
+    presenterF = JMVP.Presenter();
+
 var model1 = modelF({
-        title: 'Tha cat',
-        description: 'The cat jumps in the lake'
-        }),
-    model2 = modelF({author: 'Federico Ghedina'}),
+    title: 'The Cat',
+    description: 'The cat jumps in the lake'
+}),
+    model2 = modelF({ author: 'Federico Ghedina' }),
     view1 = viewF(`<div>
-        <h1>$[title]</h1>
-        <p>$[description]</p>
-        <span>move on</span>
-    </div>`, model1), /// oh, sure u can also pass it there as second param
-    view2 = viewF(`<div>$[author]</div>`, model2),
+            <h1>$[title]</h1>
+            <p>$[description]</p>
+            <a href="#">scramble</a>
+        </div>`, model1), /// oh, sure u can also pass it there as second param
+    view2 = viewF(`<div><span>$[author]</span>&nbsp;<button>back</button></div>`, model2),
     presenter = presenterF();
 
-    var App = presenter.getSetupsManager({
-        initialize: function () {
-            console.log('Called anyway (context the presenter)')
+
+
+var App = presenter.getSetupsManager({
+    initialize: function () {
+        console.log('Called anyway (context the presenter)')
+    },
+    firstSection: {
+        view: view1,
+        // model: model1,
+        // first define some methods if needed in the presenter
+        defs: function (params) {
+            presenter.defineMethod('scramble', function () {
+                presenter.model.scramble();
+                presenter.view.setDescription(presenter.model.getDescription())
+            });
+            presenter.view.defineMethod('setClickHandler', function (cb) {
+                presenter.view.setHandler([2], 'click', cb);
+            });
+            presenter.view.defineMethod('replaceDescription', function (txt) {
+                presenter.view.getNode([1]).innerHTML = txt;
+            })
+            presenter.model.defineMethod('scramble', function () {
+                var desc = presenter.model.getDescription();
+                presenter.model.setDescription(desc.split('').sort(function () { return Math.random() > 0.5 ? 1 : -1 }).join(''));
+            });
         },
-        firstSection: {
-            view: view1,
-            // model: model1, // not needed since already set ~10 line above
-            route: '/', //optional, just to show a different url (not reloadable)
 
-            // first define some methods if needed in the presenter
-            defs: function (params) {
-                this.defineMethod('scramble', function () {
-                    this.model.scramble();
-                    this.view.setDescription(this.model.getDescription())
-                });
-            },
-
-            init: function (params) {
-
-            }
-        },
-        secondSection: function (params) {
-            // same structure here
+        init: function (params) {
+            presenter.view.setClickHandler(function () {
+                presenter.model.scramble();
+                presenter.view.replaceDescription(
+                    presenter.model.getDescription()
+                );
+            });
         }
-    });
+    },
+    secondSection: {
+        view: view2,
+        defs: function () {
+
+        },
+        init: function () {
+
+        },
+    }
+});
+App.firstSection({ trg: trg, other: 'params', that: 'You', may: 'need' });
 ```
+
+Here we can define as many section as needed and the cool thing is that the presenter can also call `App.secondSection` from one of the others section handlers.  
+To see exactly in action it makes sense to do a final almost real-life example.  
+The App consists in a widget that can be loaded into a container which at the very beginning shows:
+- a container with in the middle two buttons, one to login, one to skip
+- if the user press login then:
+    - a form opens to allow the user to login in a github account
+    - if the login does not succeed a warning message appears and the form resets
+    - if the login succeed, then is shown:
+        - a dropdown, with no initial selection, where the user can filter per language
+        - a list of the 30 most ranked repos
+        - a filter to allow the user to see only those repos he starred
+        - a button to logout/login if he is logged in/out
+        - in case the login is shown and pressed, the login modal must be shown
+        - each item shoud show:
+            - the name of the repos (with a link to gh)
+            - a small (in case truncated) description of the repo
+            - the nunmber of stars
+            - a button to star/unstar the repo
+        - the list is dynamic thanks to a 5sec polling
+        - during the whole `mayupdate` request flow the UI is disabled, and a small spinner is shown somewhere
+
+
+- the non github authenticated version, simply let only the user to star repos locally, using the localstorage, there will be anyway a button to login
