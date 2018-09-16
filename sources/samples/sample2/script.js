@@ -5,7 +5,8 @@ var App = (function () {
         presenterF = JMVP.Presenter();
     
     var modelLogin = modelF({
-            message: 'Enter Your auth info and press login button'
+            message: 'Enter Your auth info and press login button',
+            loggedIn: false
         }),
         viewLogin = viewF(`
             <div>
@@ -26,12 +27,12 @@ var App = (function () {
         
         modelList = modelF({
             list: [],
+            languages: $LANGUAGES$,
             loggedIn: false
         }),
         viewList = viewF(`<div>Logged in</div>`, modelList),
 
         presenter = presenterF();
-
 
     var App =  presenter.getSetupsManager({
         initialize: function () {
@@ -72,19 +73,22 @@ var App = (function () {
                         });
 
                     }).catch(function (e) {
-                        console.log('ERROR')
+                        console.log('ERROR');
                         console.log(e);
                         p.updateMessage('User or password incorrect.please try again');
                     });
                 });
-                p.defineMethod('skip', function () {});
+                p.defineMethod('skip', function () {
+                    // App.list();
+                });
             },
             init: function () {
                 var p = this;
-                if (this.model.getLoggedIn) {
+                if (this.model.getLoggedIn()) {
                     App.list();
                 }
-                p.view.setSubmitHandler(p.attemptLogin);                
+                p.view.setSubmitHandler(p.attemptLogin);              
+                p.view.setSkipHandler(p.skip);              
             }
         },
         list: {
