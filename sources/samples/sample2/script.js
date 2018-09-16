@@ -40,18 +40,61 @@ var App = (function () {
         login: {
             view: viewLogin,
             model: modelLogin,
-            defs: function () {},
+            defs: function () {
+                var p = this;
+                p.view.defineMethod('updateMessage', function(m) {
+                    p.view.getNode(0, 7).innerHTML = m;
+                });
+                p.view.defineMethod('setSubmitHandler', function (handler) {
+                    p.view.setHandler([0, 3], 'click', handler);
+                });
+                p.view.defineMethod('setSkipHandler', function (handler) {
+                    p.view.setHandler([0, 5], 'click', handler);
+                });
+                p.defineMethod('updateMessage', function (m){
+                    p.model.setMessage(m);
+                    p.view.updateMessage(p.model.getMessage());
+                });
+                p.defineMethod('attemptLogin', function () {
+                    var usr = p.view.getNode(0, 1, 1).value,
+                        pwd = p.view.getNode(0, 2, 1).value;
+                    
+                    GH.login(usr, pwd).then(() => {
+                        p.updateMessage('Logged in correctly');
+
+                        GH.check();
+                        GH.getMyRepos().then(function (repos) {
+                            console.log(repos);
+                        });
+                        GH.getMyStarred().then(function (repos) {
+                            console.log(repos);
+                            App.list({repos: repos});
+                        });
+
+                    }).catch(function (e) {
+                        console.log('ERROR')
+                        console.log(e);
+                        p.updateMessage('User or password incorrect.please try again');
+                    });
+                });
+                p.defineMethod('skip', function () {});
+            },
             init: function () {
+                var p = this;
                 if (this.model.getLoggedIn) {
                     App.list();
-                }    
+                }
+                p.view.setSubmitHandler(p.attemptLogin);                
             }
         },
         list: {
             view: viewList,
             model: modelList,
             defs: function () {},
-            init: function () {}
+            init: function (params) {
+                console.log('Params received: ')
+                console.log(params)
+            }
         }
     });
 

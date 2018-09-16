@@ -61,7 +61,7 @@ View.prototype.getNode = function () {
         ret = this,
         childs = this.childs,
         i = 0, l = a.length;
-        
+
     for (null; i < l; i++) {
         ret = childs[a[i]]; 
         if (!ret) {
