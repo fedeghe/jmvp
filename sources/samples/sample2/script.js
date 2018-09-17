@@ -11,16 +11,22 @@ var App = (function () {
         viewLogin = viewF(`
             <div>
                 <fieldset class="login">
-                    <legend class="login-legend">Login</legend>
-                    <div>
-                        <label>Username:</label><input type="text"/>
+                    <legend class="login__legend">Login</legend>
+                    <div class="login__line">
+                        <label class="login__label">Username:</label>
+                        <input class="login__input"type="text"/>
                     </div>
-                    <div>
-                        <label>Password:</label><input type="password"/>
+                    <div class="login__line">
+                        <label class="login__label">Password:</label>
+                        <input class="login__input" type="password"/>
                     </div>
-                    <button>login</button><span> or </span><button>skip</button> 
+                    <div class="login__line">
+                        <button class="login__submit">login</button>
+                        <span> or </span>
+                        <button class="login__skip">skip</button> 
+                    </div>
                     <hr>
-                    <span>$[message]</span>
+                    <p class="login__message">$[message]</p>
                 </fieldset>
             </div>
         `, modelLogin),
@@ -44,13 +50,13 @@ var App = (function () {
             defs: function () {
                 var p = this;
                 p.view.defineMethod('updateMessage', function(m) {
-                    p.view.getNode(0, 7).innerHTML = m;
+                    p.view.getNode(0, 5).innerHTML = m;
                 });
                 p.view.defineMethod('setSubmitHandler', function (handler) {
-                    p.view.setHandler([0, 3], 'click', handler);
+                    p.view.setHandler([0, 3, 0], 'click', handler);
                 });
                 p.view.defineMethod('setSkipHandler', function (handler) {
-                    p.view.setHandler([0, 5], 'click', handler);
+                    p.view.setHandler([0, 3, 2], 'click', handler);
                 });
                 p.defineMethod('updateMessage', function (m){
                     p.model.setMessage(m);
@@ -79,6 +85,7 @@ var App = (function () {
                     });
                 });
                 p.defineMethod('skip', function () {
+                    p.updateMessage('Skipping');
                     // App.list();
                 });
             },
