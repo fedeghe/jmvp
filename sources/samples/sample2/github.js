@@ -1,8 +1,13 @@
 var GH = (function () {
-    var _user = null,
-        _pwd = null,
-        _loggedIn = false,
-        _userData = null,
+    function getData() {
+        return {
+            usr: JMVP.storage.get('ghusr'),
+            pwd: JMVP.storage.get('ghpwd'),
+            loggedIn: JMVP.storage.get('ghlogged') || false,
+            userData: JMVP.storage.get('ghuserdata') || {}
+        };
+    }
+    var data = getData(),
         headers = function (method) {
             method = method || 'GET';
             return {
@@ -12,7 +17,7 @@ var GH = (function () {
                 credentials: "same-origin",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
-                    "Authorization": "Basic ".concat(btoa(_user + ":" + _pwd))
+                    "Authorization": "Basic ".concat(btoa(data.usr + ":" + data.pwd))
                 },
                 redirect: "follow",
                 referrer: "no-referrer"
@@ -26,53 +31,58 @@ var GH = (function () {
         },
         err = function (error) {
             console.error('Error:', error);
+        },
+        saveAuth = function () {
+            JMVP.storage.set('ghusr', data.usr);
+            JMVP.storage.set('ghpwd', data.pwd);
+            JMVP.storage.set('ghlogged', data.loggedIn);
+            JMVP.storage.set('ghuserdata', data.userData);
         };
     return {
-        
-        isLoggedIn: function () {return _loggedIn;},
+        getData : getData,
 
-        login: function (user, pwd) {
-            _user = user;
-            _pwd = pwd;
+        isLoggedIn: function () { return data.loggedIn;},
+
+        logout: function () {
+            JMVP.storage.clear();
+        },
+
+        login: function (usr, pwd) {
+            data.usr = usr;
+            data.pwd = pwd;
             return fetch('https://api.github.com/user', headers())
             .then(getResponse)
             .then(function(json) {
-                _userData = json;
-                _loggedIn = true;
-                _user = user;
-                _pwd = pwd;
+                data.userData = json;
+                data.loggedIn = true;
+                saveAuth();
             })
             .catch(function (error) {
-                _loggedIn = false;
+                data.loggedIn = false;
                 throw error;
             });
         },
 
         getMyRepos: function () {
-            return fetch('https://api.github.com/users/' + _user + '/repos?per_page=100&type=owner', headers())
+            return fetch('https://api.github.com/users/' + data.usr + '/repos?per_page=100&type=owner', headers())
                 .then(getResponse)
                 .catch(err);
         },
 
         getMyStarred: function () {
-            return fetch('https://api.github.com/users/' + _user + '/starred', headers())
+            return fetch('https://api.github.com/users/' + data.usr + '/starred', headers())
                 .then(getResponse)
                 .catch(err);
         },
+
         getMostStarred: function (lang) {
             return fetch('https://api.github.com/search/repositories?q=language:' + lang + '&sort=stars&page=1', headers())
                 .then(getResponse)
                 .catch(err);
         },
-        
-
         check: function () {
-            console.log(_user);
-            console.log(_pwd);
-            console.log(_loggedIn);
-            console.log(_userData);
+            console.log(getData());
         }
-
     }
 })();
 
