@@ -1,41 +1,79 @@
+
+.round {
+    border:none 5px #000000;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    outline:none;
+}
+
 body {
     background-color: white;
     color:#444;
     font-family:verdana;
+    font-size:1em;
 
     .login {
         width:300px;
         margin:0 auto;
-        border:none 5px #000000;
-        -moz-border-radius:5px;
-        -webkit-border-radius:5px;
-        border-radius:5px;
+        .round();
         background-color: #eee;
-        margin-top:2em;
+        margin-top:2rem;
+        padding-top:2rem;
 
         &__legend{
-            color:red;
+            color:orange;
+            font-weight:bold;
             position:relative;
-            bottom:.8em;
-            text-transform: uppercase
+            top:1.5rem;
+            text-transform: uppercase;
+            text-align:center;
         }
         &__line{
             text-align:center;
-            margin:0.5em 0;
+            margin:0.5rem 0;
         }
         &__label{
             display:inline-block;
-            width:50%;
+            width:80%;
             text-align:left;
+            height:1.4rem;
         }
         &__input{
-            width:50%;
+            font-size:inherit;
+            width:80%;
             text-align:left;
+            .round();
+            margin-bottom:0.3em;
+            height:1.7rem;
+            background-color:orange;
+            padding:0 0.5rem;
+            
         }
         &__message{
-            font-size:.7em;
-            line-height:.7em;
+            font-size:.7rem;
+            line-height:.7rem;
             text-align:center;
         }
+        &__submit,&__skip{
+            background-color: #ddd;
+            font-size:inherit;
+            font-weight:bold;
+            padding:0.7em;
+            margin: 0 1em;
+            .round();
+            &:hover{
+                cursor:pointer;
+                background-color:#fff;
+                outline:none;
+            }
+        }
+        &__submit{color:green}
+        &__skip{color:orange;}
+        .separator {
+            border: none;
+            border-bottom: 0.2em dotted orange;
+        }
     }
+    
 }

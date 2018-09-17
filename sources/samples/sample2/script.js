@@ -5,7 +5,8 @@ var App = (function () {
         presenterF = JMVP.Presenter();
     
     var modelLogin = modelF({
-            message: 'Enter Your auth info and press login button',
+            skipMessage: '... or run it anonymously!',
+            message: 'Enter Your Github credentials and login',
             loggedIn: false
         }),
         viewLogin = viewF(`
@@ -13,11 +14,11 @@ var App = (function () {
                 <fieldset class="login">
                     <legend class="login__legend">Login</legend>
                     <div class="login__line">
-                        <label class="login__label">Username:</label>
+                        <label class="login__label">Username</label>
                         <input class="login__input"type="text"/>
                     </div>
                     <div class="login__line">
-                        <label class="login__label">Password:</label>
+                        <label class="login__label">Password</label>
                         <input class="login__input" type="password"/>
                     </div>
                     <div class="login__line">
@@ -25,7 +26,7 @@ var App = (function () {
                         <span> or </span>
                         <button class="login__skip">skip</button> 
                     </div>
-                    <hr>
+                    <hr class="separator"/>
                     <p class="login__message">$[message]</p>
                 </fieldset>
             </div>
@@ -57,6 +58,10 @@ var App = (function () {
                 });
                 p.view.defineMethod('setSkipHandler', function (handler) {
                     p.view.setHandler([0, 3, 2], 'click', handler);
+                });
+                p.view.defineMethod('setOverOutSkipHandler', function (handlerOver, handlerOut) {
+                    p.view.setHandler([0, 3, 2], 'mouseover', handlerOver);
+                    p.view.setHandler([0, 3, 2], 'mouseout', handlerOut);
                 });
                 p.defineMethod('updateMessage', function (m){
                     p.model.setMessage(m);
@@ -95,7 +100,12 @@ var App = (function () {
                     App.list();
                 }
                 p.view.setSubmitHandler(p.attemptLogin);              
-                p.view.setSkipHandler(p.skip);              
+                p.view.setSkipHandler(p.skip);   
+                p.view.setOverOutSkipHandler(function () {
+                    p.view.updateMessage(p.model.getSkipMessage());
+                }, function () {
+                    p.view.updateMessage(p.model.getMessage());
+                });         
             }
         },
         list: {
