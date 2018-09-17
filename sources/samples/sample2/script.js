@@ -6,8 +6,7 @@ var App = (function () {
     
     var modelLogin = modelF({
             skipMessage: '... or run it anonymously!',
-            message: 'Enter Your Github credentials and login',
-            loggedIn: false
+            message: 'Enter Your Github credentials and login'
         }),
         viewLogin = viewF(`
             <div>
@@ -34,8 +33,7 @@ var App = (function () {
         
         modelList = modelF({
             list: [],
-            languages: $LANGUAGES$,
-            loggedIn: false
+            languages: $LANGUAGES$
         }),
         viewList = viewF(`<div>Logged in</div>`, modelList),
 
@@ -50,6 +48,13 @@ var App = (function () {
             model: modelLogin,
             defs: function () {
                 var p = this;
+
+                function enter(s) {
+                    window.setTimeout(function () {
+                        App.list();
+                    }, s || 1000);
+                }
+
                 p.view.defineMethod('updateMessage', function(m) {
                     p.view.getNode(0, 5).innerHTML = m;
                 });
@@ -70,19 +75,9 @@ var App = (function () {
                 p.defineMethod('attemptLogin', function () {
                     var usr = p.view.getNode(0, 1, 1).value,
                         pwd = p.view.getNode(0, 2, 1).value;
-                    
                     GH.login(usr, pwd).then(() => {
                         p.updateMessage('Logged in correctly');
-
-                        GH.check();
-                        GH.getMyRepos().then(function (repos) {
-                            console.log(repos);
-                        });
-                        GH.getMyStarred().then(function (repos) {
-                            console.log(repos);
-                            App.list({repos: repos});
-                        });
-
+                        enter();
                     }).catch(function (e) {
                         console.log('ERROR');
                         console.log(e);
@@ -91,14 +86,12 @@ var App = (function () {
                 });
                 p.defineMethod('skip', function () {
                     p.updateMessage('Skipping');
-                    // App.list();
+                    GH.logout();
+                    enter();
                 });
             },
             init: function () {
                 var p = this;
-                if (this.model.getLoggedIn()) {
-                    App.list();
-                }
                 p.view.setSubmitHandler(p.attemptLogin);              
                 p.view.setSkipHandler(p.skip);   
                 p.view.setOverOutSkipHandler(function () {
@@ -111,10 +104,11 @@ var App = (function () {
         list: {
             view: viewList,
             model: modelList,
-            defs: function () {},
-            init: function (params) {
-                console.log('Params received: ')
-                console.log(params)
+            defs: function () {
+                GH.check();
+            },
+            init: function () {
+                console.log(GH.getData());
             }
         }
     });
