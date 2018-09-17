@@ -13,7 +13,7 @@
     
     function Store(reducer, state){
         this.reducer = reducer || _emptyObjFun;
-        this.state = state || reducer();
+        this.state = state || this.reducer();
         this.states = [this.state];
         this.listeners = [];
     }
