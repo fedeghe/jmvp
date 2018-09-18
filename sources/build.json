@@ -1,7 +1,7 @@
 {
     "EXE": [
         "rm -rf samples",
-        "mkdir -p samples/x"
+        "mkdir -p samples”
     ],
     "sources/jmvp/jmvp.js": "samples -vars=sources/vars.json",
     "sources/readme/build.json" : true,
