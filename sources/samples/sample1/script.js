@@ -19,7 +19,7 @@ var vFact1 = JMVP.View(),
         <div>
             <p>An empty list there</p>
             <ul></ul>
-            <p>{name} please ...</p>
+            <p>$[name] please ...</p>
             <button>add a ramdon number</button>
         </div>
     `);
@@ -27,13 +27,13 @@ view1.setModel(model1);
 view1.defineMethod('addRandom', function (number) {
     var newNode = document.createElement('li');
     newNode.appendChild(document.createTextNode(number));
-    this.getNode([1]).appendChild(newNode); // ? wtf ? ... wait
+    this.getNode(1).appendChild(newNode); // ? wtf ? ... wait
 });
 view1.defineMethod('setAddRandomHandler', function (cb) {
     view1.setHandler([3], 'click', cb);
 });
 view1.defineMethod('changeNumber', function (l) {
-    view1.getNode([0]).innerHTML = `The list contains ${l} number${l > 1 ? 's' : ''}`;
+    view1.getNode(0).innerHTML = `The list contains ${l} number${l > 1 ? 's' : ''}`;
 })
 
 
