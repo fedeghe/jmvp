@@ -47,8 +47,8 @@ var GH = (function () {
         isLoggedIn: function () { return data.loggedIn;},
 
         logout: function () {
-            refreshData();
             JMVP.storage.clear();
+            refreshData();
         },
 
         login: function (usr, pwd) {

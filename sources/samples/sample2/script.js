@@ -103,6 +103,7 @@ var App = (function () {
             },
             init: function () {
                 
+
                 var p = this;
                 p.view.setSubmitHandler(p.attemptLogin);              
                 p.view.setSkipHandler(p.skip);   
@@ -111,9 +112,7 @@ var App = (function () {
                 }, function () {
                     p.view.updateMessage(p.model.getMessage());
                 }); 
-                if (GH.isLoggedIn()) {
-                    App.list();
-                }
+                GH.isLoggedIn() && App.list();
             }
         },
         list: {
@@ -127,7 +126,6 @@ var App = (function () {
                     p.view.setHandler([2], 'click', handler);
                 });
                 p.defineMethod('logout', function () {
-
                     GH.logout();
                     App.login();
                 });
