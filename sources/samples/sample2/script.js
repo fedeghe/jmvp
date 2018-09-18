@@ -1,5 +1,5 @@
 var App = (function () {
-
+    var trg = document.getElementById('trg');
     var viewF = JMVP.View(),
         modelF = JMVP.Model(),
         presenterF = JMVP.Presenter();
@@ -35,7 +35,17 @@ var App = (function () {
             list: [],
             languages: $LANGUAGES$
         }),
-        viewList = viewF(`<div>Logged in</div>`, modelList),
+        viewList = viewF(`<div>
+                <div class="panel__header">
+                    Logged in
+                </div>
+                <div class="panel__body">
+                    BODY
+                </div>
+                <div class="panel__footer">
+                    logout
+                </div>
+        </div>`, modelList),
 
         presenter = presenterF();
 
@@ -47,6 +57,7 @@ var App = (function () {
             view: viewLogin,
             model: modelLogin,
             defs: function () {
+                console.log('login')
                 var p = this;
 
                 function enter(s) {
@@ -91,6 +102,7 @@ var App = (function () {
                 });
             },
             init: function () {
+                
                 var p = this;
                 p.view.setSubmitHandler(p.attemptLogin);              
                 p.view.setSkipHandler(p.skip);   
@@ -98,16 +110,31 @@ var App = (function () {
                     p.view.updateMessage(p.model.getSkipMessage());
                 }, function () {
                     p.view.updateMessage(p.model.getMessage());
-                });         
+                }); 
+                if (GH.isLoggedIn()) {
+                    App.list();
+                }
             }
         },
         list: {
             view: viewList,
             model: modelList,
             defs: function () {
+                console.log('list')
+                var p = this;
                 GH.check();
+                p.view.defineMethod('setLogoutHandler', function (handler) {
+                    p.view.setHandler([2], 'click', handler);
+                });
+                p.defineMethod('logout', function () {
+
+                    GH.logout();
+                    App.login();
+                });
             },
             init: function () {
+                var p = this;
+                p.view.setLogoutHandler(p.logout);
                 console.log(GH.getData());
             }
         }
