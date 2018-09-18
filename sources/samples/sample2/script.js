@@ -3,6 +3,7 @@ var App = (function () {
     var viewF = JMVP.View(),
         modelF = JMVP.Model(),
         presenterF = JMVP.Presenter();
+        presenterI = JMVP.Presenter();
     
     var modelLogin = modelF({
             skipMessage: '... or run it anonymously!',
@@ -35,7 +36,7 @@ var App = (function () {
             list: [],
             languages: $LANGUAGES$
         }),
-        viewList = viewF(`<div>
+        viewList = viewF(`<div class="panel">
                 <div class="panel__header">
                     Logged in
                 </div>
@@ -43,9 +44,9 @@ var App = (function () {
                     <ul class="panel__list"></ul>
                 </div>
                 <div class="panel__footer">
-                    <button>logout</button>
+                    <button class="panel__logout">logout</button>
                 </div>
-        </div>`, modelList),
+        </div>`, modelList);
 
         presenter = presenterF();
 
@@ -121,7 +122,21 @@ var App = (function () {
                     p.view.setHandler([2, 0], 'click', handler);
                 });
                 p.view.defineMethod('loadList', function (list) {
-
+                    var trg = p.view.getNode(1, 0);
+                    list.forEach(function(item) {
+                        var modelItem = modelF({
+                                name: item.name,
+                                description: item.description || '<i>no description</i>',
+                                link: item.html_url,
+                                stars: item.stargazers_count
+                            }),
+                            viewItem = viewF(`<li class="item">
+                                <h3 class="item__name">$[name]</h3>
+                                <p class="item__description">$[description]</p>
+                            </li>`, modelItem),
+                            pres = presenterI(modelItem, viewItem);
+                        pres.render(trg);
+                    });
                 });
                 p.defineMethod('logout', function () {
                     GH.logout();
@@ -131,13 +146,10 @@ var App = (function () {
             init: function () {
                 var p = this;
                 p.view.setLogoutHandler(p.logout);
+                GH.getMyRepos().then((list) => {
+                    p.view.loadList(list);
+                });
             }
-        },
-        element: {
-            view: viewItem,
-            model: modelItem,
-            defs: function () {},
-            init: function () {}
         }
     });
 
