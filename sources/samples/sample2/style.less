@@ -6,6 +6,13 @@
     border-radius:5px;
     outline:none;
 }
+.button {
+    font-size:inherit;
+    font-weight:bold;
+    padding:0.7em;
+    margin: 0 1em;
+    cursor:pointer;
+}
 
 body {
     background-color: white;
@@ -57,13 +64,9 @@ body {
         }
         &__submit,&__skip{
             background-color: #e3e3e3;
-            font-size:inherit;
-            font-weight:bold;
-            padding:0.7em;
-            margin: 0 1em;
+            .button();
             .round();
             &:hover{
-                cursor:pointer;
                 background-color:#fff;
                 outline:none;
             }
@@ -73,6 +76,20 @@ body {
         .separator {
             border: none;
             border-bottom: 0.15em dotted orange;
+        }
+    }
+
+    .panel {
+        .round();
+        border:1px solid #ddd;
+        padding:1em;
+        width:400px;
+
+        &__logout{
+            background-color:#ff0;
+            text-transform: uppercase;
+            .round();
+            .button();
         }
     }
     
