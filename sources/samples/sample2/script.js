@@ -40,10 +40,10 @@ var App = (function () {
                     Logged in
                 </div>
                 <div class="panel__body">
-                    BODY
+                    <ul class="panel__list"></ul>
                 </div>
                 <div class="panel__footer">
-                    logout
+                    <button>logout</button>
                 </div>
         </div>`, modelList),
 
@@ -118,7 +118,10 @@ var App = (function () {
             defs: function () {
                 var p = this;
                 p.view.defineMethod('setLogoutHandler', function (handler) {
-                    p.view.setHandler([2], 'click', handler);
+                    p.view.setHandler([2, 0], 'click', handler);
+                });
+                p.view.defineMethod('loadList', function (list) {
+
                 });
                 p.defineMethod('logout', function () {
                     GH.logout();
@@ -129,6 +132,12 @@ var App = (function () {
                 var p = this;
                 p.view.setLogoutHandler(p.logout);
             }
+        },
+        element: {
+            view: viewItem,
+            model: modelItem,
+            defs: function () {},
+            init: function () {}
         }
     });
 
