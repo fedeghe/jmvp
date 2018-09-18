@@ -49,7 +49,7 @@
         listPresenter = presenterListF();
 
     listView.defineMethod('resetList', function (el) {
-        this.getNode([1]).innerHTML = '';
+        this.getNode(1).innerHTML = '';
     });
     listView.defineMethod('addLink', function (el) {
         var item = document.createElement('li'),
@@ -58,11 +58,11 @@
         a.setAttribute('target', '_blank');
         a.innerHTML = el.label;
         item.appendChild(a);
-        this.getNode([1]).appendChild(item);
+        this.getNode(1).appendChild(item);
     });
 
     listView.defineMethod('setTitle', function (title) {
-        this.getNode([0]).innerHTML = title;
+        this.getNode(0).innerHTML = title;
     });
 
 
