@@ -57,7 +57,6 @@ var App = (function () {
             view: viewLogin,
             model: modelLogin,
             defs: function () {
-                console.log('login')
                 var p = this;
 
                 function enter(s) {
@@ -102,8 +101,6 @@ var App = (function () {
                 });
             },
             init: function () {
-                
-
                 var p = this;
                 p.view.setSubmitHandler(p.attemptLogin);              
                 p.view.setSkipHandler(p.skip);   
@@ -119,9 +116,7 @@ var App = (function () {
             view: viewList,
             model: modelList,
             defs: function () {
-                console.log('list')
                 var p = this;
-                GH.check();
                 p.view.defineMethod('setLogoutHandler', function (handler) {
                     p.view.setHandler([2], 'click', handler);
                 });
@@ -133,7 +128,6 @@ var App = (function () {
             init: function () {
                 var p = this;
                 p.view.setLogoutHandler(p.logout);
-                console.log(GH.getData());
             }
         }
     });
