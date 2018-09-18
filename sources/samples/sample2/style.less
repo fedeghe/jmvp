@@ -80,17 +80,50 @@ body {
     }
 
     .panel {
+        
         .round();
         border:1px solid #ddd;
         padding:1em;
         width:400px;
-
+        max-height: 80vh;
+        
+        &__header{
+            background-color:red;
+            height:3rem;
+        }
+        &__body{
+            height:calc(80vh - 6rem);
+            overflow:scroll;
+        }
+        &__footer{
+            background-color:green;
+            height:3rem;
+        }
         &__logout{
             background-color:#ff0;
             text-transform: uppercase;
             .round();
             .button();
         }
+        &__list{
+            list-style-type: none;
+            padding:0;
+            margin:0;
+            .item{
+                .round();
+                border:1px solid green;
+                margin:1rem 0;
+                padding:.5rem;
+                &__name{
+                    text-decoration:none;
+                }
+                &__description{
+                    font-size:.6em;
+                }
+            }
+
+        }
+        
     }
     
 }

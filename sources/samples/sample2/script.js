@@ -131,7 +131,7 @@ var App = (function () {
                                 stars: item.stargazers_count
                             }),
                             viewItem = viewF(`<li class="item">
-                                <h3 class="item__name">$[name]</h3>
+                                <a href="$[link]" target="_blank" class="item__name">$[name]</a>
                                 <p class="item__description">$[description]</p>
                             </li>`, modelItem),
                             pres = presenterI(modelItem, viewItem);
