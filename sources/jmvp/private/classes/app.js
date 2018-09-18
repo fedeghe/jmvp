@@ -41,7 +41,7 @@ App.prototype._addSetup = function (_setupName, _setup) {
         _setup.view.model == null && _setup.view.setModel(_setup.model);
         presenter.model || presenter.setModel(presenter.view.model);
         gotDefs && _setup.defs.call(presenter, params);
-        // gotInit && _setup.init.call(presenter, params);
+
         if (gotInit) presenter.init = function () {
             _setup.init.call(presenter, params);
         };

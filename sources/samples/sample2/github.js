@@ -8,6 +8,9 @@ var GH = (function () {
         };
     }
     var data = getData(),
+        refreshData = function () {
+            data = getData();
+        },
         headers = function (method) {
             method = method || 'GET';
             return {
@@ -44,8 +47,8 @@ var GH = (function () {
         isLoggedIn: function () { return data.loggedIn;},
 
         logout: function () {
+            refreshData();
             JMVP.storage.clear();
-            data = getData();
         },
 
         login: function (usr, pwd) {
