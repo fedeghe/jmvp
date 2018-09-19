@@ -37,6 +37,7 @@ App.prototype._addSetup = function (_setupName, _setup) {
         
         var model = _setup.model(),
             view = _setup.view();
+            
         presenter.setModel(model);
         presenter.setView(view);
 

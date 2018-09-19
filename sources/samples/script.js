@@ -3,7 +3,7 @@
         viewListF = JMVP.View(),
         presenterListF = JMVP.Presenter();
     
-    var listModel = modelListF({
+    var listModel = {
             defaultTitle: 'Some examples',
             title: 'Some examples',
             examples: [{
@@ -13,14 +13,14 @@
                 label: 'github widget',
                 link: 'sample2/'
             }]
-        }),
-        listView = viewListF(`<div>
+        },
+        listView = `<div>
             <h2>$[title]</h2>
             <ul></ul>
             <button>press me</button>
-        </div>`),
+        </div>`,
 
-        listModel2 = modelListF({
+        listModel2 = {
             defaultTitle: 'Some more examples',
             title: 'Some more examples',
             examples: [{
@@ -39,31 +39,16 @@
                 label: 'fifth more example',
                 link: 'sample7/'
             }]
-        }),
-        listView2 = viewListF(`<div>
+        },
+        listView2 = `<div>
             <h2 class="red">$[title]</h2>
             <ul class="nolist"></ul>
             <span>back</span>
-        </div>`),
+        </div>`,
 
         listPresenter = presenterListF();
 
-    listView.defineMethod('resetList', function (el) {
-        this.getNode(1).innerHTML = '';
-    });
-    listView.defineMethod('addLink', function (el) {
-        var item = document.createElement('li'),
-            a = document.createElement('a');
-        a.setAttribute('href', el.link);
-        a.setAttribute('target', '_blank');
-        a.innerHTML = el.label;
-        item.appendChild(a);
-        this.getNode(1).appendChild(item);
-    });
 
-    listView.defineMethod('setTitle', function (title) {
-        this.getNode(0).innerHTML = title;
-    });
 
 
     var App = listPresenter.getSetupsManager({
@@ -72,9 +57,26 @@
         },
         first: {
             route: '/',
-            view: listView,
-            model: listModel,
+            view: function (){ return viewListF(listView);},
+            model: function () {return modelListF(listModel);},
             defs: function (params) {
+                var p = this;
+                p.view.defineMethod('resetList', function (el) {
+                    this.getNode(1).innerHTML = '';
+                });
+                p.view.defineMethod('addLink', function (el) {
+                    var item = document.createElement('li'),
+                        a = document.createElement('a');
+                    a.setAttribute('href', el.link);
+                    a.setAttribute('target', '_blank');
+                    a.innerHTML = el.label;
+                    item.appendChild(a);
+                    this.getNode(1).appendChild(item);
+                });
+
+                p.view.defineMethod('setTitle', function (title) {
+                    this.getNode(0).innerHTML = title;
+                });
                 this.defineMethod('loadList', function () {
                     this.view.resetList();
                     var examples = this.model.getExamples();
@@ -116,8 +118,8 @@
         },
         second: {
             route: '/second',
-            view: listView2,
-            model: listModel2,
+            view: function () {return viewListF(listView2);},
+            model: function () { return modelListF(listModel2);},
             init: function (params) {
                 console.log('second App init');
                 console.log(params);
@@ -126,6 +128,7 @@
                     App.first({int: 4, surname:'ghedina', address: 'kudam 74'});
                 });
             }
+
         }
     });
 
