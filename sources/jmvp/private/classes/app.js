@@ -35,10 +35,12 @@ App.prototype._addSetup = function (_setupName, _setup) {
 
         presenter.reset(gotDefs);
         
-        _setup.model && presenter.setModel(_setup.model);
-        presenter.setView(_setup.view);
+        var model = _setup.model(),
+            view = _setup.view();
+        presenter.setModel(model);
+        presenter.setView(view);
 
-        _setup.view.model == null && _setup.view.setModel(_setup.model);
+        view.setModel(model);
         presenter.model || presenter.setModel(presenter.view.model);
         gotDefs && _setup.defs.call(presenter, params);
 

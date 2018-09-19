@@ -5,11 +5,11 @@ var App = (function () {
         presenterF = JMVP.Presenter();
         presenterI = JMVP.Presenter();
     
-    var modelLogin = modelF({
+    var modelLogin = {
             skipMessage: '... or run it anonymously!',
             message: 'Enter Your Github credentials and login'
-        }),
-        viewLogin = viewF(`
+        },
+        viewLogin = `
             <div>
                 <fieldset class="login">
                     <legend class="login__legend">Login</legend>
@@ -30,13 +30,13 @@ var App = (function () {
                     <p class="login__message">$[message]</p>
                 </fieldset>
             </div>
-        `, modelLogin),
+        `,
         
-        modelList = modelF({
+        modelList = {
             list: [],
             languages: $LANGUAGES$
-        }),
-        viewList = viewF(`<div class="panel">
+        },
+        viewList = `<div class="panel">
                 <div class="panel__header">
                     Logged in
                 </div>
@@ -46,7 +46,7 @@ var App = (function () {
                 <div class="panel__footer">
                     <button class="panel__logout">logout</button>
                 </div>
-        </div>`, modelList);
+        </div>`;
 
         presenter = presenterF();
 
@@ -55,8 +55,8 @@ var App = (function () {
             console.log('Initialize')
         },
         login: {
-            view: viewLogin,
-            model: modelLogin,
+            view: function () {return viewF(viewLogin);},
+            model: function () {return modelF(modelLogin);},
             defs: function () {
                 var p = this;
 
@@ -114,8 +114,8 @@ var App = (function () {
             }
         },
         list: {
-            view: viewList,
-            model: modelList,
+            view: function () {return viewF(viewList);},
+            model: function () {return modelF(modelList);},
             defs: function () {
                 var p = this;
                 p.view.defineMethod('setLogoutHandler', function (handler) {
