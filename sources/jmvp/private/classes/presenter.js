@@ -19,6 +19,7 @@ Presenter.prototype.reset = function (resetDefined) {
             this._resetDefineMethod();
         }
         this._resetHandlers();
+        this.view.reset();
         this.model = null;
         this.view = null;
         this.trg.innerHTML = '';
