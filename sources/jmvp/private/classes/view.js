@@ -5,6 +5,7 @@ function View(tpl, model) {
     this.node = this.cnt.childNodes[0];
     this.childs = [];
     this.model = model || null;
+    this.handlers = [];
     model && this.setModel(model);
 };
 
@@ -35,7 +36,15 @@ View.prototype.setModel = function (model) {
 
 };
 
+View.prototype.reset = function () {
+    for (var i   = 0, l = this.handlers.lenght; i < l; i++) {
+        this.handlers[i].call(this);
+    }
+    this.handlers = [];
+}
+
 View.prototype.setHandler = function(nodePath, ev, handler) {
+    var resetHandler;
     try{
         var n = this.getNode.apply(this, nodePath);
     } catch(e){
@@ -43,9 +52,11 @@ View.prototype.setHandler = function(nodePath, ev, handler) {
     }
     if (n){
         n.addEventListener(ev, handler);
-        return function () {
+        resetHandler =  function () {
             n.removeEventListener(ev, handler);
         }
+        this.handlers.push(resetHandler);
+        return resetHandler;
     } else {
         return false;
     }
