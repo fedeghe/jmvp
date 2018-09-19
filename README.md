@@ -97,7 +97,7 @@ Let's suppose we need to enable the user to add a random number to the list (ini
 view1.defineMethod('addRandom', function (number){
     var newNode = document.createElement('li');
     newNode.appendChild(document.createTextNode(number));
-    this.getNode([0]).appendChild(newNode); // ? wtf ? ... wait
+    this.getNode(0).appendChild(newNode); // ? wtf ? ... wait
 });
 ```
 Please ignore for the moment the `getNode`, we'll get back to it really soon, what should be said is that it allows to get a reference to any node defined within the view.  
@@ -109,17 +109,17 @@ console.log(view1.getNode());
 which outputs
 ``` html
 <div>
-    <ul>                            <!-- [0] -->
-        <li>3.141592653589793</li>  <!-- [0, 0] -->
+    <ul>                            <!-- getNode(0) -->
+        <li>3.141592653589793</li>  <!-- getNode(0, 0) -->
     </ul>                           
-    <p>An empty list there</p>      <!-- [1] -->
-    <p>Donald please ...</p>        <!-- [2] -->
-    <button>add one</button>        <!-- [3] -->
+    <p>An empty list there</p>      <!-- getNode(1) -->
+    <p>Donald please ...</p>        <!-- getNode(2) -->
+    <button>add one</button>        <!-- getNode(3) -->
 </div>
 ```
-before looking at how to set the handling function let's get back to the `getNode` _view_ function, it returns the view root if no parameters are passed, but if an array of integers is passed then it digs the view tree, e.g. the first `<li>` tag can be reached passing `[0,0]`, the second passing `[0,1]` , ... and so on.
+before looking at how to set the handling function let's get back to the `getNode` _view_ function, it returns the view root if no parameters are passed, but if integers are passed then it digs the view tree, e.g. the first `<li>` tag can be reached passing `0,0`, the second passing `0,1` , ... and so on.
 
-Now we need to set the actual handling function, using another method available in the _view_, the first argument is exactly the same as for `getNode`:
+Now we need to set the actual handling function, using another method available in the _view_, the first argument is exactly the same as for `getNode` but passed as array:
 ``` js
 view1.setHandler([3], 'click', function () {
     view1.addRandom(Math.random());
@@ -288,7 +288,7 @@ The App consists in a widget that can be loaded into a container which at the ve
         - each item shoud show:
             - the name of the repos (with a link to gh)
             - a small (in case truncated) description of the repo
-            - the nunmber of stars
+            - the number of stars
             - a button to star/unstar the repo
         - the list is dynamic thanks to a 5sec polling
         - during the whole `mayupdate` request flow the UI is disabled, and a small spinner is shown somewhere
