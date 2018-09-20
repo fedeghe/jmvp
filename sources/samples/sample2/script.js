@@ -38,13 +38,21 @@ var App = (function () {
         },
         viewList = `<div class="panel">
                 <div class="panel__header">
-                    Logged in
+                    <label>Language</label><select>
+                        <option>L</option>
+                        <option>O</option>
+                        <option>S</option>
+                        <option>E</option>
+                        <option>R</option>
+                    </select>
                 </div>
                 <div class="panel__body">
-                    <ul class="panel__list"></ul>
+                    <ul class="panel__list">
+                        <li class="spinner"></li>
+                    </ul>
                 </div>
                 <div class="panel__footer">
-                    <button class="panel__logout">logout</button>
+                    <button class="panel__logout">&larr;</button>
                 </div>
         </div>`;
 
@@ -138,6 +146,7 @@ var App = (function () {
                 });
                 p.view.defineMethod('loadList', function (list) {
                     var trg = p.view.getNode(1, 0);
+                    trg.innerHTML = '';
                     list.forEach(function(item) {
                         var modelItem = modelF({
                                 name: item.name,
@@ -162,7 +171,9 @@ var App = (function () {
                 var p = this;
                 p.view.setLogoutHandler(p.logout);
                 GH.getMyRepos().then((list) => {
+
                     p.view.loadList(list);
+
                 });
             }
         }
