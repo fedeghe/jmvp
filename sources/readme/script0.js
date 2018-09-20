@@ -30,7 +30,7 @@ view.defineMethod('onButtonClickSetHandler', function (handler) {
 view.defineMethod('addRandom', function (number) {
     var newNode = document.createElement('li');
     newNode.appendChild(document.createTextNode(number));
-    this.getNode([0]).appendChild(newNode);
+    this.getNode(0).appendChild(newNode);
 });
 
 // Presenter
