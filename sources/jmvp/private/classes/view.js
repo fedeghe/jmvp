@@ -4,9 +4,9 @@ function View(tpl, model) {
     this.cnt.innerHTML  = this.tpl;
     this.node = this.cnt.childNodes[0];
     this.childs = [];
-    this.model = model || null;
+    this.model = model ? Object.assign({}, model) : null;
     this.handlers = [];
-    model && this.setModel(model);
+    this.model && this.setModel(this.model);
 };
 
 View.prototype._refs = function () {
