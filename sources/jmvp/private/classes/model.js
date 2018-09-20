@@ -1,5 +1,5 @@
 function Model(d) {
-    this._data = d;
+    this._data = Object.assign({}, d);
     this._auto();
 }
 
