@@ -34,7 +34,7 @@ var App = presenter.getSetupsManager({
                 presenter.view.setHandler([2], 'click', cb);
             });
             presenter.view.defineMethod('replaceDescription', function (txt) {
-                presenter.view.getNode([1]).innerHTML = txt;
+                presenter.view.getNode(1).innerHTML = txt;
             })
             presenter.model.defineMethod('scramble', function () {
                 var desc = presenter.model.getDescription();
