@@ -7,6 +7,7 @@ function View(tpl, model) {
     this.model = model ? Object.assign({}, model) : null;
     this.handlers = [];
     this.model && this.setModel(this.model);
+    this.cache = {};
 };
 
 View.prototype._refs = function () {
@@ -67,18 +68,29 @@ View.prototype.defineMethod = function (name, func) {
 };
 
 // what about memoization?
+
 View.prototype.getNode = function () {
     var a = [].slice.call(arguments),
+        key = a.join(':') || 'root',
         ret = this,
-        childs = this.childs,
-        i = 0, l = a.length;
-
-    for (null; i < l; i++) {
-        ret = childs[a[i]]; 
-        if (!ret) {
-            throw a + ' not found, handler not settable';
+        i = 0, l = a.length,
+        childs;
+    if (!(key in this.cache)) {
+        childs = this.childs;
+        for (null; i < l; i++) {
+            ret = childs[a[i]];
+            if (!ret) {
+                throw a + ' not found, handler not settable';
+            }
+            childs = ret.childs;
         }
-        childs = ret.childs;
+        this.cache[key] = ret && ret.node;    
+        console.log("CACHED");
+        console.log(key, this.cache[key]);
+    } else {
+        console.log("GOT IT");
+        console.log(key, this.cache[key]);
     }
-    return ret && ret.node;
+    return this.cache[key];
 };
+
