@@ -174,7 +174,7 @@ view.defineMethod('onButtonClickSetHandler', function (handler) {
 view.defineMethod('addRandom', function (number) {
     var newNode = document.createElement('li');
     newNode.appendChild(document.createTextNode(number));
-    this.getNode([0]).appendChild(newNode);
+    this.getNode(0).appendChild(newNode);
 });
 
 // Presenter
@@ -242,7 +242,7 @@ var App = presenter.getSetupsManager({
                 presenter.view.setHandler([2], 'click', cb);
             });
             presenter.view.defineMethod('replaceDescription', function (txt) {
-                presenter.view.getNode([1]).innerHTML = txt;
+                presenter.view.getNode(1).innerHTML = txt;
             })
             presenter.model.defineMethod('scramble', function () {
                 var desc = presenter.model.getDescription();
