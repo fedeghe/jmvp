@@ -66,6 +66,18 @@ var App = (function () {
                     }, s || 1000);
                 }
 
+                p.view.defineMethod('toggleButtonsFunc', function(val) {
+                    var bSub = p.view.getNode(0, 3, 0),
+                        bSkip = p.view.getNode(0, 3, 2);
+
+                    if (val) {
+                        bSub.removeAttribute('disabled');
+                        bSkip.removeAttribute('disabled');
+                    } else {
+                        bSub.setAttribute('disabled', 'disabled');
+                        bSkip.setAttribute('disabled', 'disabled');
+                    }
+                });
                 p.view.defineMethod('updateMessage', function(m) {
                     p.view.getNode(0, 5).innerHTML = m;
                 });
@@ -86,14 +98,17 @@ var App = (function () {
                 p.defineMethod('attemptLogin', function () {
                     var usr = p.view.getNode(0, 1, 1).value,
                         pwd = p.view.getNode(0, 2, 1).value;
+                    p.view.toggleButtonsFunc(false);
                     GH.login(usr, pwd).then(() => {
                         p.updateMessage('Logged in correctly');
                         enter();
                     }).catch(function (e) {
                         console.log('ERROR');
                         console.log(e);
+                        p.view.toggleButtonsFunc(true);
                         p.updateMessage('User or password incorrect.please try again');
                     });
+                    
                 });
                 p.defineMethod('skip', function () {
                     p.updateMessage('Skipping');
