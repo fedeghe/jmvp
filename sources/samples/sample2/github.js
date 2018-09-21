@@ -1,10 +1,12 @@
 var GH = (function () {
     function getData() {
+        var uData = JMVP.storage.get('ghuserdata'),
+            userData = uData ? JSON.parse(uData) : {};
         return {
             usr: JMVP.storage.get('ghusr'),
             pwd: JMVP.storage.get('ghpwd'),
             loggedIn: JMVP.storage.get('ghlogged') || false,
-            userData: JMVP.storage.get('ghuserdata') || {}
+            userData: userData
         };
     }
     var data = getData(),
@@ -39,12 +41,12 @@ var GH = (function () {
             JMVP.storage.set('ghusr', data.usr);
             JMVP.storage.set('ghpwd', data.pwd);
             JMVP.storage.set('ghlogged', data.loggedIn);
-            JMVP.storage.set('ghuserdata', data.userData);
+            JMVP.storage.set('ghuserdata', JSON.stringify(data.userData));
         };
     return {
-        getData : getData,
+        getData: getData,
 
-        isLoggedIn: function () { return data.loggedIn;},
+        isLoggedIn: function () { return data.loggedIn; },
 
         logout: function () {
             JMVP.storage.clear();
@@ -55,16 +57,16 @@ var GH = (function () {
             data.usr = usr;
             data.pwd = pwd;
             return fetch('https://api.github.com/user', headers())
-            .then(getResponse)
-            .then(function(json) {
-                data.userData = json;
-                data.loggedIn = true;
-                saveAuth();
-            })
-            .catch(function (error) {
-                data.loggedIn = false;
-                throw error;
-            });
+                .then(getResponse)
+                .then(function (json) {
+                    data.userData = json;
+                    data.loggedIn = true;
+                    saveAuth();
+                })
+                .catch(function (error) {
+                    data.loggedIn = false;
+                    throw error;
+                });
         },
 
         getMyRepos: function () {
