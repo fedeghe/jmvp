@@ -34,7 +34,8 @@ var App = (function () {
         
         modelList = {
             list: [],
-            languages: $LANGUAGES$
+            languages: $LANGUAGES.SET$,
+            defaultLang: $LANGUAGES.DEFAULT$
         },
         viewList = `<div class="panel">
                 <div class="panel__header">
@@ -52,7 +53,7 @@ var App = (function () {
                     </ul>
                 </div>
                 <div class="panel__footer">
-                    <button class="panel__logout">&larr;</button>
+                    <span class="panel__logout"></span>
                 </div>
         </div>`;
 
@@ -141,12 +142,14 @@ var App = (function () {
             model: function () {return modelF(modelList);},
             defs: function () {
                 var p = this;
+
                 p.view.defineMethod('setLogoutHandler', function (handler) {
                     p.view.setHandler([2, 0], 'click', handler);
                 });
                 p.view.defineMethod('loadList', function (list) {
                     var trg = p.view.getNode(1, 0);
                     trg.innerHTML = '';
+                    
                     list.forEach(function(item) {
                         var modelItem = modelF({
                                 name: item.name,
@@ -169,6 +172,10 @@ var App = (function () {
             },
             init: function () {
                 var p = this;
+                var spinner = p.view.getNode(1, 0, 0),
+                        imgUrl = GH.getData().userData.avatar_url;
+
+                    spinner.style.backgroundImage = 'url(' + imgUrl + ')';
                 p.view.setLogoutHandler(p.logout);
                 GH.getMyRepos().then((list) => {
 
