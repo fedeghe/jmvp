@@ -1,21 +1,24 @@
 {
     "NS": "JMVP",
-    "LANGUAGES": [
-        "assembly",
-        "c",
-        "cobol",
-        "css",
-        "erlang",
-        "golang",
-        "haskell",
-        "java",
-        "javascript",
-        "m4",
-        "pascal",
-        "perl",
-        "php",
-        "python",
-        "r",
-        "scala"
-    ]
+    "LANGUAGES": {
+        "SET": [
+            "assembly",
+            "c",
+            "cobol",
+            "css",
+            "erlang",
+            "golang",
+            "haskell",
+            "java",
+            "javascript",
+            "m4",
+            "pascal",
+            "perl",
+            "php",
+            "python",
+            "r",
+            "scala"
+        ],
+        "DEFAULT": false
+    }
 }
