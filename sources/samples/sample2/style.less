@@ -25,7 +25,7 @@ body {
     color:#444;
     font-family:verdana;
     font-size:1em;
-    margin: 5vw;
+    margin: 1rem;
     
 
     .login {
@@ -120,11 +120,13 @@ body {
             overflow:hidden;
         }
         &__logout{
-            background-color:#ff0;
-            text-transform: uppercase;
-            .round();
-            .button();
-            margin-left:0.3em;
+            margin-left:1rem;
+            color:white;
+            display:inline-block;
+            cursor: pointer;
+            &:after{
+                content: '\25C0';
+            }
         }
         &__list{
             list-style-type: none;
@@ -143,12 +145,12 @@ body {
                     text-decoration:none;
                 }
                 &__description{
-                    font-size:.6em;
+                    font-size:.8em;
                 }
             }
             @keyframes slideappear {
-                from {margin-top: 5rem;opacity:0}
-                to {margin-top:1rem;opacity:1 }
+                from {margin-top: 3rem;opacity:0;}
+                to {margin-top:1rem;opacity:1; }
             }
 
         }
@@ -161,8 +163,11 @@ body {
         background-color: @backTwo;
         margin: 0 auto;
         margin-top:35vh;
-        -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
-        animation: sk-rotateplane 1.2s infinite ease-in-out;
+        -webkit-animation: sk-rotateplane 0.7s infinite ease;
+        animation: sk-rotateplane 0.7s infinite ease;
+        background-size: 4rem 4rem;
+        opacity:0.7;
+        .round();
     }
     @-webkit-keyframes sk-rotateplane {
         0% { -webkit-transform: perspective(120px) }
@@ -176,7 +181,7 @@ body {
             -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
         }
         50% { 
-            transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+            transform: perspective(120px) rotateX(180.1deg) rotateY(0deg);
             -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
         }
         100% { 
