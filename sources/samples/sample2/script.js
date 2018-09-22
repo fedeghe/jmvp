@@ -39,12 +39,8 @@ var App = (function () {
         },
         viewList = `<div class="panel">
                 <div class="panel__header">
-                    <label>Language</label><select>
-                        <option>L</option>
-                        <option>O</option>
-                        <option>S</option>
-                        <option>E</option>
-                        <option>R</option>
+                    <label>Language</label>
+                    <select>
                     </select>
                     <span>Total stars: </span>
                     <span></span>
@@ -84,6 +80,7 @@ var App = (function () {
                 /**
                  * define the view interface
                  */
+  
                 p.view.defineMethod('toggleButtonsFunc', function(val) {
                     var bSub = p.view.getNode(0, 3, 0),
                         bSkip = p.view.getNode(0, 3, 2);
@@ -143,7 +140,7 @@ var App = (function () {
                     p.view.updateMessage(p.model.getSkipMessage());
                 }, function () {
                     p.view.updateMessage(p.model.getMessage());
-                }); 
+                });
                 GH.isLoggedIn() && App.list();
             }
         },
@@ -160,6 +157,14 @@ var App = (function () {
                 /**
                  * define view interface
                  */
+                p.view.defineMethod('loadLanguagesList', function (list) {
+                    var trg = p.view.getNode(0, 1);
+                    list.forEach(function (lang) {
+                        var item = document.createElement('option');
+                        item.innerHTML = lang;
+                        trg.appendChild(item);
+                    });
+                });
                 p.view.defineMethod('setLogoutHandler', function (handler) {
                     p.view.setHandler([2, 0], 'click', handler);
                 });
@@ -198,14 +203,11 @@ var App = (function () {
             init: function () {
                 var p = this;
                 var spinner = p.view.getNode(1, 0, 0),
-                        imgUrl = GH.getData().userData.avatar_url;
-
-                    spinner.style.backgroundImage = 'url(' + imgUrl + ')';
+                    imgUrl = GH.getData().userData.avatar_url;
+                spinner.style.backgroundImage = 'url(' + imgUrl + ')';
                 p.view.setLogoutHandler(p.logout);
                 GH.getMyRepos().then((list) => {
-
-                    p.view.loadList(list);
-
+                    p.view.loadLanguagesList(p.model.getLanguages());
                 });
             }
         }
