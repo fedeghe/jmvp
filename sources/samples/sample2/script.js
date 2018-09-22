@@ -206,8 +206,9 @@ var App = (function () {
                     imgUrl = GH.getData().userData.avatar_url;
                 spinner.style.backgroundImage = 'url(' + imgUrl + ')';
                 p.view.setLogoutHandler(p.logout);
+                p.view.loadLanguagesList(p.model.getLanguages());
                 GH.getMyRepos().then((list) => {
-                    p.view.loadLanguagesList(p.model.getLanguages());
+                    p.view.loadList(list);
                 });
             }
         }
