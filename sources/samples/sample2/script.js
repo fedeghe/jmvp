@@ -46,6 +46,8 @@ var App = (function () {
                         <option>E</option>
                         <option>R</option>
                     </select>
+                    <span>Total stars: </span>
+                    <span></span>
                 </div>
                 <div class="panel__body">
                     <ul class="panel__list">
@@ -63,6 +65,10 @@ var App = (function () {
         initialize: function () {
             console.log('Initialize')
         },
+
+        /**
+         * The login
+         */
         login: {
             view: function () {return viewF(viewLogin);},
             model: function () {return modelF(modelLogin);},
@@ -75,10 +81,12 @@ var App = (function () {
                     }, s || 1000);
                 }
 
+                /**
+                 * define the view interface
+                 */
                 p.view.defineMethod('toggleButtonsFunc', function(val) {
                     var bSub = p.view.getNode(0, 3, 0),
                         bSkip = p.view.getNode(0, 3, 2);
-
                     if (val) {
                         bSub.removeAttribute('disabled');
                         bSkip.removeAttribute('disabled');
@@ -100,6 +108,8 @@ var App = (function () {
                     p.view.setHandler([0, 3, 2], 'mouseover', handlerOver);
                     p.view.setHandler([0, 3, 2], 'mouseout', handlerOut);
                 });
+                // end of view interface definition
+
                 p.defineMethod('updateMessage', function (m){
                     p.model.setMessage(m);
                     p.view.updateMessage(p.model.getMessage());
@@ -137,20 +147,32 @@ var App = (function () {
                 GH.isLoggedIn() && App.list();
             }
         },
+
+        /**
+         * the list
+         */
         list: {
             view: function () {return viewF(viewList);},
             model: function () {return modelF(modelList);},
             defs: function () {
                 var p = this;
 
+                /**
+                 * define view interface
+                 */
                 p.view.defineMethod('setLogoutHandler', function (handler) {
                     p.view.setHandler([2, 0], 'click', handler);
                 });
+                p.view.defineMethod('setTotStars', function (n) {
+                    p.view.getNode(0, 3).innerHTML = n;
+                });
                 p.view.defineMethod('loadList', function (list) {
-                    var trg = p.view.getNode(1, 0);
+                    var trg = p.view.getNode(1, 0),
+                        totStars = 0;
                     trg.innerHTML = '';
                     
                     list.forEach(function(item) {
+                        totStars += item.stargazers_count;
                         var modelItem = modelF({
                                 name: item.name,
                                 description: item.description || '<i>no description</i>',
@@ -160,11 +182,14 @@ var App = (function () {
                             viewItem = viewF(`<li class="item">
                                 <a href="$[link]" target="_blank" class="item__name">$[name]</a>
                                 <p class="item__description">$[description]</p>
+                                <span>$[stars]</span>
                             </li>`, modelItem),
                             pres = presenterI(modelItem, viewItem);
                         pres.render(trg);
                     });
+                    p.view.setTotStars(totStars);
                 });
+
                 p.defineMethod('logout', function () {
                     GH.logout();
                     App.login();
