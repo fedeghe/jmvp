@@ -5,6 +5,8 @@
 @textLink: #ff6600;
 @textDesc: #333;
 @darkest: #000;
+@heightHeader: 6rem;
+@heightFooter: 3rem;
 .round {
     border:none 5px #000000;
     -moz-border-radius:5px;
@@ -75,12 +77,13 @@ body {
             background-color: #e3e3e3;
             .button();
             .round();
-            &:hover{
+            &:hover:enabled{
                 background-color:#fff;
                 outline:none;
             }
             &:disabled{
                 color:gray;
+                cursor:wait;
             }
         }
         &__submit{color:green}
@@ -101,20 +104,20 @@ body {
         
         &__header{
             background-color:orange;
-            height:3rem;
+            height:@heightHeader;
             line-height:3rem;
             padding: 0 1rem;
             .round();
             overflow:hidden;
         }
         &__body{
-            height:calc(90vh - 6rem);
+            height:calc(90vh - @heightHeader - @heightFooter);
             overflow:scroll;
         }
         &__footer{
             background-color:green;
-            height:3rem;
-            line-height:3rem;
+            height: @heightFooter;
+            line-height: @heightFooter;
             padding: 0 1rem 0 0;
             .round();
             overflow:hidden;
@@ -133,6 +136,7 @@ body {
             padding:0;
             margin:0;
             .item{
+                position:relative;
                 animation-name: slideappear;
                 animation-duration: 1s;
                 animation-timing-function: ease-in-out;
@@ -146,6 +150,32 @@ body {
                 }
                 &__description{
                     font-size:.8em;
+                }
+                &_star:after{
+                    display:inline-block;
+                    width:20px;
+                    height:20px;
+                    position:absolute;
+                    top:10px;
+                    right:20px;
+                    content: '\2605';
+                }
+                &_stars:after, &_watchers:after, &_forks:after, &_issues:after{
+                    display:inline-block;
+                    width:20px;
+                    height:20px;
+                }
+                &_stars:after{
+                    content: '\2605';
+                }
+                &_watchers:after{
+                    content: '\1040';
+                }
+                &_forks:after{
+                    content: '\2442';
+                }
+                &_issues:after{
+                    content: '\2602';
                 }
             }
             @keyframes slideappear {

@@ -7,7 +7,8 @@ var App = (function () {
     
     var modelLogin = {
             skipMessage: '... or run it anonymously!',
-            message: 'Enter Your Github credentials and login'
+            message: 'Enter Your Github credentials and login',
+            onLine: navigator.onLine
         },
         viewLogin = `
             <div>
@@ -40,10 +41,9 @@ var App = (function () {
         viewList = `<div class="panel">
                 <div class="panel__header">
                     <label>Language</label>
-                    <select>
-                    </select>
-                    <span>Total stars: </span>
-                    <span></span>
+                    <select></select>
+                    <span>Total stars: <i></i></span>
+                    <input type="text"/>
                 </div>
                 <div class="panel__body">
                     <ul class="panel__list">
@@ -60,6 +60,7 @@ var App = (function () {
     var App =  presenter.getSetupsManager({
         initialize: function () {
             console.log('Initialize')
+            
         },
 
         /**
@@ -82,6 +83,7 @@ var App = (function () {
                  */
   
                 p.view.defineMethod('toggleButtonsFunc', function(val) {
+
                     var bSub = p.view.getNode(0, 3, 0),
                         bSkip = p.view.getNode(0, 3, 2);
                     if (val) {
@@ -115,6 +117,7 @@ var App = (function () {
                     var usr = p.view.getNode(0, 1, 1).value,
                         pwd = p.view.getNode(0, 2, 1).value;
                     p.view.toggleButtonsFunc(false);
+
                     GH.login(usr, pwd).then(() => {
                         p.updateMessage('Logged in correctly');
                         enter();
@@ -142,11 +145,26 @@ var App = (function () {
                     p.view.updateMessage(p.model.getMessage());
                 });
                 GH.isLoggedIn() && App.list();
+
+                // offline?
+                (function () {
+                    function goXLine(status){
+                        p.view.toggleButtonsFunc(status);
+                        p.model.setOnLine(status);
+                        p.view.updateMessage(status
+                            ? p.model.getMessage()
+                            : ' ~~~ OFFLINE ~~~'
+                        );
+                    }
+                    window.onoffline = function () {goXLine(false)};
+                    window.ononline = function () {goXLine(true);};
+                    !p.model.getOnLine() && goXLine(false);
+                })();
             }
         },
 
         /**
-         * the list
+         * the auth list
          */
         list: {
             view: function () {return viewF(viewList);},
@@ -169,7 +187,7 @@ var App = (function () {
                     p.view.setHandler([2, 0], 'click', handler);
                 });
                 p.view.defineMethod('setTotStars', function (n) {
-                    p.view.getNode(0, 3).innerHTML = n;
+                    p.view.getNode(0, 2, 1).innerHTML = n;
                 });
                 p.view.defineMethod('loadList', function (list) {
                     var trg = p.view.getNode(1, 0),
@@ -182,12 +200,16 @@ var App = (function () {
                                 name: item.name,
                                 description: item.description || '<i>no description</i>',
                                 link: item.html_url,
-                                stars: item.stargazers_count
+                                stars: item.stargazers_count,
+                                watchers: item.watchers,
+                                forks: item.forks_count,
+                                issues: item.open_issues_count
                             }),
                             viewItem = viewF(`<li class="item">
                                 <a href="$[link]" target="_blank" class="item__name">$[name]</a>
                                 <p class="item__description">$[description]</p>
-                                <span>$[stars]</span>
+                                <span class="item_star"></span>
+                                <span class="item_stars">$[stars]</span> - <span class="item_watchers">$[watchers]</span> - <span class="item_forks">$[forks]</span> - <span class="item_issues">$[issues]</span>
                             </li>`, modelItem),
                             pres = presenterI(modelItem, viewItem);
                         pres.render(trg);
