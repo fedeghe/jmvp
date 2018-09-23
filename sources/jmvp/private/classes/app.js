@@ -2,7 +2,7 @@ function App(presenter, _setups) {
     this.presenter = presenter;
     var i;
     for (i in _setups) {
-        if (_setups.hasOwnProperty(i) && i !== 'start') {
+        if (_setups.hasOwnProperty(i) && i !== 'initialize') {
             this._addSetup(i, _setups[i]);
         }
     }
