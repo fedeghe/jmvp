@@ -273,25 +273,45 @@ App.firstSection({ trg: trg, other: 'params', that: 'You', may: 'need' });
 ```
 
 Here we can define as many section as needed and the cool thing is that the presenter can also call `App.secondSection` from one of the others section handlers.  
-To see exactly in action it makes sense to do a final almost real-life example.  
-The App consists in a widget that can be loaded into a container which at the very beginning shows:
-- a container with in the middle two buttons, one to login, one to skip
-- if the user press login then:
-    - a form opens to allow the user to login in a github account
-    - if the login does not succeed a warning message appears and the form resets
-    - if the login succeed, then is shown:
-        - a dropdown, with no initial selection, where the user can filter per language
-        - a list of the 30 most ranked repos
-        - a filter to allow the user to see only those repos he starred
-        - a button to logout/login if he is logged in/out
-        - in case the login is shown and pressed, the login modal must be shown
-        - each item shoud show:
-            - the name of the repos (with a link to gh)
-            - a small (in case truncated) description of the repo
-            - the number of stars
-            - a button to star/unstar the repo
-        - the list is dynamic thanks to a 5sec polling
-        - during the whole `mayupdate` request flow the UI is disabled, and a small spinner is shown somewhere
+To see exactly in action it makes sense to do a final almost real-life example, nothing complex but for sure aims to cover a lot of common requirements.  
+
+The App consists in a widget that will be rendered into a target container; the widget shows a login panel allowing the user to either login using his github credentials either to skip and run the app anonymously.
+
+#### Login panel
+- [x] The panel manages online/offline mode, enabling and disabling the access buttons, and notifies the user about changes of the connection status.  
+- [x] In case the login fails, the usaer must be noticed about the problem.
+- [ ] Data entered must be sanitized.
+
+####  Authenticated version  
+- top panel
+    - [ ] the panel shows a radio to switch between _user_ and _public_ repos, default is _user_
+    - [ ] when the user switch to _public_ repos, appears a dropdown of languages where the user can filter per language, default one is given in the setting, as well as the list of available languages.
+    - [ ] there is a text input to allow searching for a user
+
+- list section
+    - [ ] list of repos, each item has:
+        - [ ] a title link with the name of the repo
+        - [ ] the description of the repo (most likely truncated)
+        - [ ] star icon to star unstar the repo (default actually starring status)
+        - [ ] a small summary containing all non 0 stars - watchers - forks - issues
+- footer
+    - [ ] there is a logout button a summary containing total non zero stars - profile watchers - total forks - total issues
 
 
-- the non github authenticated version, simply let only the user to star repos locally, using the localstorage, there will be anyway a button to login
+####  Unauthenticated version  
+- top panel
+    - [ ] the panel shows a radio to switch between _user_ and _public_ repos, default is _user_
+    - [ ] when the user switch to _public_ repos, appears a dropdown of languages where the user can filter per language, default one is given in the setting, as well as the list of available languages.
+    - [ ] there is a text input to allow searching for a user
+- list section
+    - [ ] list of repos, each item has:
+        - [ ] a title link with the name of the repo
+        - [ ] the description of the repo (most likely truncated)
+        - [ ] a small summary containing all non 0 stars - watchers - forks - 
+- footer
+    - [ ] in case the user is looking for a specific user's repos list there is a summary containing total non zero stars - profile watchers - total forks - total issues
+
+
+In all cases
+- the list is dynamic thanks to a 5sec polling        
+- during the whole `mayupdate` request flow the UI is disabled, and a small spinner is shown somewhere
