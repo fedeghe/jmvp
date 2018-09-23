@@ -153,7 +153,7 @@ var App = (function () {
                         p.model.setOnLine(status);
                         p.view.updateMessage(status
                             ? p.model.getMessage()
-                            : ' ~~~ OFFLINE ~~~'
+                            : ' ~~~ <span class="offline">O F F L I N E</span> ~~~'
                         );
                     }
                     window.onoffline = function () {goXLine(false)};
@@ -209,7 +209,10 @@ var App = (function () {
                                 <a href="$[link]" target="_blank" class="item__name">$[name]</a>
                                 <p class="item__description">$[description]</p>
                                 <span class="item_star"></span>
-                                <span class="item_stars">$[stars]</span> - <span class="item_watchers">$[watchers]</span> - <span class="item_forks">$[forks]</span> - <span class="item_issues">$[issues]</span>
+                                {$[stars] ? '<span title="stars" class="item_stars">$[stars]</span>' : ''}
+                                {$[watchers] ? '<span title="watchers" class="item_watchers">$[watchers]</span>' : ''}
+                                {$[forks] ? '<span title="forks" class="item_forks">$[forks]</span>' : ''}
+                                {$[issues] ? '<span title="issues" class="item_issues">$[issues]</span>' : ''}
                             </li>`, modelItem),
                             pres = presenterI(modelItem, viewItem);
                         pres.render(trg);
