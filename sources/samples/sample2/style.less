@@ -147,6 +147,7 @@ body {
                 background-color:white;
                 &__name{
                     text-decoration:none;
+                    color:@backTwo;
                 }
                 &__description{
                     font-size:.8em;
@@ -164,6 +165,7 @@ body {
                     display:inline-block;
                     width:20px;
                     height:20px;
+                    margin-right:0.2rem;
                 }
                 &_stars:after{
                     content: '\2605';
@@ -218,6 +220,45 @@ body {
             transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
             -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
         }
+    }
+
+
+
+
+    .offline{
+        -webkit-animation: color-change 1s infinite;
+        -moz-animation: color-change 1s infinite;
+        -o-animation: color-change 1s infinite;
+        -ms-animation: color-change 1s infinite;
+        animation: color-change 1s infinite;
+        font-weight:bold;
+        font-size:inherit;
+    }
+
+    @-webkit-keyframes color-change {
+        0% { color: @backOne; }
+        50% { color: @backTwo; }
+        100% { color: @backOne; }
+    }
+    @-moz-keyframes color-change {
+        0% { color: @backOne; }
+        50% { color: @backTwo; }
+        100% { color: @backOne; }
+    }
+    @-ms-keyframes color-change {
+        0% { color: @backOne; }
+        50% { color: @backTwo; }
+        100% { color: @backOne; }
+    }
+    @-o-keyframes color-change {
+        0% { color: @backOne; }
+        50% { color: @backTwo; }
+        100% { color: @backOne; }
+    }
+    @keyframes color-change {
+        0% { color: @backOne; }
+        50% { color: @backTwo; }
+        100% { color: @backOne; }
     }
     
 }
