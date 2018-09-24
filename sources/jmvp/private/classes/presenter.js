@@ -74,8 +74,7 @@ Presenter.prototype.refresh = function () {
     this.view.setModel(this.model);
     this.setModel(this.model);
     this.setView(this.view);
-    this.view.reset(true);
-    this.view.childs = [];
+    this.view.reset();
     this.view._refs();
     this.trg.replaceChild(
         this.view.node,

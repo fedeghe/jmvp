@@ -42,6 +42,7 @@ View.prototype.reset = function () {
         this.handlers[i].call(this);
     }
     this.handlers = [];
+    this.childs = [];
 }
 
 View.prototype.setHandler = function(nodePath, ev, handler) {

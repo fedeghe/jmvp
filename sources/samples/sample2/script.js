@@ -255,7 +255,6 @@ var App = (function () {
                 var m  = modelF(modelItem);
                 var item = params.item,
                     starred = params.starred;
-
                 m.setName(item.name);
                 m.setDescription(item.description || '<i>no description</i>'),
                 m.setLink(item.html_url);
