@@ -4,6 +4,7 @@ function Presenter(model, view) {
     this.trg = null;
     this._definedMethods = {};
     this._setups= {};
+    this.active = true;
     this._handlersResetFuncs = [];
 };
 
@@ -65,8 +66,12 @@ Presenter.prototype.render = function (trg) {
     this.trg = trg;
     this.defs.call(this);
     this.init.call(this);
-    trg.appendChild(this.getNode());
+
+    this.active && trg.appendChild(this.getNode());
     
+};
+Presenter.prototype.stop = function () {
+    this.active = false;
 };
 
 Presenter.prototype.refresh = function () {

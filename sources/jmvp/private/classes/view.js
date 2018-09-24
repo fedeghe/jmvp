@@ -95,7 +95,6 @@ View.prototype.defineMethod = function (name, func) {
 //     return this.cache[key];
 // };
 View.prototype.getNode = function () {
-    debugger;
     var a = [].slice.call(arguments),
         key = a.join(':') || 'root',
         ret = this,

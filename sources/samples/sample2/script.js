@@ -164,10 +164,10 @@ var App = (function () {
                 }, function () {
                     p.view.updateMessage(p.model.getMessage());
                 });
-                // if (GH.isLoggedIn()){
-                //     App.list({trg: trg});
-                //     return;
-                // }
+                if (GH.isLoggedIn()){
+                    App.list({trg: trg});
+                    p.stop();
+                }
 
                 // offline?
                 (function () {
