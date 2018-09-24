@@ -38,7 +38,7 @@ View.prototype.setModel = function (model) {
 };
 
 View.prototype.reset = function () {
-    for (var i   = 0, l = this.handlers.lenght; i < l; i++) {
+    for (var i   = 0, l = this.handlers.length; i < l; i++) {
         this.handlers[i].call(this);
     }
     this.handlers = [];
@@ -48,7 +48,7 @@ View.prototype.reset = function () {
 View.prototype.setHandler = function(nodePath, ev, handler) {
     var resetHandler;
     try{
-        var n = this.getNode(nodePath);
+        var n = this.getNode.apply(this, nodePath);
     } catch(e){
         console.log(e)
     }
@@ -95,13 +95,13 @@ View.prototype.defineMethod = function (name, func) {
 //     return this.cache[key];
 // };
 View.prototype.getNode = function () {
+    debugger;
     var a = [].slice.call(arguments),
         key = a.join(':') || 'root',
         ret = this,
         i = 0, l = a.length,
-        childs;
+        childs = this.childs;
     
-    childs = this.childs;
     for (null; i < l; i++) {
         ret = childs[a[i]];
         if (!ret) {

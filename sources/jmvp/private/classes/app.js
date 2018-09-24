@@ -27,7 +27,7 @@ App.prototype._addSetup = function (_setupName, _setup) {
 
     App.prototype[_setupName] = function (params) {
         var p = JMVP.Presenter();
-        
+        console.log(_setupName);
         var self = this,
             gotDefs = 'defs' in _setup,
             gotInit = 'init' in _setup;
@@ -39,11 +39,11 @@ App.prototype._addSetup = function (_setupName, _setup) {
         
         
         var model = _setup.model(params),
-            view = _setup.view();
+            view = _setup.view(params);
         var presenter = p(model, view);
         // presenter.reset(gotDefs);
-        presenter.setModel(model);
-        presenter.setView(view);
+        // presenter.setModel(model);
+        // presenter.setView(view);
 
         view.setModel(model);
         presenter.model || presenter.setModel(presenter.view.model);
@@ -56,7 +56,7 @@ App.prototype._addSetup = function (_setupName, _setup) {
             _setup.defs.call(presenter, params);
         };
         if (!(params.append))params.trg.innerHTML = '';
-        presenter.render(params.trg);
+        presenter.render.call(presenter, params.trg);
         return true;
     }
 };

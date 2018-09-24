@@ -128,7 +128,7 @@ var App = (function () {
                     p.view.setHandler([0, 3, 2], 'mouseout', handlerOut);
                 });
                 // end of view interface definition
-
+                
                 p.defineMethod('updateMessage', function (m){
                     p.model.setMessage(m);
                     p.view.updateMessage(p.model.getMessage());
@@ -164,10 +164,10 @@ var App = (function () {
                 }, function () {
                     p.view.updateMessage(p.model.getMessage());
                 });
-                if (GH.isLoggedIn()){
-                    App.list({trg: trg});
-                    return;
-                }
+                // if (GH.isLoggedIn()){
+                //     App.list({trg: trg});
+                //     return;
+                // }
 
                 // offline?
                 (function () {
@@ -229,6 +229,9 @@ var App = (function () {
                     });
                     p.view.setTotStars(totStars);
                 });
+                p.view.setHandler([0, 1], 'change', function () {
+                    console.log('changed')
+                });
 
                 p.defineMethod('logout', function () {
                     GH.logout();
@@ -240,6 +243,7 @@ var App = (function () {
                 var spinner = p.view.getNode(1, 0, 0),
                     imgUrl = GH.getData().userData.avatar_url;
                 spinner.style.backgroundImage = 'url(' + imgUrl + ')';
+
                 p.view.setLogoutHandler(p.logout);
                 p.view.loadLanguagesList(p.model.getLanguages());
                 Promise.all([GH.getMyRepos(), GH.getMyStarred()]).then((values) => {
