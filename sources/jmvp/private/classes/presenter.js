@@ -22,7 +22,6 @@ Presenter.prototype.reset = function (resetDefined) {
         this.view.reset();
         this.model = null;
         this.view = null;
-        this.trg.innerHTML = '';
     } catch (e) {
         return false;
     }
@@ -57,16 +56,36 @@ Presenter.prototype.defineMethod = function (name, func) {
 };
 
 Presenter.prototype.render = function (trg) {
-    if (trg) this.trg = trg;
     if (!this.view) {
         throw 'ERROR: presenter with no view'
     }
     if (!this.view.model) {
         throw 'ERROR: view with no model'
     }
+    this.trg = trg;
+    trg.appendChild(this.getNode());
+    this.defs();
     this.init();
-    this.trg && this.trg.appendChild(this.getNode());
 };
+
+Presenter.prototype.refresh = function () {
+    var n  = this.getNode();
+    
+    this.view.setModel(this.model);
+    this.setModel(this.model);
+    this.setView(this.view);
+    this.view.reset(true);
+    this.view.childs = [];
+    this.view._refs();
+    this.trg.replaceChild(
+        this.view.node,
+        n
+    );
+    
+    this.defs.call(this);
+    this.init.call(this);
+};
+
 
 Presenter.prototype.getSetupsManager = function (setups) {
     this._setups = Object.assign(this._setups, setups);

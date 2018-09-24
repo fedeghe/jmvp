@@ -35,6 +35,7 @@ var App = (function () {
         
         modelList = {
             list: [],
+            starredIds: [],
             languages: $LANGUAGES.SET$,
             defaultLang: $LANGUAGES.DEFAULT$
         },
@@ -42,7 +43,7 @@ var App = (function () {
                 <div class="panel__header">
                     <label>Language</label>
                     <select></select>
-                    <span>Total stars: <i></i></span>
+                    <span><span>Total stars: </span><i></i></span>
                     <input type="text"/>
                 </div>
                 <div class="panel__body">
@@ -53,7 +54,26 @@ var App = (function () {
                 <div class="panel__footer">
                     <span class="panel__logout"></span>
                 </div>
-        </div>`;
+        </div>`,
+        modelItem = {
+            name: null,
+            description: null,
+            link: null,
+            stars: null,
+            watchers: null,
+            forks: null,
+            issues: null,
+            starredByMe: null
+        },
+        viewItem = `<li class="item">
+            <a href="$[link]" target="_blank" class="item__name">$[name]</a>
+            <p class="item__description">$[description]</p>
+            <span class="{$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}"></span>
+            {$[stars] ? '<span title="stars" class="item_stars">$[stars]</span>' : ''}
+            {$[watchers] ? '<span title="watchers" class="item_watchers">$[watchers]</span>' : ''}
+            {$[forks] ? '<span title="forks" class="item_forks">$[forks]</span>' : ''}
+            {$[issues] ? '<span title="issues" class="item_issues">$[issues]</span>' : ''}
+        </li>`,
 
         presenter = presenterF();
 
@@ -74,7 +94,7 @@ var App = (function () {
 
                 function enter(s) {
                     window.setTimeout(function () {
-                        App.list();
+                        App.list({trg: trg});
                     }, s || 1000);
                 }
 
@@ -144,7 +164,10 @@ var App = (function () {
                 }, function () {
                     p.view.updateMessage(p.model.getMessage());
                 });
-                GH.isLoggedIn() && App.list();
+                if (GH.isLoggedIn()){
+                    App.list({trg: trg});
+                    return;
+                }
 
                 // offline?
                 (function () {
@@ -189,40 +212,27 @@ var App = (function () {
                 p.view.defineMethod('setTotStars', function (n) {
                     p.view.getNode(0, 2, 1).innerHTML = n;
                 });
-                p.view.defineMethod('loadList', function (list) {
+                p.view.defineMethod('loadList', function (list ,starred) {
                     var trg = p.view.getNode(1, 0),
                         totStars = 0;
-                    trg.innerHTML = '';
                     
+                    trg.innerHTML = '';
+
                     list.forEach(function(item) {
                         totStars += item.stargazers_count;
-                        var modelItem = modelF({
-                                name: item.name,
-                                description: item.description || '<i>no description</i>',
-                                link: item.html_url,
-                                stars: item.stargazers_count,
-                                watchers: item.watchers,
-                                forks: item.forks_count,
-                                issues: item.open_issues_count
-                            }),
-                            viewItem = viewF(`<li class="item">
-                                <a href="$[link]" target="_blank" class="item__name">$[name]</a>
-                                <p class="item__description">$[description]</p>
-                                <span class="item_star"></span>
-                                {$[stars] ? '<span title="stars" class="item_stars">$[stars]</span>' : ''}
-                                {$[watchers] ? '<span title="watchers" class="item_watchers">$[watchers]</span>' : ''}
-                                {$[forks] ? '<span title="forks" class="item_forks">$[forks]</span>' : ''}
-                                {$[issues] ? '<span title="issues" class="item_issues">$[issues]</span>' : ''}
-                            </li>`, modelItem),
-                            pres = presenterI(modelItem, viewItem);
-                        pres.render(trg);
+                        App.item({
+                            append: true,
+                            trg: trg,
+                            item: item,
+                            starred: starred.indexOf(item.id) >= 0
+                        });
                     });
                     p.view.setTotStars(totStars);
                 });
 
                 p.defineMethod('logout', function () {
                     GH.logout();
-                    App.login();
+                    App.login({trg: trg});
                 });
             },
             init: function () {
@@ -232,12 +242,59 @@ var App = (function () {
                 spinner.style.backgroundImage = 'url(' + imgUrl + ')';
                 p.view.setLogoutHandler(p.logout);
                 p.view.loadLanguagesList(p.model.getLanguages());
-                GH.getMyRepos().then((list) => {
-                    p.view.loadList(list);
+                Promise.all([GH.getMyRepos(), GH.getMyStarred()]).then((values) => {
+                    p.model.setList(values[0]);
+                    p.model.setStarredIds(values[1].map(i => i.id));
+                    p.view.loadList(p.model.getList(), p.model.getStarredIds());
                 });
             }
+        },
+        item : {
+            view: function () { return viewF(viewItem); },
+            model: function (params) {
+                var m  = modelF(modelItem);
+                var item = params.item,
+                    starred = params.starred;
+
+                m.setName(item.name);
+                m.setDescription(item.description || '<i>no description</i>'),
+                m.setLink(item.html_url);
+                m.setStars(item.stargazers_count);
+                m.setWatchers(item.watchers);
+                m.setForks(item.forks_count);
+                m.setIssues(item.open_issues_count);
+                m.setStarredByMe(starred);
+                return m;
+            },
+            defs: function () {
+                var pres = this;
+
+                pres.view.defineMethod('toggleStar', function (starred) {
+                    var node = this.getNode(2);
+                    node.className = starred ? 'item_starredByMe' : 'item_notStarredByMe';
+                });
+                pres.view.defineMethod('setStarHandler', function (handler) {
+                    pres.setHandler([2], 'click', handler);
+                });
+            },
+            init: function () {
+                var pres = this;
+                pres.view.setStarHandler(function () {
+                    var status = pres.model.getStarredByMe(),
+                        newStatus = !status;
+                    pres.model.setStars(pres.model.getStars() + (newStatus ? +1 : -1));
+                    pres.model.setStarredByMe(newStatus);
+                    pres.view.toggleStar(pres.model.getStarredByMe());
+                    pres.refresh();
+                });
+            },
         }
     });
 
     return App;
 })();
+
+
+
+
+

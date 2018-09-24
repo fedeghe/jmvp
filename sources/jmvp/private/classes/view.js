@@ -25,16 +25,16 @@ View.prototype._refs = function () {
 };
 
 View.prototype.setModel = function (model) {
+    this.reset();
     this.model = model;
-    this.tpl = this.tpl.replace(/\$\[([^\]]*)\]/mg, function (a, b) {
+    var tpl = this.tpl.replace(/\$\[([^\]]*)\]/mg, function (a, b) {
         return model._data[b];
     }).replace(/\{([^\}]*)\}/mg, function (a, b) {
         return (new Function('return ' + b))();
     });
-    this.cnt.innerHTML = this.tpl;
+    this.cnt.innerHTML = tpl;
     this.node = this.cnt.childNodes[0]; 
     this._refs();
-
 };
 
 View.prototype.reset = function () {
@@ -47,7 +47,7 @@ View.prototype.reset = function () {
 View.prototype.setHandler = function(nodePath, ev, handler) {
     var resetHandler;
     try{
-        var n = this.getNode.apply(this, nodePath);
+        var n = this.getNode(nodePath);
     } catch(e){
         console.log(e)
     }
@@ -69,28 +69,46 @@ View.prototype.defineMethod = function (name, func) {
 
 // what about memoization?
 
+// View.prototype.getNode = function () {
+//     var a = [].slice.call(arguments),
+//         key = a.join(':') || 'root',
+//         ret = this,
+//         i = 0, l = a.length,
+//         childs;
+//     if (!(key in this.cache)) {
+//         childs = this.childs;
+//         for (null; i < l; i++) {
+//             ret = childs[a[i]];
+//             if (!ret) {
+//                 throw a + ' not found, handler not settable';
+//             }
+//             childs = ret.childs;
+//         }
+//         this.cache[key] = ret && ret.node;    
+//         // console.log("CACHED");
+//         // console.log(key, this.cache[key]);
+//     } else {
+//         // console.log("GOT IT");
+//         // console.log(key, this.cache[key]);
+//     }
+//     return this.cache[key];
+// };
 View.prototype.getNode = function () {
     var a = [].slice.call(arguments),
         key = a.join(':') || 'root',
         ret = this,
         i = 0, l = a.length,
         childs;
-    if (!(key in this.cache)) {
-        childs = this.childs;
-        for (null; i < l; i++) {
-            ret = childs[a[i]];
-            if (!ret) {
-                throw a + ' not found, handler not settable';
-            }
-            childs = ret.childs;
+    
+    childs = this.childs;
+    for (null; i < l; i++) {
+        ret = childs[a[i]];
+        if (!ret) {
+            throw a + ' not found, handler not settable';
         }
-        this.cache[key] = ret && ret.node;    
-        console.log("CACHED");
-        console.log(key, this.cache[key]);
-    } else {
-        console.log("GOT IT");
-        console.log(key, this.cache[key]);
+        childs = ret.childs;
     }
-    return this.cache[key];
+    return ret && ret.node;
+        
 };
 

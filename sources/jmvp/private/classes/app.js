@@ -24,20 +24,24 @@ App.prototype._initPopState = function () {
 };
 
 App.prototype._addSetup = function (_setupName, _setup) {
-    var presenter = this.presenter;
+
     App.prototype[_setupName] = function (params) {
-        var gotDefs = 'defs' in _setup,
+        var p = JMVP.Presenter();
+        
+        var self = this,
+            gotDefs = 'defs' in _setup,
             gotInit = 'init' in _setup;
 
-        presenter.trg = (params && params.trg) || presenter.trg;
-        if (params) delete params.trg;
-        _setup.route && window.history.pushState(params, null, _setup.route);
+        // presenter.trg = (params && params.trg) || presenter.trg;
+        // if (params) delete params.trg;
+        // _setup.route && window.history.pushState(params, null, _setup.route);
 
-        presenter.reset(gotDefs);
         
-        var model = _setup.model(),
+        
+        var model = _setup.model(params),
             view = _setup.view();
-            
+        var presenter = p(model, view);
+        // presenter.reset(gotDefs);
         presenter.setModel(model);
         presenter.setView(view);
 
@@ -48,7 +52,11 @@ App.prototype._addSetup = function (_setupName, _setup) {
         if (gotInit) presenter.init = function () {
             _setup.init.call(presenter, params);
         };
-        presenter.render();
+        if (gotDefs) presenter.defs = function () {
+            _setup.defs.call(presenter, params);
+        };
+        if (!(params.append))params.trg.innerHTML = '';
+        presenter.render(params.trg);
         return true;
     }
 };

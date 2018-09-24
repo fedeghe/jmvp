@@ -15,3 +15,13 @@ NS.util.toQs = function (obj, params) {
     qs = '?' + qsElems.join('&');
     return qs;
 }
+NS.util.keyfy = function (arr, key) {
+    "use strict";
+    var ret = {},
+        i = 0,
+        l = arr.length;
+    for (null; i < l ; i++) {
+        ret[arr[i][key]] = arr[i];
+    }
+    return ret;
+}
