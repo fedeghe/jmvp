@@ -167,9 +167,6 @@ var App = (function () {
                         p.view.setHandler([0, 3, 2], 'mouseover', handlerOver);
                         p.view.setHandler([0, 3, 2], 'mouseout', handlerOut);
                     });
-                    p.view.defineMethod('setLanguageChangeHandler', function (handler) {
-                        p.view.setHandler([0, 1, 2], 'change', handler);
-                    });
                     // end of view interface definition
                     
                     p.defineMethod('updateMessage', function (m){
@@ -208,9 +205,6 @@ var App = (function () {
                     }, function () {
                         p.view.updateMessage(p.model.getMessage());
                     });
-                    p.view.setLanguageChangeHandler(function () {
-                        alert(CONSTANTS.WIP)
-                    })
                     if (GH.isLoggedIn()){
                         MyApp.list({trg: trg});
                         p.stop();
@@ -280,9 +274,6 @@ var App = (function () {
                         p.model.setTotStarred(totStars);
                         p.view.setTotStars(totStars);
                     });
-                    p.view.setHandler([0, 1], 'change', function () {
-                        console.log('changed')
-                    });
 
                     p.defineMethod('logout', function () {
                         GH.logout();
@@ -294,6 +285,10 @@ var App = (function () {
                     var spinner = p.view.getNode(1, 0, 0),
                         imgUrl = GH.getData().userData.avatar_url;
                     spinner.style.backgroundImage = 'url(' + imgUrl + ')';
+
+                    p.view.setHandler([0, 1], 'change', function () {
+                        alert(CONSTANTS.WIP);
+                    });
 
                     p.view.setLogoutHandler(p.logout);
                     p.view.loadLanguagesList(p.model.getLanguages());
@@ -309,7 +304,7 @@ var App = (function () {
                     });
                 }
             },
-            
+
             item : {
                 view: function () { return viewF(viewItem); },
                 model: function (params) {
