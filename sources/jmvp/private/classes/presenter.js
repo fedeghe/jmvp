@@ -64,8 +64,8 @@ Presenter.prototype.render = function (trg) {
         throw 'ERROR: view with no model'
     }
     this.trg = trg;
-    this.defs.call(this);
-    this.init.call(this);
+    this.defs && this.defs.call(this);
+    this.init && this.init.call(this);
 
     this.active && trg.appendChild(this.getNode());
     
@@ -87,8 +87,8 @@ Presenter.prototype.refresh = function () {
         n
     );
     
-    this.defs.call(this);
-    this.init.call(this);
+    this.defs && this.defs.call(this);
+    this.init && this.init.call(this);
 };
 
 
