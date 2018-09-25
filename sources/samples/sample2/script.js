@@ -49,7 +49,8 @@ var App = (function () {
             starredIds: [],
             languages: $LANGUAGES.SET$,
             defaultLang: $LANGUAGES.DEFAULT$,
-            totStarred: 0
+            totStarred: 0,
+            loggedIn: false
         },
         viewList = `<div class="panel">
                 <div class="panel__header">
@@ -89,7 +90,7 @@ var App = (function () {
 
         presenter = presenterF();
 
-    var App =  presenter.getSetupsManager({
+    var MyApp =  presenter.getSetupsManager({
         initialize: function () {
             console.log('Initialize')
             
@@ -106,7 +107,8 @@ var App = (function () {
 
                 function enter(s) {
                     window.setTimeout(function () {
-                        App.list({trg: trg});
+                        p.stop();
+                        MyApp.list({trg: trg});
                     }, s || 1000);
                 }
 
@@ -177,7 +179,7 @@ var App = (function () {
                     p.view.updateMessage(p.model.getMessage());
                 });
                 if (GH.isLoggedIn()){
-                    App.list({trg: trg});
+                    MyApp.list({trg: trg});
                     p.stop();
                 }
 
@@ -206,7 +208,7 @@ var App = (function () {
             model: function () {return modelF(modelList);},
             defs: function () {
                 var p = this;
-
+                p.model.setLoggedIn(true);
                 /**
                  * define view interface
                  */
@@ -232,7 +234,7 @@ var App = (function () {
 
                     list.forEach(function(item) {
                         totStars += item.stargazers_count;
-                        App.item({
+                        MyApp.item({
                             append: true,
                             trg: trg,
                             item: item,
@@ -248,7 +250,7 @@ var App = (function () {
 
                 p.defineMethod('logout', function () {
                     GH.logout();
-                    App.login({trg: trg});
+                    MyApp.login({trg: trg});
                 });
             },
             init: function () {
@@ -306,9 +308,9 @@ var App = (function () {
                          * here I try to use the reference to the list presenter
                          * to manage the total stars count
                          */
-                        var listPresenter = App.list.presenter,
+                        var listPresenter = MyApp.list.presenter,
                             currentTot = listPresenter.model.getTotStarred();
-                        listPresenter.model.setTotStarred(currentTot + (newStatus  || -1));
+                        listPresenter.model.setTotStarred(currentTot + (newStatus || -1));
                         listPresenter.view.setTotStars(listPresenter.model.getTotStarred());
                         //
 
@@ -328,7 +330,7 @@ var App = (function () {
         }
     });
 
-    return App;
+    return MyApp;
 })();
 
 
