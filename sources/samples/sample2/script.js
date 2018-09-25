@@ -57,7 +57,9 @@ var App = (function () {
                     <label>Language</label>
                     <select></select>
                     <span><span>Total stars: </span><i></i></span>
-                    <input type="text"/>
+                    <br/>
+                    <label for="only_owned">Only owned</label>
+                    <input id="only_owned" type="checkbox" />
                 </div>
                 <div class="panel__body">
                     <ul class="panel__list">
@@ -229,6 +231,9 @@ var App = (function () {
                         trg.appendChild(item);
                     });
                 });
+                p.view.defineMethod('setOnlyOwnedFilterHandler', function (handler) {
+                    p.view.setHandler([0, 5], 'change', handler);
+                })
                 p.view.defineMethod('setLogoutHandler', function (handler) {
                     p.view.setHandler([2, 0], 'click', handler);
                 });
@@ -270,6 +275,11 @@ var App = (function () {
 
                 p.view.setLogoutHandler(p.logout);
                 p.view.loadLanguagesList(p.model.getLanguages());
+                p.view.setOnlyOwnedFilterHandler(function (e) {
+                    var onlyOwned = e.target.checked,
+                        list = p.model.getList().filter(repo => onlyOwned ? repo.fork == 0 : true);
+                    p.view.loadList(list, p.model.getStarredIds());
+                })
                 Promise.all([GH.getMyRepos(), GH.getMyStarred()]).then((values) => {
                     p.model.setList(values[0]);
                     p.model.setStarredIds(values[1].map(i => i.id));
