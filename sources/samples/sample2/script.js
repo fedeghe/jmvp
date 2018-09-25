@@ -48,7 +48,8 @@ var App = (function () {
             list: [],
             starredIds: [],
             languages: $LANGUAGES.SET$,
-            defaultLang: $LANGUAGES.DEFAULT$
+            defaultLang: $LANGUAGES.DEFAULT$,
+            totStarred: 0
         },
         viewList = `<div class="panel">
                 <div class="panel__header">
@@ -238,6 +239,7 @@ var App = (function () {
                             starred: starred.indexOf(item.id) >= 0
                         });
                     });
+                    p.model.setTotStarred(totStars);
                     p.view.setTotStars(totStars);
                 });
                 p.view.setHandler([0, 1], 'change', function () {
@@ -299,7 +301,17 @@ var App = (function () {
                         name = pres.model.getName();
                     Toggle(false);
                     GH[newStatus ? 'starRepo' : 'unstarRepo'](name).then(r => {
-                        console.log(`done : ${r}`);
+
+                        /**
+                         * here I try to use the reference to the list presenter
+                         * to manage the total stars count
+                         */
+                        var listPresenter = App.list.presenter,
+                            currentTot = listPresenter.model.getTotStarred();
+                        listPresenter.model.setTotStarred(currentTot + (newStatus  || -1));
+                        listPresenter.view.setTotStars(listPresenter.model.getTotStarred());
+                        //
+
                         pres.model.setStars(pres.model.getStars() + (newStatus ? +1 : -1));
                         pres.model.setStarredByMe(newStatus);
                         pres.model.setWatchers(pres.model.getWatchers() + (newStatus ? +1 : -1));
