@@ -34,6 +34,9 @@ var GH = (function () {
             }
             throw new Error(response.status + ' : ' + response.statusText);
         },
+        checkResponse = function (response) {
+            return response.ok; // maybe add some relevant check of the statuscode like a rangecheck in [200,400[  ???
+        },
         err = function (error) {
             console.error('Error:', error);
         },
@@ -86,6 +89,21 @@ var GH = (function () {
                 .then(getResponse)
                 .catch(err);
         },
+
+        starRepo: function (repo, user) {
+            user = user || data.usr;
+            return fetch('https://api.github.com/user/starred/' + user + '/' + repo , headers('PUT'))
+                .then(checkResponse)
+                .catch(err);
+        },
+
+        unstarRepo: function (repo, user) {
+            user = user || data.usr;
+            return fetch('https://api.github.com/user/starred/' + user + '/' + repo, headers('DELETE'))
+                .then(checkResponse)
+                .catch(err);
+        },
+
         check: function () {
             console.log(getData());
         }
