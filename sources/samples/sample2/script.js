@@ -80,9 +80,10 @@ var App = (function () {
             issues: null,
             starredByMe: null,
             isFork: null,
-            size: null
+            size: null,
+            isEmpty: null
         },
-        viewItem = `<li class="item{$[isFork] ? ' fork': ''}">
+        viewItem = `<li class="item{$[isFork] ? ' fork': ''}{$[isEmpty] ? ' emptyRepo': ''}" title="{$[isEmpty] ? ' this repository is empty': ''}">
             <a href="$[link]" target="_blank" class="item__name">$[name]</a>
             <p class="item__description">$[description]</p>
             <span class="{$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}"></span>
@@ -302,6 +303,7 @@ var App = (function () {
                 m.setIssues(item.open_issues_count);
                 m.setIsFork(item.fork);
 
+                m.setIsEmpty(item.size == 0)
                 m.setSize(JMVP.util.toMemFormat(item.size));                
                 m.setStarredByMe(params.starred);
                 return m;
@@ -310,8 +312,7 @@ var App = (function () {
                 var pres = this;
 
                 pres.view.defineMethod('toggleStar', function (starred) {
-                    var node = this.getNode(2);
-                    node.className = starred ? 'item_starredByMe' : 'item_notStarredByMe';
+                    this.getNode(2).className = starred ? 'item_starredByMe' : 'item_notStarredByMe';
                 });
                 pres.view.defineMethod('setStarHandler', function (handler) {
                     pres.setHandler([2], 'click', handler);
@@ -351,11 +352,5 @@ var App = (function () {
             },
         }
     });
-
     return MyApp;
 })();
-
-
-
-
-
