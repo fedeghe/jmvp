@@ -5,6 +5,17 @@ var App = (function () {
         presenterF = JMVP.Presenter();
         presenterI = JMVP.Presenter();
     
+    var Toggle = function (active) {
+        if (active) {
+            trg.style.opacity = 1;
+            trg.style.pointerEvents = 'initial';
+        } else {
+            trg.style.opacity = 0.5;
+            trg.style.pointerEvents = 'none';
+        }
+    }
+
+
     var modelLogin = {
             skipMessage: '... or run it anonymously!',
             message: 'Enter Your Github credentials and login',
@@ -285,10 +296,21 @@ var App = (function () {
                 pres.view.setStarHandler(function () {
                     var status = pres.model.getStarredByMe(),
                         newStatus = !status;
-                    pres.model.setStars(pres.model.getStars() + (newStatus ? +1 : -1));
-                    pres.model.setStarredByMe(newStatus);
-                    pres.view.toggleStar(pres.model.getStarredByMe());
-                    pres.refresh();
+                        name = pres.model.getName();
+                    Toggle(false);
+                    GH[newStatus ? 'starRepo' : 'unstarRepo'](name).then(r => {
+                        console.log(`done : ${r}`);
+                        pres.model.setStars(pres.model.getStars() + (newStatus ? +1 : -1));
+                        pres.model.setStarredByMe(newStatus);
+                        pres.model.setWatchers(pres.model.getWatchers() + (newStatus ? +1 : -1));
+
+                        pres.view.toggleStar(pres.model.getStarredByMe());
+                        pres.refresh();
+                        Toggle(true);
+                    }).catch((err) => {
+                        console.log(err)
+                    });
+                    
                 });
             },
         }
