@@ -76,9 +76,11 @@ var App = (function () {
             watchers: null,
             forks: null,
             issues: null,
-            starredByMe: null
+            starredByMe: null,
+            isFork: null,
+            size: null
         },
-        viewItem = `<li class="item">
+        viewItem = `<li class="item{$[isFork] ? ' fork': ''}">
             <a href="$[link]" target="_blank" class="item__name">$[name]</a>
             <p class="item__description">$[description]</p>
             <span class="{$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}"></span>
@@ -86,6 +88,13 @@ var App = (function () {
             {$[watchers] ? '<span title="watchers" class="item_watchers">$[watchers]</span>' : ''}
             {$[forks] ? '<span title="forks" class="item_forks">$[forks]</span>' : ''}
             {$[issues] ? '<span title="issues" class="item_issues">$[issues]</span>' : ''}
+            <hr>
+            <details class="item__details">
+                <summary class="item__details_summary">more details</summary>
+                <ul class="item__details_summary_list">
+                    <li>Size: $[size]</li>
+                </ul>
+            </details>
         </li>`,
 
         presenter = presenterF();
@@ -271,9 +280,9 @@ var App = (function () {
         item : {
             view: function () { return viewF(viewItem); },
             model: function (params) {
-                var m  = modelF(modelItem);
-                var item = params.item,
-                    starred = params.starred;
+                var m  = modelF(modelItem),
+                    item = params.item;
+
                 m.setName(item.name);
                 m.setDescription(item.description || '<i>no description</i>'),
                 m.setLink(item.html_url);
@@ -281,7 +290,10 @@ var App = (function () {
                 m.setWatchers(item.watchers);
                 m.setForks(item.forks_count);
                 m.setIssues(item.open_issues_count);
-                m.setStarredByMe(starred);
+                m.setIsFork(item.fork);
+
+                m.setSize(JMVP.util.toMemFormat(item.size));                
+                m.setStarredByMe(params.starred);
                 return m;
             },
             defs: function () {
@@ -314,9 +326,9 @@ var App = (function () {
                         listPresenter.view.setTotStars(listPresenter.model.getTotStarred());
                         //
 
-                        pres.model.setStars(pres.model.getStars() + (newStatus ? +1 : -1));
+                        pres.model.setStars(pres.model.getStars() + (newStatus || -1));
                         pres.model.setStarredByMe(newStatus);
-                        pres.model.setWatchers(pres.model.getWatchers() + (newStatus ? +1 : -1));
+                        pres.model.setWatchers(pres.model.getWatchers() + (newStatus || -1));
 
                         pres.view.toggleStar(pres.model.getStarredByMe());
                         pres.refresh();
