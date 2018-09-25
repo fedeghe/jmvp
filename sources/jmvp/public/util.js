@@ -14,7 +14,7 @@ NS.util.toQs = function (obj, params) {
     }
     qs = '?' + qsElems.join('&');
     return qs;
-}
+};
 
 /**
  * 
@@ -30,4 +30,9 @@ NS.util.toMemFormat = function (size) {
     }
 
     return (size / Math.pow(div, index)).toFixed(2).replace(/\.?0+$/,'') + units[index];
-}
+};
+
+NS.util.dateFormat = function(d) {
+    var data = new Date(d);
+    return data.toLocaleString(navigator.language);
+};

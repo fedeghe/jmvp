@@ -81,6 +81,10 @@ var App = (function () {
             starredByMe: null,
             isFork: null,
             size: null,
+            language: null,
+            license: null,
+            created: null,
+            pushed: null,
             isEmpty: null
         },
         viewItem = `<li class="item{$[isFork] ? ' fork': ''}{$[isEmpty] ? ' emptyRepo': ''}" title="{$[isEmpty] ? ' this repository is empty': ''}">
@@ -96,6 +100,10 @@ var App = (function () {
                 <summary class="item__details_summary">more details</summary>
                 <ul class="item__details_summary_list">
                     <li>Size: $[size]</li>
+                    <li>Language: $[language]</li>
+                    <li>Created: $[created]</li>
+                    <li>Last push: $[pushed]</li>
+                    <li>License: $[license]</li>
                 </ul>
             </details>
         </li>`,
@@ -302,6 +310,10 @@ var App = (function () {
                 m.setForks(item.forks_count);
                 m.setIssues(item.open_issues_count);
                 m.setIsFork(item.fork);
+                m.setLanguage(item.language || 'unknown');
+                m.setLicense(item.license ? '<a href="' + item.license.url + '" target="_blank">' + item.license.name + '</a>' : '<i>unset</i>');
+                m.setCreated(JMVP.util.dateFormat(item.created_at));
+                m.setPushed(JMVP.util.dateFormat(item.pushed_at));
 
                 m.setIsEmpty(item.size == 0)
                 m.setSize(JMVP.util.toMemFormat(item.size));                
