@@ -1,4 +1,5 @@
 (function () {
+    var trg = document.getElementById('trg');
     var modelListF = JMVP.Model(),
         viewListF = JMVP.View(),
         presenterListF = JMVP.Presenter();
@@ -48,9 +49,34 @@
 
         listPresenter = presenterListF();
 
+    
 
+    var commonDefs = function (params) {
+        var p = this;
+        p.view.defineMethod('resetList', function (el) {
+            this.getNode(1).innerHTML = '';
+        });
+        p.view.defineMethod('addLink', function (el) {
+            var item = document.createElement('li'),
+                a = document.createElement('a');
+            a.setAttribute('href', el.link);
+            a.setAttribute('target', '_blank');
+            a.innerHTML = el.label;
+            item.appendChild(a);
+            this.getNode(1).appendChild(item);
+        });
 
-
+        p.view.defineMethod('setTitle', function (title) {
+            this.getNode(0).innerHTML = title;
+        });
+        this.defineMethod('loadList', function () {
+            this.view.resetList();
+            var examples = this.model.getExamples();
+            for (var i = 0, l = examples.length; i < l; i++) {
+                this.view.addLink(examples[i]);
+            }
+        });
+    };
     var App = listPresenter.getSetupsManager({
         initialize: function () {
             console.log('Started');
@@ -59,32 +85,7 @@
             route: '/',
             view: function (){ return viewListF(listView);},
             model: function () {return modelListF(listModel);},
-            defs: function (params) {
-                var p = this;
-                p.view.defineMethod('resetList', function (el) {
-                    this.getNode(1).innerHTML = '';
-                });
-                p.view.defineMethod('addLink', function (el) {
-                    var item = document.createElement('li'),
-                        a = document.createElement('a');
-                    a.setAttribute('href', el.link);
-                    a.setAttribute('target', '_blank');
-                    a.innerHTML = el.label;
-                    item.appendChild(a);
-                    this.getNode(1).appendChild(item);
-                });
-
-                p.view.defineMethod('setTitle', function (title) {
-                    this.getNode(0).innerHTML = title;
-                });
-                this.defineMethod('loadList', function () {
-                    this.view.resetList();
-                    var examples = this.model.getExamples();
-                    for (var i = 0, l = examples.length; i < l; i++) {
-                        this.view.addLink(examples[i]);
-                    }
-                });
-            },
+            defs: commonDefs,
             init: function (params) {
                 console.log('first App init');
                 console.log(params);
@@ -99,7 +100,7 @@
                 });
 
                 this.setHandler([2], 'click', function () {
-                    App.second({number:1, name:'fede'});
+                    App.second({ trg: trg,  number:1, name:'fede'});
                 });
 
                 this.setHandler([1], 'mouseover', function (e) {
@@ -120,12 +121,13 @@
             route: '/second',
             view: function () {return viewListF(listView2);},
             model: function () { return modelListF(listModel2);},
+            defs: commonDefs,
             init: function (params) {
                 console.log('second App init');
                 console.log(params);
                 this.loadList();
                 this.setHandler([2], 'click', function () {
-                    App.first({int: 4, surname:'ghedina', address: 'kudam 74'});
+                    App.first({trg: trg, int: 4, surname:'ghedina', address: 'kudam 74'});
                 });
             }
 
@@ -133,7 +135,7 @@
     });
 
     App.first({
-        trg: document.getElementById('trg'),
+        trg: trg,
         name: 'Federico'
     });
     
