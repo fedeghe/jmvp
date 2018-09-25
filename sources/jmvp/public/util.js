@@ -15,13 +15,19 @@ NS.util.toQs = function (obj, params) {
     qs = '?' + qsElems.join('&');
     return qs;
 }
-NS.util.keyfy = function (arr, key) {
+
+/**
+ * 
+ * @param {*} size meant to be given in KB
+ */
+NS.util.toMemFormat = function (size) {
     "use strict";
-    var ret = {},
-        i = 0,
-        l = arr.length;
-    for (null; i < l ; i++) {
-        ret[arr[i][key]] = arr[i];
+    var div = 2<<9,
+        units = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+        index = 0;
+    while (size / Math.pow(div, index + 1) > 1) {
+        index++;
     }
-    return ret;
+
+    return (size / Math.pow(div, index)).toFixed(2).replace(/\.?0+$/,'') + units[index];
 }
