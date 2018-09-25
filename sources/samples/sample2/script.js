@@ -184,9 +184,10 @@ var App = (function () {
                     
                 });
                 p.defineMethod('skip', function () {
-                    p.updateMessage('Skipping');
+                    // p.updateMessage('Skipping');
                     GH.logout();
-                    enter();
+                    alert('Sorry this feature is not yet implemented! ... come back in a few days, or simply watch the repo!!! :D')
+                    //enter();
                 });
             },
             init: function () {
