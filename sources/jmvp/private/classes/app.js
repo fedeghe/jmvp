@@ -26,24 +26,14 @@ App.prototype._initPopState = function () {
 App.prototype._addSetup = function (_setupName, _setup) {
 
     App.prototype[_setupName] = function (params) {
-        var p = JMVP.Presenter();
-        console.log(_setupName);
         var self = this,
+            p = JMVP.Presenter(),
             gotDefs = 'defs' in _setup,
-            gotInit = 'init' in _setup;
+            gotInit = 'init' in _setup,
+            model = _setup.model(params),
+            view = _setup.view(params),
+            presenter = p(model, view);
 
-        // presenter.trg = (params && params.trg) || presenter.trg;
-        // if (params) delete params.trg;
-        // _setup.route && window.history.pushState(params, null, _setup.route);
-
-        
-        
-        var model = _setup.model(params),
-            view = _setup.view(params);
-        var presenter = p(model, view);
-        // presenter.reset(gotDefs);
-        // presenter.setModel(model);
-        // presenter.setView(view);
 
         view.setModel(model);
         presenter.model || presenter.setModel(presenter.view.model);
