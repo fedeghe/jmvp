@@ -34,7 +34,7 @@ App.prototype._addSetup = function (_setupName, _setup) {
             view = _setup.view(params),
             presenter = p(model, view);
 
-
+        App.prototype[_setupName].presenter = presenter;
         view.setModel(model);
         presenter.model || presenter.setModel(presenter.view.model);
         gotDefs && _setup.defs.call(presenter, params);
