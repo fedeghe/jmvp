@@ -62,7 +62,7 @@ var App = (function () {
                     <select></select>
                     <span><span>Total stars: </span><i></i></span>
                     <br/>
-                    <input id="only_owned" type="checkbox" /><label data-tooltip="use it to filter" for="only_owned">Only owned</label>
+                    <input id="only_owned" type="checkbox" /><label for="only_owned">Only owned</label>
                 </div>
                 <div class="panel__body">
                     <ul class="panel__list">
