@@ -357,7 +357,6 @@ var App = (function () {
                         tooltipApp = MyApp.tooltip.presenter;
                     pres.view.defineMethod('updateDetailsLabels', function (label, tooltip) {
                         var node = this.getNode(5, 0);
-                        console.log(node);
                         node.innerHTML = label;
                         node.dataset.tooltip = tooltip;
                         tooltipApp.updateMessage(tooltip);
