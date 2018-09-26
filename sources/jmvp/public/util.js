@@ -36,3 +36,22 @@ NS.util.dateFormat = function(d) {
     var data = new Date(d);
     return data.toLocaleString(navigator.language);
 };
+
+NS.util.ready = (function () {
+    var cb = [],
+        readyStateCheckInterval = setInterval(function () {
+            if (document.readyState === "complete") {
+                clearInterval(readyStateCheckInterval);
+                for (var i = 0, l = cb.length; i < l; i++) {
+                    cb[i].call(this);
+                }
+            }
+        }, 10);
+    return function (c) {
+        if (document.readyState === "complete") {
+            c.call(this);
+        } else {
+            cb.push(c);
+        }
+    };
+})()
