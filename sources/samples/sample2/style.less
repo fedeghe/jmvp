@@ -23,12 +23,28 @@
 }
 
 body {
+
     background-color: white;
     color:#444;
     font-family:verdana;
     font-size:1em;
     margin: 1rem;
     
+    #trg {
+        position:relative;
+    }
+
+    .tooltip {
+        position:absolute;
+        display:none;
+        background-color:white;
+        padding:5px;
+        .round();
+        -moz-box-shadow:0px 0px 5px #aaa;
+        -webkit-box-shadow:0px 0px 5px #aaa;
+        box-shadow:10px 10px 5px rgba(200,200,200,0.5);
+    }
+
 
     .login {
         width:300px;
@@ -95,7 +111,8 @@ body {
     }
 
     .panel {
-        
+        margin-left:100px;
+        margin-top:100px;
         .round();
         padding:1em;
         max-width:400px;

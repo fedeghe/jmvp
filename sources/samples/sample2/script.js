@@ -62,7 +62,7 @@ var App = (function () {
                     <select></select>
                     <span><span>Total stars: </span><i></i></span>
                     <br/>
-                    <input id="only_owned" type="checkbox" /><label for="only_owned">Only owned</label>
+                    <input id="only_owned" type="checkbox" /><label data-tooltip="use it to filter" for="only_owned">Only owned</label>
                 </div>
                 <div class="panel__body">
                     <ul class="panel__list">
@@ -70,11 +70,16 @@ var App = (function () {
                     </ul>
                 </div>
                 <div class="panel__footer">
-                    <span class="panel__logout">Logout</span>
+                    <span class="panel__logout">EXIT</span>
                 </div>
         </div>`,
 
         modelItem = {
+            detailsLabel: 'show more details',
+            detailsTooltipMessage: 'show more details about the repo',
+            detailsLabelClose: 'show less details',
+            detailsTooltipMessageClose: 'hide details about the repo',
+            detailsVisible: false,
             name: null,
             description: null,
             link: null,
@@ -96,13 +101,15 @@ var App = (function () {
             <a href="$[link]" target="_blank" class="item__name">$[name]</a>
             <p class="item__description">$[description]</p>
             <span class="{$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}"></span>
-            {$[stars] ? '<span title="stars" class="item_stars">$[stars]</span>' : ''}
-            {$[watchers] ? '<span title="watchers" class="item_watchers">$[watchers]</span>' : ''}
-            {$[forks] ? '<span title="forks" class="item_forks">$[forks]</span>' : ''}
-            {$[issues] ? '<span title="issues" class="item_issues">$[issues]</span>' : ''}
+            <div>
+                {$[stars] ? '<span data-tooltip="stars" class="item_stars">$[stars]</span>' : ''}
+                {$[watchers] ? '<span data-tooltip="watchers" class="item_watchers">$[watchers]</span>' : ''}
+                {$[forks] ? '<span data-tooltip="forks" class="item_forks">$[forks]</span>' : ''}
+                {$[issues] ? '<span data-tooltip="issues" class="item_issues">$[issues]</span>' : ''}
+            </div>
             <hr>
             <details class="item__details">
-                <summary class="item__details_summary">more details</summary>
+                <summary class="item__details_summary" data-tooltip="$[detailsTooltipMessage]">$[detailsLabel]</summary>
                 <ul class="item__details_summary_list">
                     <li>Size: $[size]</li>
                     <li>Language: $[language]</li>
@@ -117,8 +124,7 @@ var App = (function () {
 
         MyApp =  presenter.getSetupsManager({
             initialize: function () {
-                console.log('Initialize')
-                
+                console.log('Initialize');
             },
 
             /**
@@ -221,7 +227,7 @@ var App = (function () {
                         }
                         window.onoffline = function () {goXLine(false)};
                         window.ononline = function () {goXLine(true);};
-                        !p.model.getOnLine() && goXLine(false);
+                        p.model.getOnLine() && navigator.onLine || goXLine(false);
                     })();
                 }
             },
@@ -305,6 +311,20 @@ var App = (function () {
                         model.setStarredIds(values[1].map(i => i.id));
                         view.loadList(model.getList(), model.getStarredIds());
                     });
+
+                    JMVP.events.ready(function () {
+                        window.onoffline = function () {
+                            Toggle(false);
+                            setTimeout(function () {
+                                GH.logout();
+                                MyApp.login({ trg: trg });
+                                Toggle(true);
+                            }, 3000);
+                        };
+                        //and reset the one from login
+                        window.ononline = function () { };
+                        App.tooltip({ trg: trg, append: true });
+                    });
                 }
             },
 
@@ -333,8 +353,15 @@ var App = (function () {
                     return m;
                 },
                 defs: function () {
-                    var pres = this;
-
+                    var pres = this,
+                        tooltipApp = MyApp.tooltip.presenter;
+                    pres.view.defineMethod('updateDetailsLabels', function (label, tooltip) {
+                        var node = this.getNode(5, 0);
+                        console.log(node);
+                        node.innerHTML = label;
+                        node.dataset.tooltip = tooltip;
+                        tooltipApp.updateMessage(tooltip);
+                    });
                     pres.view.defineMethod('toggleStar', function (starred) {
                         this.getNode(2).className = starred ? 'item_starredByMe' : 'item_notStarredByMe';
                     });
@@ -344,6 +371,27 @@ var App = (function () {
                 },
                 init: function () {
                     var pres = this;
+                    pres.view.setHandler([5, 0], 'click', function () {
+                        var detailsVisible = pres.model.getDetailsVisible();
+                        if (detailsVisible) {
+                            pres.view.updateDetailsLabels(
+                                pres.model.getDetailsLabel(),
+                                pres.model.getDetailsTooltipMessage()
+                            );
+                        } else {
+                            pres.view.updateDetailsLabels(
+                                pres.model.getDetailsLabelClose(),
+                                pres.model.getDetailsTooltipMessageClose()
+                            );
+                        }
+                        pres.model.setDetailsVisible(!detailsVisible);
+                        /*
+                        detailsLabel: 'show more details',
+                        detailsTooltipMessage: 'show more details about the repo',
+                        detailsLabelClose: 'show less details',
+                        detailsTooltipMessageClose: 'hide details about the repo',
+                        */
+                    })
                     pres.view.setStarHandler(function () {
                         var status = pres.model.getStarredByMe(),
                             newStatus = !status;
@@ -374,6 +422,53 @@ var App = (function () {
                         
                     });
                 },
+            },
+
+            tooltip : {
+                view: function () {return viewF(`<div class="tooltip">$[message]</div>`)},
+                model: function () {return modelF({message: 'nothing', offset: [20, 10]})},
+                defs: function () {
+                    var p = this,
+                        node = p.view.getNode();
+                    p.view.defineMethod('showTooltip', function (m) {
+                        node.innerHTML = m;
+                        node.style.display = 'block';
+                    });
+                    p.view.defineMethod('hideTooltip', function () {
+                        node.style.display = 'none';
+                    });
+                    p.view.defineMethod('updateMessage', function (message) {
+                        node.innerHTML = message;
+                    });
+                },
+                init: function () {
+                    var p = this,
+                        node = p.view.getNode(),
+                        toolTipOffset = p.model.getOffset(),
+                        listTrg = MyApp.list.presenter.view.getNode(); // only external ref to the panel container
+                    listTrg.addEventListener('mousemove', function (e) {
+                        var target = e.target,
+                            offset = null;
+                        if ('tooltip' in target.dataset){
+                            offset = JMVP.events.getOffset(e, trg);
+                            node.style.left = (offset[0] + toolTipOffset[0]) + 'px';
+                            node.style.top = (offset[1] + toolTipOffset[1]) + 'px';
+                            p.show(target.dataset.tooltip);
+                        } else {
+                            p.hide();
+                        }
+                    })
+                    p.defineMethod('show', function (m) {
+                        p.view.showTooltip(m);
+                    });
+                    p.defineMethod('hide', function () {
+                        p.view.hideTooltip();
+                    });
+                    p.defineMethod('updateMessage', function (message) {
+                        p.model.setMessage(message);
+                        p.view.updateMessage(p.model.getMessage());
+                    })
+                }
             }
         });
     
