@@ -1,6 +1,6 @@
 var App = (function () {
     var CONSTANTS = {
-            WIP: 'Sorry this feature is not yet implemented! ...come back in a few days, or simply watch the repo!!! :D'
+            WIP: 'Sorry this feature is not yet implemented! ...come back to check, or simply watch the repo!!! :D'
         },
         trg = document.getElementById('trg'),
         viewF = JMVP.View(),
@@ -62,8 +62,7 @@ var App = (function () {
                     <select></select>
                     <span><span>Total stars: </span><i></i></span>
                     <br/>
-                    <label for="only_owned">Only owned</label>
-                    <input id="only_owned" type="checkbox" />
+                    <input id="only_owned" type="checkbox" /><label for="only_owned">Only owned</label>
                 </div>
                 <div class="panel__body">
                     <ul class="panel__list">
@@ -71,7 +70,7 @@ var App = (function () {
                     </ul>
                 </div>
                 <div class="panel__footer">
-                    <span class="panel__logout"></span>
+                    <span class="panel__logout">Logout</span>
                 </div>
         </div>`,
 
@@ -248,7 +247,7 @@ var App = (function () {
                         });
                     });
                     p.view.defineMethod('setOnlyOwnedFilterHandler', function (handler) {
-                        p.view.setHandler([0, 5], 'change', handler);
+                        p.view.setHandler([0, 4], 'change', handler);
                     })
                     p.view.defineMethod('setLogoutHandler', function (handler) {
                         p.view.setHandler([2, 0], 'click', handler);
@@ -281,26 +280,30 @@ var App = (function () {
                     });
                 },
                 init: function () {
-                    var p = this;
-                    var spinner = p.view.getNode(1, 0, 0),
+                    var p = this,
+                        model = this.model,
+                        view = this.view;
+                    var spinner =view.getNode(1, 0, 0),
                         imgUrl = GH.getData().userData.avatar_url;
+
                     spinner.style.backgroundImage = 'url(' + imgUrl + ')';
 
-                    p.view.setHandler([0, 1], 'change', function () {
+                    view.setHandler([0, 1], 'change', function () {
                         alert(CONSTANTS.WIP);
                     });
 
-                    p.view.setLogoutHandler(p.logout);
-                    p.view.loadLanguagesList(p.model.getLanguages());
-                    p.view.setOnlyOwnedFilterHandler(function (e) {
+                    view.setLogoutHandler(p.logout);
+                    view.loadLanguagesList(model.getLanguages());
+                    view.setOnlyOwnedFilterHandler(function (e) {
                         var onlyOwned = e.target.checked,
-                            list = p.model.getList().filter(repo => onlyOwned ? repo.fork == 0 : true);
-                        p.view.loadList(list, p.model.getStarredIds());
-                    })
+                            list = model.getList().filter(repo => onlyOwned ? repo.fork == 0 : true);
+                        view.loadList(list, model.getStarredIds());
+                    });
+
                     Promise.all([GH.getMyRepos(), GH.getMyStarred()]).then((values) => {
-                        p.model.setList(values[0]);
-                        p.model.setStarredIds(values[1].map(i => i.id));
-                        p.view.loadList(p.model.getList(), p.model.getStarredIds());
+                        model.setList(values[0]);
+                        model.setStarredIds(values[1].map(i => i.id));
+                        view.loadList(model.getList(), model.getStarredIds());
                     });
                 }
             },
@@ -320,7 +323,7 @@ var App = (function () {
                     m.setIssues(item.open_issues_count);
                     m.setIsFork(item.fork);
                     m.setLanguage(item.language || 'unknown');
-                    m.setLicense(item.license ? '<a href="' + item.license.url + '" target="_blank">' + item.license.name + '</a>' : '<i>unset</i>');
+                    m.setLicense(item.license ? '<a href="' + (item.license.url || 'javascript:;') + '" target="_blank">' + item.license.name + '</a>' : '<i>unset</i>');
                     m.setCreated(JMVP.util.dateFormat(item.created_at));
                     m.setPushed(JMVP.util.dateFormat(item.pushed_at));
 

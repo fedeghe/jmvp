@@ -127,8 +127,12 @@ body {
             color:white;
             display:inline-block;
             cursor: pointer;
-            &:after{
+            &:before{
+                margin-right:0.5rem;
                 content: '\25C0';
+            }
+            &:hover{
+                color:@backOne;
             }
         }
         &__list{
