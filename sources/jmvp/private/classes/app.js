@@ -47,7 +47,7 @@ App.prototype._addSetup = function (_setupName, _setup) {
         };
         if (!(params.append))params.trg.innerHTML = '';
         presenter.render.call(presenter, params.trg);
-        return true;
+        return presenter;
     }
 };
 
