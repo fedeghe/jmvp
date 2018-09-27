@@ -402,9 +402,9 @@ var App = (function () {
                         
                         askConfirmation ? dialog.show(
                             proceed,
-                            'Are You sure you should '+ (status ? '<b>un</b>' : '') + 'star Your own repo?'
+                            'Are You sure You should '+ (status ? '<b>un</b>' : '') + 'star Your own repo?'
                         ) : proceed();
-                        
+
                         function proceed() {
                             var newStatus = !status;
                                 name = pres.model.getName();
