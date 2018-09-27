@@ -70,7 +70,7 @@ var App = (function () {
                     </ul>
                 </div>
                 <div class="panel__footer">
-                    <span class="panel__logout">EXIT</span>
+                    <span class="panel__logout" data-tooltip="... where are you going?">EXIT</span>
                 </div>
         </div>`,
 
@@ -97,10 +97,10 @@ var App = (function () {
             isEmpty: null
         },
 
-        viewItem = `<li class="item{$[isFork] ? ' fork': ''}{$[isEmpty] ? ' emptyRepo': ''}" title="{$[isEmpty] ? ' this repository is empty': ''}">
+        viewItem = `<li class="item{$[isFork] ? ' fork': ''}{$[isEmpty] ? ' emptyRepo': ''}" {$[isEmpty] ? 'data-tooltip="this repository is empty"': ''}>
             <a href="$[link]" target="_blank" class="item__name">$[name]</a>
             <p class="item__description">$[description]</p>
-            <span class="{$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}"></span>
+            <span class="{$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}" {$[isEmpty] ? 'data-tooltip="really want to star a empty repo???"': ''}></span>
             <div>
                 {$[stars] ? '<span data-tooltip="stars" class="item_stars">$[stars]</span>' : ''}
                 {$[watchers] ? '<span data-tooltip="watchers" class="item_watchers">$[watchers]</span>' : ''}
@@ -111,11 +111,11 @@ var App = (function () {
             <details class="item__details">
                 <summary class="item__details_summary" data-tooltip="$[detailsTooltipMessage]">$[detailsLabel]</summary>
                 <ul class="item__details_summary_list">
-                    <li>Size: $[size]</li>
-                    <li>Language: $[language]</li>
-                    <li>Created: $[created]</li>
-                    <li>Last push: $[pushed]</li>
-                    <li>License: $[license]</li>
+                    <li><b>Size:</b> $[size]</li>
+                    <li><b>Language:</b> $[language]</li>
+                    <li><b>Created:</b> $[created]</li>
+                    <li><b>Last push:</b> $[pushed]</li>
+                    <li><b>License:</b> $[license]</li>
                 </ul>
             </details>
         </li>`,
@@ -323,7 +323,7 @@ var App = (function () {
                         };
                         //and reset the one from login
                         window.ononline = function () { };
-                        App.tooltip({ trg: trg, append: true });
+                        MyApp.tooltip({ trg: trg, append: true });
                     });
                 }
             },
@@ -444,7 +444,12 @@ var App = (function () {
                     var p = this,
                         node = p.view.getNode(),
                         toolTipOffset = p.model.getOffset(),
-                        listTrg = MyApp.list.presenter.view.getNode(); // only external ref to the panel container
+                        listTrg = MyApp.list.presenter.view.getNode(),  //
+                        content = MyApp.list.presenter.view.getNode(1); // only 2 external ref to the panel container
+
+                    content.addEventListener('scroll', function () {
+                        p.hide();
+                    });
                     listTrg.addEventListener('mousemove', function (e) {
                         var target = e.target,
                             offset = null;

@@ -7,6 +7,7 @@
 @darkest: #000;
 @heightHeader: 6rem;
 @heightFooter: 3rem;
+@tooltipBg: rgb(255, 218, 150);
 .round {
     border:none 5px #000000;
     -moz-border-radius:5px;
@@ -37,17 +38,17 @@ body {
     .tooltip {
         position:absolute;
         display:none;
-        background-color:#ddd;
-        padding:5px;
+        background-color:@tooltipBg;
+        padding:0.3em 0.5em;
         .round();
-        -moz-box-shadow:0px 0px 5px #aaa;
-        -webkit-box-shadow:0px 0px 5px #aaa;
-        box-shadow:10px 10px 5px rgba(220,220,220,0.5);
+        z-index: 1000;
+        font-size:0.6em;
         &:before {
             content:'◄';
-            color:#ddd;
+            color:@tooltipBg;
             font-size:2em;
             position:absolute;
+            z-index: 0;
             left:-0.2em;
             top:-0.65em;
             -webkit-transform: rotate(45deg);
@@ -241,7 +242,7 @@ body {
             }
             .fork {
                 background-color:#e0e0e0;
-                border:4px inset white;
+                opacity:0.8;
             }
             .emptyRepo{
                 color:#ddd !important;
