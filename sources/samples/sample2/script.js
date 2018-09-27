@@ -288,8 +288,9 @@ var App = (function () {
                 init: function () {
                     var p = this,
                         model = this.model,
-                        view = this.view;
-                    var spinner =view.getNode(1, 0, 0),
+                        view = this.view,
+                        vRoot = view.getNode();
+                    var spinner = view.getNode(1, 0, 0),
                         imgUrl = GH.getData().userData.avatar_url;
 
                     spinner.style.backgroundImage = 'url(' + imgUrl + ')';
@@ -324,6 +325,7 @@ var App = (function () {
                         //and reset the one from login
                         window.ononline = function () { };
                         MyApp.tooltip({ trg: trg, append: true });
+                        MyApp.dialog({ trg: vRoot, append: true });
                     });
                 }
             },
@@ -392,32 +394,46 @@ var App = (function () {
                         */
                     })
                     pres.view.setStarHandler(function () {
-                        var status = pres.model.getStarredByMe(),
-                            newStatus = !status;
-                            name = pres.model.getName();
-                        Toggle(false);
-                        GH[newStatus ? 'starRepo' : 'unstarRepo'](name).then(r => {
 
-                            /**
-                             * here I try to use the reference to the list presenter
-                             * to manage the total stars count
-                             */
-                            var listPresenter = MyApp.list.presenter,
-                                currentTot = listPresenter.model.getTotStarred();
-                            listPresenter.model.setTotStarred(currentTot + (newStatus || -1));
-                            listPresenter.view.setTotStars(listPresenter.model.getTotStarred());
-                            //
+                        var dialog = MyApp.dialog.presenter,
+                            view = this,
+                            status = pres.model.getStarredByMe(),
+                            askConfirmation = $SETTINGS.ASK_STARRING_CONFIRM$;
+                        
+                        askConfirmation ? dialog.show(
+                            proceed,
+                            'Are You sure you should '+ (status ? '<b>un</b>' : '') + 'star Your own repo?'
+                        ) : proceed();
+                        
+                        function proceed() {
+                            var newStatus = !status;
+                                name = pres.model.getName();
+                            Toggle(false);
+                            GH[newStatus ? 'starRepo' : 'unstarRepo'](name).then(r => {
 
-                            pres.model.setStars(pres.model.getStars() + (newStatus || -1));
-                            pres.model.setStarredByMe(newStatus);
-                            pres.model.setWatchers(pres.model.getWatchers() + (newStatus || -1));
+                                /**
+                                 * here I try to use the reference to the list presenter
+                                 * to manage the total stars count
+                                 */
+                                var listPresenter = MyApp.list.presenter,
+                                    currentTot = listPresenter.model.getTotStarred();
+                                listPresenter.model.setTotStarred(currentTot + (newStatus || -1));
+                                listPresenter.view.setTotStars(listPresenter.model.getTotStarred());
+                                //
 
-                            pres.view.toggleStar(pres.model.getStarredByMe());
-                            pres.refresh();
-                            Toggle(true);
-                        }).catch((err) => {
-                            console.log(err)
-                        });
+                                pres.model.setStars(pres.model.getStars() + (newStatus || -1));
+                                pres.model.setStarredByMe(newStatus);
+                                pres.model.setWatchers(pres.model.getWatchers() + (newStatus || -1));
+
+                                pres.view.toggleStar(pres.model.getStarredByMe());
+                                pres.refresh();
+                                dialog.hide();
+                                Toggle(true);
+                            }).catch((err) => {
+                                console.log(err)
+                            });
+
+                        }
                         
                     });
                 },
@@ -472,6 +488,63 @@ var App = (function () {
                         p.model.setMessage(message);
                         p.view.updateMessage(p.model.getMessage());
                     })
+                }
+            },
+
+            dialog: {
+                view: function () { return viewF(`
+                    <div class="dialog">
+                        <div class="dialog--box">
+                            <span class="dialog--close"></span>
+                            <p>$[message]</p>
+                            <div>
+                                <button class="dialog--button dialog--confirm">$[confirmLabel]</button>
+                                <button class="dialog--button dialog--abort">$[abortLabel]</button>
+                            </div>
+                        </div>
+                    </div>
+                `) },
+                model: function () {
+                    return modelF({
+                        message: 'no message',
+                        confirmLabel: 'Confirm',
+                        abortLabel: 'Abort'
+                    })
+                },
+                defs: function () {
+                    var p = this,
+                        node = p.view.getNode();
+                    p.view.defineMethod('show', function () {
+                        node.style.display = 'block';
+                    });
+                    p.view.defineMethod('hide', function () {
+                        node.style.display = 'none';
+                    });
+                    
+                    p.view.defineMethod('setup', function (func, msg, confirm, abort) {
+                        p.model.setMessage(msg || 'no message');
+                        confirm && p.model.setConfirmLabel(confirm);
+                        abort && p.model.setAbortLabel(abort);
+                        var $message = this.getNode(0, 1),
+                            $confirm = this.getNode(0, 2, 0),
+                            $abort = this.getNode(0, 2, 1);
+                        $message.innerHTML = p.model.getMessage();
+                        $confirm.innerHTML = p.model.getConfirmLabel();
+                        $abort.innerHTML = p.model.getAbortLabel();
+                        $confirm.addEventListener('click', func);
+                        $abort.addEventListener('click', this.hide);
+                        this.show();
+                    });
+                },
+                init: function () {
+                    var p = this;
+                    p.defineMethod('show', function (func, msg, confirm, abort) {
+                        p.refresh();
+                        p.view.setup(func, msg, confirm, abort);
+                    });
+                    p.defineMethod('hide', function (func, msg, confirm, abort) {
+                        p.view.hide();
+                    });
                 }
             }
         });

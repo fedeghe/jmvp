@@ -20,5 +20,8 @@
             "scala"
         ],
         "DEFAULT": false
+    },
+    "SETTINGS": {
+        "ASK_STARRING_CONFIRM": true
     }
 }
