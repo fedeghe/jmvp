@@ -395,7 +395,7 @@ var App = (function () {
                         detailsLabelClose: 'show less details',
                         detailsTooltipMessageClose: 'hide details about the repo',
                         */
-                    })
+                    });
                     pres.view.setStarHandler(function () {
 
                         var dialog = MyApp.dialog.presenter,
