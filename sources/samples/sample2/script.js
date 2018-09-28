@@ -59,10 +59,14 @@ var App = (function () {
 
         viewList = `<div class="panel">
                 <div class="panel__header">
-                    <span><strong>$[username] </strong><i class="panel__fame"></i></span>
-                    <br/>
-                    <input id="only_owned" type="checkbox" /><label for="only_owned">Only owned</label>
-                    <div></div>
+                    <div class="hfMargin">
+                        <p>
+                            <strong>$[username] </strong><i class="panel__fame"></i>
+                        </p>
+                        <p><strong>Tot repos: </strong><span></span></p>
+                        <input id="only_owned" type="checkbox" /><label for="only_owned">Only owned</label>
+                        <div></div>
+                    </div>
                 </div>
                 <div class="panel__body">
                     <ul class="panel__list">
@@ -112,11 +116,11 @@ var App = (function () {
             <details class="item__details">
                 <summary class="item__details_summary" data-tooltip="$[detailsTooltipMessage]">$[detailsLabel]</summary>
                 <ul class="item__details_summary_list">
-                    <li><b>Size:</b> $[size]</li>
-                    <li><b>Language:</b> $[language]</li>
-                    <li><b>Created:</b> $[created]</li>
-                    <li><b>Last push:</b> $[pushed]</li>
-                    <li><b>License:</b> $[license]</li>
+                    <li class="item__details_summary_list__item"><strong>Size:</strong> $[size]</li>
+                    <li class="item__details_summary_list__item"><strong>Language:</strong> $[language]</li>
+                    <li class="item__details_summary_list__item"><strong>Created:</strong> $[created]</li>
+                    <li class="item__details_summary_list__item"><strong>Last push:</strong> $[pushed]</li>
+                    <li class="item__details_summary_list__item"><strong>License:</strong> $[license]</li>
                 </ul>
             </details>
         </li>`,
@@ -258,13 +262,13 @@ var App = (function () {
                     //     });
                     // });
                     p.view.defineMethod('setOnlyOwnedFilterHandler', function (handler) {
-                        p.view.setHandler([0, 2], 'change', handler);
+                        p.view.setHandler([0, 0, 2], 'change', handler);
                     })
                     p.view.defineMethod('setLogoutHandler', function (handler) {
                         p.view.setHandler([2, 0], 'click', handler);
                     });
                     p.view.defineMethod('setTotStars', function (n) {
-                        p.view.getNode(0, 0, 1).innerHTML = n;
+                        p.view.getNode(0, 0, 0, 1).innerHTML = n;
                     });
                     p.view.defineMethod('loadList', function (list ,starred) {
                         var trg = p.view.getNode(1, 0),
@@ -508,11 +512,10 @@ var App = (function () {
                 view: function () { return viewF(`
                     <div class="dialog">
                         <div class="dialog--box">
-                            <span class="dialog--close"></span>
-                            <p>$[message]</p>
+                            <p class="dialog__message">$[message]</p>
                             <div>
-                                <button class="dialog--button dialog--confirm">$[confirmLabel]</button>
-                                <button class="dialog--button dialog--abort">$[abortLabel]</button>
+                                <button class="dialog__button dialog--confirm">$[confirmLabel]</button>
+                                <button class="dialog__button dialog--abort">$[abortLabel]</button>
                             </div>
                         </div>
                     </div>
@@ -538,9 +541,9 @@ var App = (function () {
                         p.model.setMessage(msg || 'no message');
                         confirm && p.model.setConfirmLabel(confirm);
                         abort && p.model.setAbortLabel(abort);
-                        var $message = this.getNode(0, 1),
-                            $confirm = this.getNode(0, 2, 0),
-                            $abort = this.getNode(0, 2, 1);
+                        var $message = this.getNode(0, 0),
+                            $confirm = this.getNode(0, 1, 0),
+                            $abort = this.getNode(0, 1, 1);
                         $message.innerHTML = p.model.getMessage();
                         $confirm.innerHTML = p.model.getConfirmLabel();
                         $abort.innerHTML = p.model.getAbortLabel();
