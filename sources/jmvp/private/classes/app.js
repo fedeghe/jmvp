@@ -11,6 +11,7 @@ function App(presenter, _setups) {
     }
     this._setups = _setups;
     this._routesApp = getRouteApp(_setups);
+    this.trg = null;
     this._initPopState();
 }
 App.prototype._initPopState = function () {
@@ -26,6 +27,7 @@ App.prototype._initPopState = function () {
 App.prototype._addSetup = function (_setupName, _setup) {
 
     App.prototype[_setupName] = function (params) {
+        if (params && params.trg) this.trg = params.trg;
         var self = this,
             p = JMVP.Presenter(),
             gotDefs = 'defs' in _setup,
@@ -45,8 +47,8 @@ App.prototype._addSetup = function (_setupName, _setup) {
         if (gotDefs) presenter.defs = function () {
             _setup.defs.call(presenter, params);
         };
-        if (!(params.append))params.trg.innerHTML = '';
-        presenter.render.call(presenter, params.trg);
+        if (!(params.append))this.trg.innerHTML = '';
+        presenter.render.call(presenter, this.trg);
         return presenter;
     }
 };
