@@ -9,7 +9,7 @@ $$reset.css$$
 @textDesc: #333;
 @darkest: #000;
 @heightHeader: 7rem;
-@heightFooter: 3rem;
+@heightFooter: 2rem;
 @tooltipBg: rgb(255, 218, 150);
 @hfMargin:0.5rem;
 
@@ -179,6 +179,18 @@ body {
     .hfMargin {
         margin: @hfMargin;
     }
+    .iconBefore{
+        &:before {
+            font-family: FontAwesome;
+            margin-right:3px;
+        }
+    }
+    .iconAfter{
+        &:after {
+            font-family: FontAwesome;
+            margin-left:3px;
+        }
+    }
     .panel {
         .round();
         padding:1em;
@@ -207,24 +219,28 @@ body {
             overflow:hidden;
         }
         &__logout{
-            margin-left:1rem;
+            margin-left:0.5rem;
             color:white;
             display:inline-block;
             cursor: pointer;
             &:before{
+                content: '\f08b';
+                display: inline-block;
+                -webkit-transform: rotate(180deg);
+                -moz-transform: rotate(180deg);
+                -o-transform: rotate(180deg);
+                -ms-transform: rotate(180deg);
+                transform: rotate(180deg);
                 margin-right:0.5rem;
-                content: '\25C0';
             }
             &:hover{
                 color:@backOne;
             }
         }
-        &__fame{
-            &:before{
-                font-family: FontAwesome;
-                content: "\f3a5"
-            }
+        &__fame:before{
+            content: '\f0c3';
         }
+
         &__list{
             list-style-type: none;
             padding:0;
@@ -256,7 +272,7 @@ body {
                     position:absolute;
                     top:10px;
                     right:20px;
-                    content: '\2605';
+                    content: '\f005';
                 }
                 &_notStarredByMe:after{
                     cursor:pointer;
@@ -266,7 +282,7 @@ body {
                     position:absolute;
                     top:10px;
                     right:20px;
-                    content: '\2606';
+                    content: '\f006';
                 }
                 &_stars:after, &_watchers:after, &_forks:after, &_issues:after{
                     display:inline-block;
@@ -275,17 +291,19 @@ body {
                     margin-right:0.2rem;
                 }
                 &_stars:after{
-                    content: '\2605';
+                    content: '\f005';
                 }
                 &_watchers:after{
-                    content: '\1040';
+                    content: '\f06e';
                 }
                 &_forks:after{
-                    content: '\2442';
+                    content: '\f126';
                 }
                 &_issues:after{
-                    content: '\2602';
+                    
+                    content: '\f0e9';
                 }
+                
 
 
                 &__details{
