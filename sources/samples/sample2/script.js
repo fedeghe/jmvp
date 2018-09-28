@@ -53,14 +53,13 @@ var App = (function () {
             languages: $LANGUAGES.SET$,
             defaultLang: $LANGUAGES.DEFAULT$,
             totStarred: 0,
+            username: null,
             loggedIn: false
         },
 
         viewList = `<div class="panel">
                 <div class="panel__header">
-                    <label>Language</label>
-                    <select></select>
-                    <span><span>Total stars: </span><i></i></span>
+                    <span><strong>$[username] </strong><i class="panel__fame"></i></span>
                     <br/>
                     <input id="only_owned" type="checkbox" /><label for="only_owned">Only owned</label>
                     <div></div>
@@ -138,10 +137,10 @@ var App = (function () {
                 defs: function () {
                     var p = this;
 
-                    function enter(s) {
+                    function enter(mode, s) {
                         window.setTimeout(function () {
                             p.stop();
-                            MyApp.list({trg: trg});
+                            MyApp.list({mode: mode, trg: trg});
                         }, s || 1000);
                     }
 
@@ -187,7 +186,7 @@ var App = (function () {
 
                         GH.login(usr, pwd).then(() => {
                             p.updateMessage('Logged in correctly');
-                            enter();
+                            enter('auth');
                         }).catch(function (e) {
                             console.log('ERROR');
                             console.log(e);
@@ -200,7 +199,7 @@ var App = (function () {
                         // p.updateMessage('Skipping');
                         GH.logout();
                         alert(CONSTANTS.WIP)
-                        //enter();
+                        //enter('skip');
                     });
                 },
                 init: function () {
@@ -239,29 +238,33 @@ var App = (function () {
              */
             list: {
                 view: function () {return viewF(viewList);},
-                model: function () {return modelF(modelList);},
+                model: function () {
+                    var userData = GH.getData();
+                    modelList.username = userData.usr;
+                    return modelF(modelList);
+                },
                 defs: function () {
                     var p = this;
                     p.model.setLoggedIn(true);
                     /**
                      * define view interface
                      */
-                    p.view.defineMethod('loadLanguagesList', function (list) {
-                        var trg = p.view.getNode(0, 1);
-                        list.forEach(function (lang) {
-                            var item = document.createElement('option');
-                            item.innerHTML = lang;
-                            trg.appendChild(item);
-                        });
-                    });
+                    // p.view.defineMethod('loadLanguagesList', function (list) {
+                    //     var trg = p.view.getNode(0, 1);
+                    //     list.forEach(function (lang) {
+                    //         var item = document.createElement('option');
+                    //         item.innerHTML = lang;
+                    //         trg.appendChild(item);
+                    //     });
+                    // });
                     p.view.defineMethod('setOnlyOwnedFilterHandler', function (handler) {
-                        p.view.setHandler([0, 4], 'change', handler);
+                        p.view.setHandler([0, 2], 'change', handler);
                     })
                     p.view.defineMethod('setLogoutHandler', function (handler) {
                         p.view.setHandler([2, 0], 'click', handler);
                     });
                     p.view.defineMethod('setTotStars', function (n) {
-                        p.view.getNode(0, 2, 1).innerHTML = n;
+                        p.view.getNode(0, 0, 1).innerHTML = n;
                     });
                     p.view.defineMethod('loadList', function (list ,starred) {
                         var trg = p.view.getNode(1, 0),
@@ -297,12 +300,12 @@ var App = (function () {
 
                     spinner.style.backgroundImage = 'url(' + imgUrl + ')';
 
-                    view.setHandler([0, 1], 'change', function () {
-                        alert(CONSTANTS.WIP);
-                    });
+                    // view.setHandler([0, 1], 'change', function () {
+                    //     alert(CONSTANTS.WIP);
+                    // });
 
                     view.setLogoutHandler(p.logout);
-                    view.loadLanguagesList(model.getLanguages());
+                    // view.loadLanguagesList(model.getLanguages());
                     view.setOnlyOwnedFilterHandler(function (e) {
                         var onlyOwned = e.target.checked,
                             list = model.getList().filter(repo => onlyOwned ? repo.fork == 0 : true);
