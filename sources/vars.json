@@ -22,6 +22,7 @@
         "DEFAULT": false
     },
     "SETTINGS": {
-        "ASK_STARRING_CONFIRM": true
+        "ASK_STARRING_CONFIRM": true,
+        "ASK_UNSTARRING_CONFIRM": false
     }
 }
