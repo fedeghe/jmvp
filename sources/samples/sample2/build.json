@@ -3,7 +3,7 @@
         "rm -rf samples/sample2",
         "mkdir -p samples/sample2"
     ],
-    "sources/samples/sample2/index.html": "samples/sample2 -plugins=malta-browser-refresh[files:\"*\"]",
+    "sources/samples/sample2/index.html": "samples/sample2 -plugins=malta-browser-refresh[files:\"relative\"]",
     "sources/samples/sample2/*.js": "samples/sample2 -vars=sources/vars.json",
     "sources/samples/sample2/style.less": "samples/sample2 -plugins=malta-less"
 }
