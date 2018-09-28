@@ -211,7 +211,7 @@ var App = (function () {
                         p.view.updateMessage(p.model.getMessage());
                     });
                     if (GH.isLoggedIn()){
-                        MyApp.list({trg: trg});
+                        MyApp.list({trg: trg}); // pass trg in case of refresh
                         p.stop();
                     }
 
@@ -324,7 +324,7 @@ var App = (function () {
                         };
                         //and reset the one from login
                         window.ononline = function () { };
-                        MyApp.tooltip({ trg: trg, append: true });
+                        MyApp.tooltip({ append: true });
                         MyApp.dialog({ trg: vRoot, append: true });
                     });
                 }
@@ -355,13 +355,12 @@ var App = (function () {
                     return m;
                 },
                 defs: function () {
-                    var pres = this,
-                        tooltipApp = MyApp.tooltip.presenter;
+                    var pres = this;
                     pres.view.defineMethod('updateDetailsLabels', function (label, tooltip) {
                         var node = this.getNode(5, 0);
                         node.innerHTML = label;
                         node.dataset.tooltip = tooltip;
-                        tooltipApp.updateMessage(tooltip);
+                        MyApp.tooltip.presenter.updateMessage(tooltip);
                     });
                     pres.view.defineMethod('toggleStar', function (starred) {
                         this.getNode(2).className = starred ? 'item_starredByMe' : 'item_notStarredByMe';
@@ -398,9 +397,14 @@ var App = (function () {
                         var dialog = MyApp.dialog.presenter,
                             view = this,
                             status = pres.model.getStarredByMe(),
-                            askConfirmation = $SETTINGS.ASK_STARRING_CONFIRM$;
+                            askStartConfirmation = $SETTINGS.ASK_STARRING_CONFIRM$,
+                            askUnstartConfirmation = $SETTINGS.ASK_UNSTARRING_CONFIRM$;
                         
-                        askConfirmation ? dialog.show(
+                        (
+                            (askStartConfirmation && !status)
+                            ||
+                            (askUnstartConfirmation && status)
+                        ) ? dialog.show(
                             proceed,
                             'Are You sure You should '+ (status ? '<b>un</b>' : '') + 'star Your own repo?'
                         ) : proceed();
