@@ -71,7 +71,11 @@ var App = (function () {
                             <input id="only_owned" type="checkbox" />
                             <label for="only_owned">Only owned</label>
                         </p>
-                        <div></div>
+                        <div class="panel__header__switch">
+                            <span class="icon panel__header__switch__user"></span>
+                            <span class="icon panel__header__switch__arrowdown"></span>
+                            <span class="icon panel__header__switch__github"></span>
+                        </div>
                     </div>
                 </div>
                 <div class="panel__body">

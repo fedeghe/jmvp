@@ -191,6 +191,16 @@ body {
             margin-left:3px;
         }
     }
+    .icon{
+        &:after {
+            font-family: FontAwesome;
+            display: inline-block;
+            font-size:1rem;
+            line-height:1rem;
+            margin:1px;
+        }
+    }
+
     .panel {
         .round();
         padding:1em;
@@ -200,11 +210,33 @@ body {
         position:relative;
         
         &__header{
+            position:relative;
             background-color:orange;
             height:@heightHeader;
             line-height:calc((@heightHeader - @hfMargin*2)/3);
             .round();
             overflow:hidden;
+
+            &__switch{
+                position:absolute;
+                right:15px;
+                top:15px;
+                height:calc(@heightHeader - @hfMargin*2 - 15px);
+                width:20px;
+
+                &__github:after{
+                    content: '\f09b';
+                }
+                &__user:after{
+                    content: '\f007';
+                }
+                &__arrowup:after{
+                    content: '\f062';
+                }
+                &__arrowdown:after{
+                    content: '\f063';
+                }
+            }
         }
         &__body{
             height:calc(90vh - @heightHeader - @heightFooter);
@@ -300,9 +332,9 @@ body {
                     content: '\f126';
                 }
                 &_issues:after{
-                    
                     content: '\f0e9';
                 }
+
                 
 
 
