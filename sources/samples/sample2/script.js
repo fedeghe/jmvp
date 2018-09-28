@@ -61,10 +61,16 @@ var App = (function () {
                 <div class="panel__header">
                     <div class="hfMargin">
                         <p>
-                            <strong>$[username] </strong><i class="panel__fame"></i>
+                            <strong>$[username] </strong><i class="iconBefore panel__fame"></i>
                         </p>
-                        <p><strong>Tot repos: </strong><span></span></p>
-                        <input id="only_owned" type="checkbox" /><label for="only_owned">Only owned</label>
+                        <p>
+                            <strong>#Repos: </strong>
+                            <span></span>
+                        </p>
+                        <p>
+                            <input id="only_owned" type="checkbox" />
+                            <label for="only_owned">Only owned</label>
+                        </p>
                         <div></div>
                     </div>
                 </div>
@@ -74,7 +80,7 @@ var App = (function () {
                     </ul>
                 </div>
                 <div class="panel__footer">
-                    <span class="panel__logout" data-tooltip="... where are you going?">EXIT</span>
+                    <span class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
                 </div>
         </div>`,
 
@@ -105,12 +111,12 @@ var App = (function () {
         viewItem = `<li class="item{$[isFork] ? ' fork': ''}{$[isEmpty] ? ' emptyRepo': ''}" {$[isEmpty] ? 'data-tooltip="this repository is empty"': ''}>
             <a href="$[link]" target="_blank" class="item__name">$[name]</a>
             <p class="item__description">$[description]</p>
-            <span class="{$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}" {$[isEmpty] ? 'data-tooltip="really want to star a empty repo???"': ''}></span>
+            <span class="iconAfter {$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}" {$[isEmpty] ? 'data-tooltip="really want to star a empty repo???"': ''}></span>
             <div>
-                {$[stars] ? '<span data-tooltip="stars" class="item_stars">$[stars]</span>' : ''}
-                {$[watchers] ? '<span data-tooltip="watchers" class="item_watchers">$[watchers]</span>' : ''}
-                {$[forks] ? '<span data-tooltip="forks" class="item_forks">$[forks]</span>' : ''}
-                {$[issues] ? '<span data-tooltip="issues" class="item_issues">$[issues]</span>' : ''}
+                {$[stars] ? '<span data-tooltip="stars" class="iconAfter item_stars">$[stars]</span>' : ''}
+                {$[watchers] ? '<span data-tooltip="watchers" class="iconAfter item_watchers">$[watchers]</span>' : ''}
+                {$[forks] ? '<span data-tooltip="forks" class="iconAfter item_forks">$[forks]</span>' : ''}
+                {$[issues] ? '<span data-tooltip="issues" class="iconAfter item_issues">$[issues]</span>' : ''}
             </div>
             <hr>
             <details class="item__details">
@@ -262,7 +268,7 @@ var App = (function () {
                     //     });
                     // });
                     p.view.defineMethod('setOnlyOwnedFilterHandler', function (handler) {
-                        p.view.setHandler([0, 0, 2], 'change', handler);
+                        p.view.setHandler([0, 0, 2, 0], 'change', handler);
                     })
                     p.view.defineMethod('setLogoutHandler', function (handler) {
                         p.view.setHandler([2, 0], 'click', handler);
@@ -272,12 +278,17 @@ var App = (function () {
                     });
                     p.view.defineMethod('loadList', function (list ,starred) {
                         var trg = p.view.getNode(1, 0),
-                            totStars = 0;
-                        
+                            $counter = p.view.getNode(0, 0, 1, 1),
+                            totStars = 0,
+                            counter = {
+                                own: 0,
+                                fork: 0
+                            };
                         trg.innerHTML = '';
 
                         list.forEach(function(item) {
                             totStars += item.stargazers_count;
+                            counter[item.fork ? 'fork' : 'own']++;
                             MyApp.item({
                                 append: true,
                                 trg: trg,
@@ -285,6 +296,7 @@ var App = (function () {
                                 starred: starred.indexOf(item.id) >= 0
                             });
                         });
+                        $counter.innerHTML = list.length + (counter.fork ? (' ('+ counter.fork) + ' forks)': '');
                         p.model.setTotStarred(totStars);
                         p.view.setTotStars(totStars);
                     });
@@ -524,7 +536,7 @@ var App = (function () {
                     return modelF({
                         message: 'no message',
                         confirmLabel: 'Confirm',
-                        abortLabel: 'Abort'
+                        abortLabel: 'Discard'
                     })
                 },
                 defs: function () {
