@@ -63,6 +63,7 @@ var App = (function () {
                     <span><span>Total stars: </span><i></i></span>
                     <br/>
                     <input id="only_owned" type="checkbox" /><label for="only_owned">Only owned</label>
+                    <div></div>
                 </div>
                 <div class="panel__body">
                     <ul class="panel__list">
@@ -94,6 +95,7 @@ var App = (function () {
             license: null,
             created: null,
             pushed: null,
+            owner: null,
             isEmpty: null
         },
 
@@ -344,6 +346,7 @@ var App = (function () {
                     m.setForks(item.forks_count);
                     m.setIssues(item.open_issues_count);
                     m.setIsFork(item.fork);
+                    m.setOwner(item.owner.login);
                     m.setLanguage(item.language || 'unknown');
                     m.setLicense(item.license ? '<a href="' + (item.license.url || 'javascript:;') + '" target="_blank">' + item.license.name + '</a>' : '<i>unset</i>');
                     m.setCreated(JMVP.util.dateFormat(item.created_at));
@@ -370,7 +373,8 @@ var App = (function () {
                     });
                 },
                 init: function () {
-                    var pres = this;
+                    var pres = this,
+                        userData = GH.getData();
                     pres.view.setHandler([5, 0], 'click', function () {
                         var detailsVisible = pres.model.getDetailsVisible();
                         if (detailsVisible) {
@@ -398,15 +402,17 @@ var App = (function () {
                             view = this,
                             status = pres.model.getStarredByMe(),
                             askStartConfirmation = $SETTINGS.ASK_STARRING_CONFIRM$,
-                            askUnstartConfirmation = $SETTINGS.ASK_UNSTARRING_CONFIRM$;
+                            askUnstartConfirmation = $SETTINGS.ASK_UNSTARRING_CONFIRM$,
+                            itsYourRepo = userData.usr === pres.model.getOwner();
                         
-                        (
+                        (   itsYourRepo
+                            &&
                             (askStartConfirmation && !status)
                             ||
                             (askUnstartConfirmation && status)
                         ) ? dialog.show(
                             proceed,
-                            'Are You sure You should '+ (status ? '<b>un</b>' : '') + 'star Your own repo?'
+                            'Really You want to '+ (status ? '<b>un</b>' : '') + 'star <u>Your own</u> repo?'
                         ) : proceed();
 
                         function proceed() {
