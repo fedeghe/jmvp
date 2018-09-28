@@ -1,3 +1,6 @@
+$$reset.css$$
+
+
 @backGray: #ddd;
 @backWhite: white;
 @backOne: orange;
@@ -8,6 +11,12 @@
 @heightHeader: 7rem;
 @heightFooter: 3rem;
 @tooltipBg: rgb(255, 218, 150);
+@hfMargin:0.5rem;
+
+strong {
+    font-weight:bold;
+}
+
 .round {
     border:none 5px #000000;
     -moz-border-radius:5px;
@@ -82,11 +91,16 @@ body {
             color:white;
             .round();
         }
-        &--button {
+        &__message{
+            line-height:2rem;
+            margin-bottom:1rem;
+        }
+        &__button {
             .button();
             .round();
+            background-color:#ddd;
             &:hover{
-                
+                background-color:#fff;
             }
         }
         &--confirm {
@@ -140,6 +154,7 @@ body {
             font-size:.7rem;
             line-height:.7rem;
             text-align:center;
+            margin:1rem;
         }
         &__submit,&__skip{
             background-color: #e3e3e3;
@@ -161,7 +176,9 @@ body {
             border-bottom: 0.15em dotted orange;
         }
     }
-
+    .hfMargin {
+        margin: @hfMargin;
+    }
     .panel {
         .round();
         padding:1em;
@@ -173,8 +190,7 @@ body {
         &__header{
             background-color:orange;
             height:@heightHeader;
-            line-height:3rem;
-            padding: 0 1rem;
+            line-height:calc((@heightHeader - @hfMargin*2)/3);
             .round();
             overflow:hidden;
         }
@@ -226,9 +242,11 @@ body {
                 &__name{
                     text-decoration:none;
                     color:@backTwo;
+                    line-height:2rem;
                 }
                 &__description{
                     font-size:.8em;
+                    line-height:2rem;
                 }
                 &_starredByMe:after{
                     cursor:pointer;
@@ -280,11 +298,16 @@ body {
                     color:@backOne;
                 }
                 &__details_summary_list{
+                    list-style-type: disc;
                     padding:0;
                     padding-top:0.2em;
-                    padding-left:1.3em;
-                    margin:0
+                    padding-left:1.15em;
+                    margin:0;
+                    &__item{
+                        height:1rem;
+                    }
                 }
+                
             }
             .fork {
                 background-color:#e0e0e0;
