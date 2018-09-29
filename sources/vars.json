@@ -21,6 +21,7 @@
         ],
         "DEFAULT": false
     },
+    "STARTING_MODE": "USER",
     "SETTINGS": {
         "ASK_STARRING_CONFIRM": true,
         "ASK_UNSTARRING_CONFIRM": false

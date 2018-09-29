@@ -1,6 +1,10 @@
 var App = (function () {
     var CONSTANTS = {
-            WIP: 'Sorry this feature is not yet implemented! ...come back to check, or simply watch the repo!!! :D'
+            WIP: 'Sorry this feature is not yet implemented! ...come back to check, or simply watch the repo!!! :D',
+            MODES : {
+                USER: 'USER',
+                GITHUB: 'GITHUB'
+            }
         },
         trg = document.getElementById('trg'),
         viewF = JMVP.View(),
@@ -54,7 +58,8 @@ var App = (function () {
             defaultLang: $LANGUAGES.DEFAULT$,
             totStarred: 0,
             username: null,
-            loggedIn: false
+            loggedIn: false,
+            mode: CONSTANTS.MODES.$STARTING_MODE$
         },
 
         viewList = `<div class="panel">
@@ -126,11 +131,21 @@ var App = (function () {
             <details class="item__details">
                 <summary class="item__details_summary" data-tooltip="$[detailsTooltipMessage]">$[detailsLabel]</summary>
                 <ul class="item__details_summary_list">
-                    <li class="item__details_summary_list__item"><strong>Size:</strong> $[size]</li>
-                    <li class="item__details_summary_list__item"><strong>Language:</strong> $[language]</li>
-                    <li class="item__details_summary_list__item"><strong>Created:</strong> $[created]</li>
-                    <li class="item__details_summary_list__item"><strong>Last push:</strong> $[pushed]</li>
-                    <li class="item__details_summary_list__item"><strong>License:</strong> $[license]</li>
+                    <li class="item__details_summary_list__item">
+                        <strong>Size:</strong> $[size]
+                    </li>
+                    <li class="item__details_summary_list__item">
+                        <strong>Language:</strong> $[language]
+                    </li>
+                    <li class="item__details_summary_list__item">
+                        <strong>Created:</strong> $[created]
+                    </li>
+                    <li class="item__details_summary_list__item">
+                        <strong>Last push:</strong> $[pushed]
+                        </li>
+                    <li class="item__details_summary_list__item">
+                        <strong>License:</strong> $[license]
+                        </li>
                 </ul>
             </details>
         </li>`,
@@ -258,53 +273,75 @@ var App = (function () {
                     return modelF(modelList);
                 },
                 defs: function () {
-                    var p = this;
+                    var p = this,
+                        mode = p.model.getMode();
                     p.model.setLoggedIn(true);
-                    /**
-                     * define view interface
-                     */
-                    // p.view.defineMethod('loadLanguagesList', function (list) {
-                    //     var trg = p.view.getNode(0, 1);
-                    //     list.forEach(function (lang) {
-                    //         var item = document.createElement('option');
-                    //         item.innerHTML = lang;
-                    //         trg.appendChild(item);
-                    //     });
-                    // });
-                    p.view.defineMethod('setOnlyOwnedFilterHandler', function (handler) {
-                        p.view.setHandler([0, 0, 2, 0], 'change', handler);
-                    })
-                    p.view.defineMethod('setLogoutHandler', function (handler) {
-                        p.view.setHandler([2, 0], 'click', handler);
-                    });
-                    p.view.defineMethod('setTotStars', function (n) {
-                        p.view.getNode(0, 0, 0, 1).innerHTML = n;
-                    });
-                    p.view.defineMethod('loadList', function (list ,starred) {
-                        var trg = p.view.getNode(1, 0),
-                            $counter = p.view.getNode(0, 0, 1, 1),
-                            totStars = 0,
-                            counter = {
-                                own: 0,
-                                fork: 0
-                            };
-                        trg.innerHTML = '';
+                    
 
-                        list.forEach(function(item) {
-                            totStars += item.stargazers_count;
-                            counter[item.fork ? 'fork' : 'own']++;
-                            MyApp.item({
-                                append: true,
-                                trg: trg,
-                                item: item,
-                                starred: starred.indexOf(item.id) >= 0
+                    p.view.defineMethod('setSwitchModeHandler', function (func) {
+                        p.view.setHandler([0, 0, 3], 'click', func);
+                    });
+                    
+                    switch (mode) {
+                        case CONSTANTS.MODES.USER: 
+                            /**
+                             * define view interface
+                             */
+                            // p.view.defineMethod('loadLanguagesList', function (list) {
+                            //     var trg = p.view.getNode(0, 1);
+                            //     list.forEach(function (lang) {
+                            //         var item = document.createElement('option');
+                            //         item.innerHTML = lang;
+                            //         trg.appendChild(item);
+                            //     });
+                            // });
+                            p.view.defineMethod('setOnlyOwnedFilterHandler', function (handler) {
+                                p.view.setHandler([0, 0, 2, 0], 'change', handler);
+                            })
+                            p.view.defineMethod('setLogoutHandler', function (handler) {
+                                p.view.setHandler([2, 0], 'click', handler);
                             });
-                        });
-                        $counter.innerHTML = list.length + (counter.fork ? (' ('+ counter.fork) + ' forks)': '');
-                        p.model.setTotStarred(totStars);
-                        p.view.setTotStars(totStars);
-                    });
+                            p.view.defineMethod('setTotStars', function (n) {
+                                p.view.getNode(0, 0, 0, 1).innerHTML = n;
+                            });
 
+
+                            p.view.defineMethod('loadList', function (list, starred) {
+                                var trg = p.view.getNode(1, 0),
+                                    $counter = p.view.getNode(0, 0, 1, 1),
+                                    totStars = 0,
+                                    counter = {
+                                        own: 0,
+                                        fork: 0
+                                    };
+                                trg.innerHTML = '';
+
+                                list.forEach(function (item) {
+                                    totStars += item.stargazers_count;
+                                    counter[item.fork ? 'fork' : 'own']++;
+                                    MyApp.item({
+                                        append: true,
+                                        trg: trg,
+                                        item: item,
+                                        starred: starred.indexOf(item.id) >= 0
+                                    });
+                                });
+                                $counter.innerHTML = list.length + (counter.fork ? (' (' + counter.fork) + ' forks)' : '');
+                                p.model.setTotStarred(totStars);
+                                p.view.setTotStars(totStars);
+                            });
+                            break;
+                        case CONSTANTS.MODES.GITHUB:
+                            console.log('defs github mode');
+                            break;
+                        default: 
+                            alert('Wrong mode')
+                            break;
+                    }
+                    
+
+
+                    //common
                     p.defineMethod('logout', function () {
                         GH.logout();
                         MyApp.login({trg: trg});
@@ -314,28 +351,48 @@ var App = (function () {
                     var p = this,
                         model = this.model,
                         view = this.view,
-                        vRoot = view.getNode();
+                        vRoot = view.getNode(),
+                        mode = p.model.getMode();
+                    
                     var spinner = view.getNode(1, 0, 0),
                         imgUrl = GH.getData().userData.avatar_url;
-
                     spinner.style.backgroundImage = 'url(' + imgUrl + ')';
 
-                    // view.setHandler([0, 1], 'change', function () {
-                    //     alert(CONSTANTS.WIP);
-                    // });
 
-                    view.setLogoutHandler(p.logout);
-                    // view.loadLanguagesList(model.getLanguages());
-                    view.setOnlyOwnedFilterHandler(function (e) {
-                        var onlyOwned = e.target.checked,
-                            list = model.getList().filter(repo => onlyOwned ? repo.fork == 0 : true);
-                        view.loadList(list, model.getStarredIds());
-                    });
+                    switch (mode) {
+                        case CONSTANTS.MODES.USER: 
 
-                    Promise.all([GH.getMyRepos(), GH.getMyStarred()]).then((values) => {
-                        model.setList(values[0]);
-                        model.setStarredIds(values[1].map(i => i.id));
-                        view.loadList(model.getList(), model.getStarredIds());
+                            // view.setHandler([0, 1], 'change', function () {
+                            //     alert(CONSTANTS.WIP);
+                            // });
+
+                            view.setLogoutHandler(p.logout);
+                            // view.loadLanguagesList(model.getLanguages());
+                            view.setOnlyOwnedFilterHandler(function (e) {
+                                var onlyOwned = e.target.checked,
+                                    list = model.getList().filter(repo => onlyOwned ? repo.fork == 0 : true);
+                                view.loadList(list, model.getStarredIds());
+                            });
+
+                            Promise.all([GH.getMyRepos(), GH.getMyStarred()]).then((values) => {
+                                model.setList(values[0]);
+                                model.setStarredIds(values[1].map(i => i.id));
+                                view.loadList(model.getList(), model.getStarredIds());
+                            });
+                            break;
+
+                        case CONSTANTS.MODES.GITHUB:
+                            console.log('init github mode');
+                            break;
+                        default:
+                            alert('Wrong mode')
+                            break;
+                    }
+
+                    view.setSwitchModeHandler(function () {
+                        var currentMode = model.getMode();
+                        model.setMode(currentMode === CONSTANTS.MODES.GITHUB ? CONSTANTS.MODES.USER : CONSTANTS.MODES.GITHUB);
+                        p.refresh();
                     });
 
                     JMVP.events.ready(function () {
@@ -352,6 +409,8 @@ var App = (function () {
                         MyApp.tooltip({ append: true });
                         MyApp.dialog({ trg: vRoot, append: true });
                     });
+
+
                 }
             },
 
