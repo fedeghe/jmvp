@@ -71,7 +71,7 @@ var App = (function () {
                             <input id="only_owned" type="checkbox" />
                             <label for="only_owned">Only owned</label>
                         </p>
-                        <div class="panel__header__switch">
+                        <div class="panel__header__switch" user>
                             <span class="icon panel__header__switch__user"></span>
                             <span class="icon panel__header__switch__arrowdown"></span>
                             <span class="icon panel__header__switch__github"></span>
@@ -117,10 +117,10 @@ var App = (function () {
             <p class="item__description">$[description]</p>
             <span class="iconAfter {$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}" {$[isEmpty] ? 'data-tooltip="really want to star a empty repo???"': ''}></span>
             <div>
-                {$[stars] ? '<span data-tooltip="stars" class="iconAfter item_stars">$[stars]</span>' : ''}
-                {$[watchers] ? '<span data-tooltip="watchers" class="iconAfter item_watchers">$[watchers]</span>' : ''}
-                {$[forks] ? '<span data-tooltip="forks" class="iconAfter item_forks">$[forks]</span>' : ''}
-                {$[issues] ? '<span data-tooltip="issues" class="iconAfter item_issues">$[issues]</span>' : ''}
+                {$[stars] ? '<span data-tooltip="stars" class="icon iconAfter item_stars">$[stars]</span>' : ''}
+                {$[watchers] ? '<span data-tooltip="watchers" class="icon iconAfter item_watchers">$[watchers]</span>' : ''}
+                {$[forks] ? '<span data-tooltip="forks" class="icon iconAfter item_forks">$[forks]</span>' : ''}
+                {$[issues] ? '<span data-tooltip="issues" class="icon iconAfter item_issues">$[issues]</span>' : ''}
             </div>
             <hr>
             <details class="item__details">
