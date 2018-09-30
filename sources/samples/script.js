@@ -82,7 +82,7 @@
             console.log('Started');
         },
         first: {
-            route: '/',
+            route: '/first',
             view: function (){ return viewListF(listView);},
             model: function () {return modelListF(listModel);},
             defs: commonDefs,

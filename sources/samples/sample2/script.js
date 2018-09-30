@@ -76,9 +76,37 @@ var App = (function () {
                             <input id="only_owned" type="checkbox" />
                             <label for="only_owned">Only owned</label>
                         </p>
-                        <div class="panel__header__switch" user>
+                        <div class="panel__header__switch">
                             <span class="icon panel__header__switch__user"></span>
                             <span class="icon panel__header__switch__arrowdown"></span>
+                            <span class="icon panel__header__switch__github"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel__body">
+                    <ul class="panel__list">
+                        <li class="spinner"></li>
+                    </ul>
+                </div>
+                <div class="panel__footer">
+                    <span class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
+                </div>
+        </div>`,
+        viewList2 = `<div class="panel">
+                <div class="panel__header">
+                    <div class="hfMargin">
+                        <p><strong>$[username] </strong></p>
+                        <p>
+                            <label>Language</label>
+                            <select></select>
+                        </p>
+                        <p>
+                            <label>User</label>
+                            <input type="text"/><i class="fa fa-close"></i>
+                        </p>
+                        <div class="panel__header__switch">
+                            <span class="icon panel__header__switch__user"></span>
+                            <span class="icon panel__header__switch__arrowup"></span>
                             <span class="icon panel__header__switch__github"></span>
                         </div>
                     </div>
@@ -215,7 +243,7 @@ var App = (function () {
 
                         GH.login(usr, pwd).then(() => {
                             p.updateMessage('Logged in correctly');
-                            enter('auth');
+                            enter('USER');
                         }).catch(function (e) {
                             console.log('ERROR');
                             console.log(e);
@@ -266,35 +294,35 @@ var App = (function () {
              * the auth list
              */
             list: {
-                view: function () {return viewF(viewList);},
-                model: function () {
+                view: function (p) {
+                    console.log('in the VIEW init');
+                    console.log(p);
+                    return viewF(p.mode === CONSTANTS.MODES.GITHUB ? viewList2 : viewList);
+                },
+                model: function (p) {
+                    console.log('in the MODEL init');
+                    console.log(p);
                     var userData = GH.getData();
                     modelList.username = userData.usr;
                     return modelF(modelList);
                 },
-                defs: function () {
+                defs: function (params) {
                     var p = this,
-                        mode = p.model.getMode();
+                        mode = params.mode || p.model.getMode();
+                    console.log('Mode is >>> ' + mode)
+                    p.model.setMode(mode);
                     p.model.setLoggedIn(true);
                     
 
                     p.view.defineMethod('setSwitchModeHandler', function (func) {
                         p.view.setHandler([0, 0, 3], 'click', func);
                     });
-                    
                     switch (mode) {
                         case CONSTANTS.MODES.USER: 
                             /**
                              * define view interface
                              */
-                            // p.view.defineMethod('loadLanguagesList', function (list) {
-                            //     var trg = p.view.getNode(0, 1);
-                            //     list.forEach(function (lang) {
-                            //         var item = document.createElement('option');
-                            //         item.innerHTML = lang;
-                            //         trg.appendChild(item);
-                            //     });
-                            // });
+
                             p.view.defineMethod('setOnlyOwnedFilterHandler', function (handler) {
                                 p.view.setHandler([0, 0, 2, 0], 'change', handler);
                             })
@@ -304,8 +332,6 @@ var App = (function () {
                             p.view.defineMethod('setTotStars', function (n) {
                                 p.view.getNode(0, 0, 0, 1).innerHTML = n;
                             });
-
-
                             p.view.defineMethod('loadList', function (list, starred) {
                                 var trg = p.view.getNode(1, 0),
                                     $counter = p.view.getNode(0, 0, 1, 1),
@@ -333,6 +359,47 @@ var App = (function () {
                             break;
                         case CONSTANTS.MODES.GITHUB:
                             console.log('defs github mode');
+                            p.view.defineMethod('loadLanguagesList', function (list) {
+                                var trg = p.view.getNode(0, 0, 1, 1);
+                                list.forEach(function (lang, i) {
+                                    var item = document.createElement('option');
+                                    item.innerHTML = lang;
+                                    if (i === p.model.getDefaultLang()) item.setAttribute('selected', 'selected');
+                                    trg.appendChild(item);
+                                });
+                            });
+                            p.view.defineMethod('showSpinner', function (func) {
+                                var trg = this.getNode(1, 0),
+                                    imgUrl = GH.getData().userData.avatar_url,
+                                    spinner = document.createElement('li');
+                                spinner.className = 'spinner';
+                                spinner.style.backgroundImage = 'url(' + imgUrl + ')';
+                                trg.innerHTML = '';
+                                trg.appendChild(spinner);
+                            });
+                            p.view.defineMethod('setChangeLanguageHandler', function (func) {
+                                this.setHandler([0, 0, 1, 1], 'change', func);
+                            });
+                            p.view.defineMethod('loadList', function (list, starred) {
+                                var trg = p.view.getNode(1, 0),
+                                    
+                                    counter = {
+                                        own: 0,
+                                        fork: 0
+                                    };
+                                trg.innerHTML = '';
+
+                                list.items.forEach(function (item) {
+                                    counter[item.fork ? 'fork' : 'own']++;
+                                    MyApp.item({
+                                        append: true,
+                                        trg: trg,
+                                        item: item,
+                                        starred: starred.indexOf(item.id) >= 0
+                                    });
+                                });
+                                
+                            });
                             break;
                         default: 
                             alert('Wrong mode')
@@ -367,7 +434,7 @@ var App = (function () {
                             // });
 
                             view.setLogoutHandler(p.logout);
-                            // view.loadLanguagesList(model.getLanguages());
+                            
                             view.setOnlyOwnedFilterHandler(function (e) {
                                 var onlyOwned = e.target.checked,
                                     list = model.getList().filter(repo => onlyOwned ? repo.fork == 0 : true);
@@ -383,6 +450,24 @@ var App = (function () {
 
                         case CONSTANTS.MODES.GITHUB:
                             console.log('init github mode');
+                            view.loadLanguagesList(model.getLanguages());
+
+                            view.setChangeLanguageHandler(function (e) {
+                                var lang = e.target.value;
+                                if (!lang) return;
+                                view.showSpinner();
+                                GH.getMostStarred(lang).then((values) => {
+                                    model.setList(values);
+                                    view.loadList(model.getList(), model.getStarredIds());    
+                                })
+                            })
+
+                            Promise.all([GH.getMostStarred('javascript'), GH.getMyStarred()]).then((values) => {
+                                model.setList(values[0]);
+                                model.setStarredIds(values[1].map(i => i.id));
+                                view.loadList(model.getList(), model.getStarredIds());
+                            });
+
                             break;
                         default:
                             alert('Wrong mode')
@@ -390,9 +475,10 @@ var App = (function () {
                     }
 
                     view.setSwitchModeHandler(function () {
-                        var currentMode = model.getMode();
-                        model.setMode(currentMode === CONSTANTS.MODES.GITHUB ? CONSTANTS.MODES.USER : CONSTANTS.MODES.GITHUB);
-                        p.refresh();
+                        var currentMode = model.getMode(),
+                            newMode = currentMode === CONSTANTS.MODES.GITHUB ? CONSTANTS.MODES.USER : CONSTANTS.MODES.GITHUB;
+                        model.setMode(newMode);
+                        MyApp.list({trg: trg, mode : newMode});
                     });
 
                     JMVP.events.ready(function () {
@@ -423,10 +509,12 @@ var App = (function () {
                     m.setName(item.name);
                     m.setDescription(item.description || '<i>no description</i>'),
                     m.setLink(item.html_url);
+
                     m.setStars(item.stargazers_count);
                     m.setWatchers(item.watchers);
                     m.setForks(item.forks_count);
                     m.setIssues(item.open_issues_count);
+                    
                     m.setIsFork(item.fork);
                     m.setOwner(item.owner.login);
                     m.setLanguage(item.language || 'unknown');
@@ -435,7 +523,7 @@ var App = (function () {
                     m.setPushed(JMVP.util.dateFormat(item.pushed_at));
 
                     m.setIsEmpty(item.size == 0)
-                    m.setSize(JMVP.util.toMemFormat(item.size));                
+                    m.setSize(JMVP.util.toMemFormat(item.size * 1024, 'B'));
                     m.setStarredByMe(params.starred);
                     return m;
                 },
@@ -499,9 +587,10 @@ var App = (function () {
 
                         function proceed() {
                             var newStatus = !status;
-                                name = pres.model.getName();
+                                name = pres.model.getName(),
+                                owner = pres.model.getOwner();
                             Toggle(false);
-                            GH[newStatus ? 'starRepo' : 'unstarRepo'](name).then(r => {
+                            GH[newStatus ? 'starRepo' : 'unstarRepo'](name, owner).then(r => {
 
                                 /**
                                  * here I try to use the reference to the list presenter

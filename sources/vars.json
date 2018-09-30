@@ -19,7 +19,7 @@
             "r",
             "scala"
         ],
-        "DEFAULT": false
+        "DEFAULT": 8
     },
     "STARTING_MODE": "USER",
     "SETTINGS": {
