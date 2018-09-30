@@ -9,6 +9,7 @@
             "erlang",
             "golang",
             "haskell",
+            "html",
             "java",
             "javascript",
             "m4",
@@ -19,7 +20,7 @@
             "r",
             "scala"
         ],
-        "DEFAULT": 8
+        "DEFAULT": "javascript"
     },
     "STARTING_MODE": "USER",
     "SETTINGS": {

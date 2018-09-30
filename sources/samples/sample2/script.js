@@ -55,7 +55,7 @@ var App = (function () {
             list: [],
             starredIds: [],
             languages: $LANGUAGES.SET$,
-            defaultLang: $LANGUAGES.DEFAULT$,
+            defaultLang: "$LANGUAGES.DEFAULT$",
             totStarred: 0,
             username: null,
             loggedIn: false,
@@ -97,13 +97,13 @@ var App = (function () {
                     <div class="hfMargin">
                         <p><strong>$[username] </strong></p>
                         <p>
-                            <label>Language</label>
+                            <label>Language: </label>
                             <select></select>
                         </p>
-                        <p>
+                        <p><!--
                             <label>User</label>
                             <input type="text"/><i class="fa fa-close"></i>
-                        </p>
+                        --></p>
                         <div class="panel__header__switch">
                             <span class="icon panel__header__switch__user"></span>
                             <span class="icon panel__header__switch__arrowup"></span>
@@ -361,10 +361,10 @@ var App = (function () {
                             console.log('defs github mode');
                             p.view.defineMethod('loadLanguagesList', function (list) {
                                 var trg = p.view.getNode(0, 0, 1, 1);
-                                list.forEach(function (lang, i) {
+                                list.forEach(function (lang) {
                                     var item = document.createElement('option');
                                     item.innerHTML = lang;
-                                    if (i === p.model.getDefaultLang()) item.setAttribute('selected', 'selected');
+                                    if (lang == p.model.getDefaultLang()) item.setAttribute('selected', 'selected');
                                     trg.appendChild(item);
                                 });
                             });
@@ -455,6 +455,7 @@ var App = (function () {
                             view.setChangeLanguageHandler(function (e) {
                                 var lang = e.target.value;
                                 if (!lang) return;
+                                model.setDefaultLang(lang);
                                 view.showSpinner();
                                 GH.getMostStarred(lang).then((values) => {
                                     model.setList(values);
