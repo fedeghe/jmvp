@@ -29,13 +29,13 @@ var GH = (function () {
             };
         },
         getResponse = function (response) {
-            if (response.ok) {
+            if (checkResponse(response)) {
                 return response.json();
             }
             throw new Error(response.status + ' : ' + response.statusText);
         },
         checkResponse = function (response) {
-            return response.ok; // maybe add some relevant check of the statuscode like a rangecheck in [200,400[  ???
+            return response.ok && response.status >= 200 && response.status < 300; // maybe add some relevant check of the statuscode like a rangecheck in [200,400[  ???
         },
         err = function (error) {
             console.error('Error:', error);
