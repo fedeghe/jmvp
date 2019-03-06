@@ -237,7 +237,7 @@ var App = (function () {
                         p.view.updateMessage(p.model.getMessage());
                     });
                     p.defineMethod('attemptLogin', function () {
-                        var usr = p.view.getNode(0, 1, 1).value,
+                        var usr = p.view.getNode(0, 1, 1).value.replace(/@.*/, ''),
                             pwd = p.view.getNode(0, 2, 1).value;
                         p.view.toggleButtonsFunc(false);
 
