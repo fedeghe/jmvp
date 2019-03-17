@@ -76,7 +76,7 @@ var App = (function () {
                             <input id="only_owned" type="checkbox" />
                             <label for="only_owned">Only owned</label>
                         </p>
-                        <div class="panel__header__switch">
+                        <div class="panel__header__switch" data-tooltip="switch to public">
                             <span class="icon panel__header__switch__user"></span>
                             <span class="icon panel__header__switch__arrowdown"></span>
                             <span class="icon panel__header__switch__github"></span>
@@ -92,6 +92,7 @@ var App = (function () {
                     <span class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
                 </div>
         </div>`,
+
         viewList2 = `<div class="panel">
                 <div class="panel__header">
                     <div class="hfMargin">
@@ -104,7 +105,7 @@ var App = (function () {
                             <label>User</label>
                             <input type="text"/><i class="fa fa-close"></i>
                         --></p>
-                        <div class="panel__header__switch">
+                        <div class="panel__header__switch" data-tooltip="switch to Your user">
                             <span class="icon panel__header__switch__user"></span>
                             <span class="icon panel__header__switch__arrowup"></span>
                             <span class="icon panel__header__switch__github"></span>
@@ -359,6 +360,10 @@ var App = (function () {
                             break;
                         case CONSTANTS.MODES.GITHUB:
                             console.log('defs github mode');
+
+                            p.view.defineMethod('setLogoutHandler', function (handler) {
+                                p.view.setHandler([2, 0], 'click', handler);
+                            });
                             p.view.defineMethod('loadLanguagesList', function (list) {
                                 var trg = p.view.getNode(0, 0, 1, 1);
                                 list.forEach(function (lang) {
@@ -425,7 +430,6 @@ var App = (function () {
                         imgUrl = GH.getData().userData.avatar_url;
                     spinner.style.backgroundImage = 'url(' + imgUrl + ')';
 
-
                     switch (mode) {
                         case CONSTANTS.MODES.USER: 
 
@@ -451,6 +455,8 @@ var App = (function () {
                         case CONSTANTS.MODES.GITHUB:
                             console.log('init github mode');
                             view.loadLanguagesList(model.getLanguages());
+                            
+                            view.setLogoutHandler(p.logout);
 
                             view.setChangeLanguageHandler(function (e) {
                                 var lang = e.target.value;
@@ -477,7 +483,9 @@ var App = (function () {
 
                     view.setSwitchModeHandler(function () {
                         var currentMode = model.getMode(),
-                            newMode = currentMode === CONSTANTS.MODES.GITHUB ? CONSTANTS.MODES.USER : CONSTANTS.MODES.GITHUB;
+                            newMode = currentMode === CONSTANTS.MODES.GITHUB
+                                ? CONSTANTS.MODES.USER
+                                : CONSTANTS.MODES.GITHUB;
                         model.setMode(newMode);
                         MyApp.list({trg: trg, mode : newMode});
                     });
