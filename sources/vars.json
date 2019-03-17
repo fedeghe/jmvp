@@ -33,7 +33,9 @@
         ],
         "DEFAULT": "javascript"
     },
+    "GH_RNUM": 100,
     "STARTING_MODE": "USER",
+    "___STARTING_MODE": "USER",
     "SETTINGS": {
         "ASK_STARRING_CONFIRM": true,
         "ASK_UNSTARRING_CONFIRM": false

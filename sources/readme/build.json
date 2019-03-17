@@ -3,6 +3,5 @@
         "rm -rf readme",
         "mkdir readme"
     ],
-    "sources/readme/README.md": ". -options=showPath:false",
-    "sources/readme/*.js": "readme"
+    "sources/readme/README.md": ". -options=showPath:false"
 }
