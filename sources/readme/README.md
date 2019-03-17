@@ -4,12 +4,18 @@ Is a playground project to explore MVP architectural approach. JMVP object can b
 
 ## Install
 
+From the jmvp root run
+
 `> npm i`
 
-## Build & run  
+## Build & run the demo  
 `> npm start`
 
-let the build watch for changes on the source folder; navigate to a basic _w.i.p._ sample on http://localhost:3001
+let the build watch for changes on the source folder; navigate to a a couple of basic _w.i.p._ samples on http://localhost:3001
+
+## Build a production version
+Dude this is a playground, nothing serious, btw  
+`@ npm run build`
 
 ---
 
@@ -161,20 +167,20 @@ The App consists in a widget that will be rendered into a target container; the 
 #### Login panel
 - [x] The panel manages online/offline mode, enabling and disabling the access buttons, and notifies the user about changes of the connection status.  
 - [x] In case the login fails, the usaer must be noticed about the problem.
-- [ ] Data entered must be sanitized.
+- [x] Data entered must be sanitized.
 
 ####  Authenticated version  
 - top panel
-    - [ ] the panel shows a radio to switch between _user_ and _public_ repos, default is _user_
-    - [ ] when the user switch to _public_ repos, appears a dropdown of languages where the user can filter per language, default one is given in the setting, as well as the list of available languages.
+    - [x] the panel allows to switch between _user_ and _public_ repos, default is _user_
+    - [x] when the user switch to _public_ repos, appears a dropdown of languages where the user can filter per language, default one is given in the setting, as well as the list of available languages.
     - [ ] there is a text input to allow searching for a user
 
 - list section
-    - [ ] list of repos, each item has:
-        - [ ] a title link with the name of the repo
-        - [ ] the description of the repo (most likely truncated)
-        - [ ] star icon to star unstar the repo (default actually starring status)
-        - [ ] a small summary containing all non 0 stars - watchers - forks - issues
+    - [x] list of repos, each item has:
+        - [x] a title link with the name of the repo
+        - [x] the description of the repo (most likely truncated)
+        - [x] star icon to star unstar the repo (default actually starring status)
+        - [x] a small summary containing all non 0 stars - watchers - forks - issues
 - footer
     - [ ] there is a logout button a summary containing total non zero stars - profile watchers - total forks - total issues
 
