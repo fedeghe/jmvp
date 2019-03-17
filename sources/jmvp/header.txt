@@ -1,0 +1,4 @@
+$PACKAGE.name$ v.$PACKAGE.version$
+$PACKAGE.description$
+$PACKAGE.author$
+License: $PACKAGE.license$

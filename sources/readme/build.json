@@ -1,7 +1,0 @@
-{
-    "EXE": [
-        "rm -rf readme",
-        "mkdir readme"
-    ],
-    "sources/readme/README.md": ". -options=showPath:false"
-}

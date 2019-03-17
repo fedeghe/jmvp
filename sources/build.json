@@ -1,9 +1,7 @@
 {
     "EXE": [
-        "rm -rf samples",
-        "mkdir -p samples"
+        "rm -rf dist",
+        "mkdir -p dist"
     ],
-    "sources/jmvp/jmvp.js": "samples -vars=sources/vars.json",
-    "sources/readme/build.json" : true,
-    "sources/samples/build.json": true
+    "sources/jmvp/jmvp.js": "dist -plugins=malta-js-uglify...malta-header-comment[name:'sources/jmvp/header.txt'] -vars=sources/vars.json"
 }
