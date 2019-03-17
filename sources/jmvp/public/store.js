@@ -1,8 +1,8 @@
-+function (){
-    "use strict";
-    function _emptyObjFun(){return {};}
-    
-    function _pushState(instance, newState, actionType) {
+(function () {
+    'use strict';
+    function _emptyObjFun () { return {}; }
+
+    function _pushState (instance, newState, actionType) {
         var len = instance.states.length,
             oldState = instance.states[len - 1];
         instance.listeners.forEach(function (sub) {
@@ -10,8 +10,8 @@
         });
         instance.states[len] = newState;
     }
-    
-    function Store(reducer, state){
+
+    function Store (reducer, state) {
         this.reducer = reducer || _emptyObjFun;
         this.state = state || this.reducer();
         this.states = [this.state];
@@ -23,13 +23,15 @@
     };
 
     Store.prototype.dispatch = function (a) {
-        if (!("type" in a)) {throw new Error("Actions needs a type");}
+        if (!('type' in a)) {
+            throw new Error('Actions needs a type');
+        }
         var actionType = a.type,
             oldState = this.states[this.states.length - 1],
             newState = this.reducer(oldState, actionType),
             i;
         for (i in a) {
-            if (i !== "type") {
+            if (i !== 'type') {
                 newState[i] = a[i];
             }
         }
@@ -63,4 +65,4 @@
     NS.getStore = function (reducer, initState) {
         return new Store(reducer, initState);
     };
-}();
+})();

@@ -85,7 +85,7 @@ var GH = (function () {
         },
 
         getMostStarred: function (lang) {
-            return fetch('https://api.github.com/search/repositories?q=language:' + lang + '&sort=stars&page=1', headers())
+            return fetch('https://api.github.com/search/repositories?q=language:' + lang + '&per_page=$GH_RNUM$&sort=stars&page=1', headers())
                 .then(getResponse)
                 .catch(err);
         },

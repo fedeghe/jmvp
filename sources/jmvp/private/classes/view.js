@@ -1,7 +1,7 @@
-function View(tpl, model) {
+function View (tpl, model) {
     this.cnt = document.createElement('div');
     this.tpl = tpl.replace(/\r?\n|\r|\t|\s\s/gm, '');
-    this.cnt.innerHTML  = this.tpl;
+    this.cnt.innerHTML = this.tpl;
     this.node = this.cnt.childNodes[0];
     this.childs = [];
     this.model = model ? Object.assign({}, model) : null;
@@ -11,7 +11,7 @@ function View(tpl, model) {
 };
 
 View.prototype._refs = function () {
-    (function dig(node, acc) {
+    (function dig (node, acc) {
         var i = 0,
             childs = node.childNodes,
             l = childs.length,
@@ -29,34 +29,36 @@ View.prototype.setModel = function (model) {
     this.model = model;
     var tpl = this.tpl.replace(/\$\[([^\]]*)\]/mg, function (a, b) {
         return model._data[b];
-    }).replace(/\{([^\}]*)\}/mg, function (a, b) {
-        return (new Function('return ' + b))();
+    }).replace(/\{([^}]*)\}/mg, function (a, b) {
+        // return (new Function('return ' + b))();
+        return eval('(' + b + ')');
     });
     this.cnt.innerHTML = tpl;
-    this.node = this.cnt.childNodes[0]; 
+    this.node = this.cnt.childNodes[0];
     this._refs();
 };
 
 View.prototype.reset = function () {
-    for (var i   = 0, l = this.handlers.length; i < l; i++) {
+    for (var i = 0, l = this.handlers.length; i < l; i++) {
         this.handlers[i].call(this);
     }
     this.handlers = [];
     this.childs = [];
-}
+};
 
-View.prototype.setHandler = function(nodePath, ev, handler) {
-    var resetHandler;
-    try{
-        var n = this.getNode.apply(this, nodePath);
-    } catch(e){
-        console.log(e)
+View.prototype.setHandler = function (nodePath, ev, handler) {
+    var resetHandler,
+        n;
+    try {
+        n = this.getNode.apply(this, nodePath);
+    } catch (e) {
+        console.log(e);
     }
-    if (n){
+    if (n) {
         n.addEventListener(ev, handler);
-        resetHandler =  function () {
+        resetHandler = function () {
             n.removeEventListener(ev, handler);
-        }
+        };
         this.handlers.push(resetHandler);
         return resetHandler;
     } else {
@@ -85,7 +87,7 @@ View.prototype.defineMethod = function (name, func) {
 //             }
 //             childs = ret.childs;
 //         }
-//         this.cache[key] = ret && ret.node;    
+//         this.cache[key] = ret && ret.node;
 //         // console.log("CACHED");
 //         // console.log(key, this.cache[key]);
 //     } else {
@@ -96,19 +98,16 @@ View.prototype.defineMethod = function (name, func) {
 // };
 View.prototype.getNode = function () {
     var a = [].slice.call(arguments),
-        key = a.join(':') || 'root',
         ret = this,
         i = 0, l = a.length,
         childs = this.childs;
-    
+
     for (null; i < l; i++) {
         ret = childs[a[i]];
         if (!ret) {
-            throw a + ' not found, handler not settable';
+            throw new Error(a + ' not found, handler not settable');
         }
         childs = ret.childs;
     }
     return ret && ret.node;
-        
 };
-

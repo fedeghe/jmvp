@@ -1,4 +1,4 @@
-function Model(d) {
+function Model (d) {
     this._data = Object.assign({}, d);
     this._auto();
 }
@@ -13,15 +13,17 @@ Model.prototype._has = function (name) {
 
 Model.prototype._auto = function () {
     var data = this._data,
-        self = this;
-    for (var i in data)
+        self = this,
+        i;
+    for (i in data) {
         if (data.hasOwnProperty(i) && typeof i === 'string') {
             self._getter(i);
             self._setter(i);
         }
+    }
 };
 
-Model.prototype._setter = function(name){
+Model.prototype._setter = function (name) {
     notValidModel(name, 'setter');
     var self = this;
     self['set' + jmvp.utils.ucfirst(name)] = function (value, done) {
@@ -33,23 +35,25 @@ Model.prototype._setter = function(name){
     };
 };
 
-Model.prototype._getter = function(name){
+Model.prototype._getter = function (name) {
     var self = this;
     notValidModel(name, 'getter');
     self['get' + jmvp.utils.ucfirst(name)] = function () {
         return self._data[name];
-    }
+    };
 };
 
-Model.prototype.getData = function(){ return this._data;};
+Model.prototype.getData = function () {
+    return this._data;
+};
 
-Model.prototype.defineMethod = function (name, func){
+Model.prototype.defineMethod = function (name, func) {
     notValidModel(name, 'method');
     this.constructor.prototype[name] = func; // no bind!!!
 };
 
-function notValidModel(n, type){
+function notValidModel (n, type) {
     if (n.match(/_setter|_getter|_data|_auto|defineMethod/)) {
-        throw 'Forbidden ' + type + ' "' + n + '"';
+        throw new Error('Forbidden ' + type + ' "' + n + '"');
     }
 }

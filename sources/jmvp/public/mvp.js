@@ -2,11 +2,11 @@
  * Model
  */
 NS.Model = function (data) {
-    function model(d) { this._data = d || data; };
-    jmvp.extends(model, Model);
-    return function (d){
-        var ret = new model(d || data);
-        model.super(ret, d || data);
+    function Tmodel (d) { this._data = d || data; };
+    jmvp.extends(Tmodel, Model);
+    return function (d) {
+        var ret = new Tmodel(d || data);
+        Tmodel.super(ret, d || data);
         return ret;
     };
 };
@@ -15,13 +15,13 @@ NS.Model = function (data) {
  * View
  */
 NS.View = function (tpl, model) {
-    function view(t) {
+    function Tview (t) {
         this.tpl = t || tpl;
     };
-    jmvp.extends(view, View);
-    return function _view(t, m) {
-        var ret = new view(t || tpl, m);
-        view.super(ret, t || tpl, m);
+    jmvp.extends(Tview, View);
+    return function (t, m) {
+        var ret = new Tview(t || tpl, m);
+        Tview.super(ret, t || tpl, m);
         return ret;
     };
 };
@@ -30,16 +30,16 @@ NS.View = function (tpl, model) {
  * Presenter
  */
 NS.Presenter = function (modelObj, viewObj) {
-    function presenter(m, v) {
+    function Tpresenter (m, v) {
         this.model = m;
         this.view = v;
     };
-    jmvp.extends(presenter, Presenter);
-    return function _presenter(m, v) {
+    jmvp.extends(Tpresenter, Presenter);
+    return function (m, v) {
         m = m || modelObj;
         v = v || viewObj;
-        var ret = new presenter(m, v);
-        presenter.super(ret, m, v);
+        var ret = new Tpresenter(m, v);
+        Tpresenter.super(ret, m, v);
         return ret;
     };
 };

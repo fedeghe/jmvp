@@ -1,5 +1,5 @@
 jmvp.extends = function (Child, Parent) {
-    function T() { }
+    function T () { }
     T.prototype = Parent.prototype;
     Child.prototype = new T();
     Child.prototype.constructor = Child;
@@ -9,5 +9,5 @@ jmvp.extends = function (Child, Parent) {
     Child.super = function (inst) {
         var args = [].slice.call(arguments, 1);
         Parent.apply(inst, args);
-    }
+    };
 };
