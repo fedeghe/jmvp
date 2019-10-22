@@ -1,5 +1,5 @@
 /*
-project_jmvp v.1.0.0
+mvp v.1.0.0
 An experimental microframework using the mvp
 Federico Ghedina <fedeghe@gmail.com>
 License: MIT
