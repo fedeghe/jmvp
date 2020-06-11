@@ -8,10 +8,14 @@ From the jmvp root run
 
 `> npm i`
 
-## Build & run  
+## Build & run the demo  
 `> npm start`
 
-let the build watch for changes on the source folder; navigate to a basic _w.i.p._ sample on http://localhost:3001
+let the build watch for changes on the source folder; navigate to a a couple of basic _w.i.p._ samples on http://localhost:3001
+
+## Build a production version
+Dude this is a playground, nothing serious, btw  
+`@ npm run build`
 
 ---
 

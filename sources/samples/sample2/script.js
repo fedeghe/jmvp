@@ -37,8 +37,8 @@ var App = (function () {
                         <input class="login__input"type="text"/>
                     </div>
                     <div class="login__line">
-                        <label class="login__label">Password</label>
-                        <input class="login__input" type="password"/>
+                        <label class="login__label">access token</label>
+                        <input class="login__input" type="text"/>
                     </div>
                     <div class="login__line">
                         <button class="login__submit">login</button>
@@ -239,10 +239,10 @@ var App = (function () {
                     });
                     p.defineMethod('attemptLogin', function () {
                         var usr = p.view.getNode(0, 1, 1).value.replace(/@.*/, ''),
-                            pwd = p.view.getNode(0, 2, 1).value;
+                            token = p.view.getNode(0, 2, 1).value;
                         p.view.toggleButtonsFunc(false);
 
-                        GH.login(usr, pwd).then(() => {
+                        GH.login(usr, token).then(() => {
                             p.updateMessage('Logged in correctly');
                             enter('USER');
                         }).catch(function (e) {

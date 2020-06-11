@@ -22,7 +22,8 @@ var GH = (function () {
                 credentials: "same-origin",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
-                    "Authorization": "Basic ".concat(btoa(data.usr + ":" + data.pwd))
+                    // "Authorization": "Basic ".concat(btoa(data.usr + ":" + data.pwd)),
+                    "Authorization": "token " + data.accessToken
                 },
                 redirect: "follow",
                 referrer: "no-referrer"
@@ -56,9 +57,9 @@ var GH = (function () {
             refreshData();
         },
 
-        login: function (usr, pwd) {
+        login: function (usr, accessToken) {
             data.usr = usr;
-            data.pwd = pwd;
+            data.accessToken = accessToken;
             return fetch('https://api.github.com/user', headers())
                 .then(getResponse)
                 .then(function (json) {
