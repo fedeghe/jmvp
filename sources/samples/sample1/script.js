@@ -11,9 +11,6 @@ model1.defineMethod('summarize', function () {
     return `${this.getName()[0]}.${this.getSurame()[0]}. <${this.getEmail()}>`;
 });
 
-
-
-
 var vFact1 = JMVP.View(),
     view1 = vFact1(`
         <div>
@@ -23,6 +20,7 @@ var vFact1 = JMVP.View(),
             <button>add a ramdon number</button>
         </div>
     `);
+
 view1.setModel(model1);
 view1.defineMethod('addRandom', function (number) {
     var newNode = document.createElement('li');
