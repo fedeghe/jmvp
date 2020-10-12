@@ -37,8 +37,8 @@ var App = (function () {
                         <input class="login__input"type="text"/>
                     </div>
                     <div class="login__line">
-                        <label class="login__label">access token</label>
-                        <input class="login__input" type="text"/>
+                        <label class="login__label">Access token</label>
+                        <input class="login__input" type="password"/>
                     </div>
                     <div class="login__line">
                         <button class="login__submit">login</button>
