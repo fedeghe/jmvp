@@ -6,16 +6,16 @@ Is a playground project to explore MVP architectural approach. JMVP object can b
 
 From the jmvp root run
 
-`> npm i`
+`@ yarn`
 
 ## Build & run the demo  
-`> npm start`
+`@ yarn start`
 
 let the build watch for changes on the source folder; navigate to a a couple of basic _w.i.p._ samples on http://localhost:3001
 
 ## Build a production version
 Dude this is a playground, nothing serious, btw  
-`@ npm run build`
+`@ yarn build`
 
 ---
 
