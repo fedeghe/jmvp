@@ -162,13 +162,15 @@ var mFact1 = JMVP.Model(),
     //
     vFact1 = JMVP.View(),
     view = vFact1(`
-    <div>
-        <p>A list of numbers</p>
-        <ul></ul>
-        <p>{name} $[surname] please ...</p>
-        <button>add random</button>
-    </div>
-`);
+        <div>
+            <p>A list of numbers</p>
+            <ul></ul>
+            <p>{name} $[surname] please ...</p>
+            <button>add random</button>
+        </div>
+    `),
+    pFact1,
+    presenter;
 
 // bind'em
 view.setModel(model);
@@ -185,8 +187,8 @@ view.defineMethod('addRandom', function (number) {
 
 // Presenter
 //
-var pFact1 = JMVP.Presenter(),
-    presenter = pFact1(model, view);
+pFact1 = JMVP.Presenter();
+presenter = pFact1(model, view);
 
 presenter.defineMethod('add', function () {
     var elements = this.model.getList(),
