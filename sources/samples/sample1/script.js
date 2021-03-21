@@ -1,19 +1,12 @@
-// get a factory method
 var mFact1 = JMVP.Model(),
-
-    //use the factory to create a model
     model1 = mFact1({
         name: 'Federico',
         surname: 'Ghedina',
         email: 'federico.ghedina@gmail.c', // not a typo :D
         list: []
     });
-
-// use the setter
-model1.setEmail('federico.ghedina@gmail.com');
-
+model1.setEmail('federico.ghedina@gmail.com');// use the setter to fix
 model1.defineMethod('summarize', function () {
-    // here the context is the model
     return `${this.getName()[0]}.${this.getSurame()[0]}. <${this.getEmail()}>`;
 });
 
@@ -44,10 +37,8 @@ view1.defineMethod('changeNumber', function (l) {
     view1.getNode(0).innerHTML = `The list contains ${l} number${l > 1 ? 's' : ''}`;
 })
 
-
 var pFact1 = JMVP.Presenter(),
     presenter1 = pFact1(model1, view1);
-
 presenter1.init = function () {
     var self = this;
     this.defineMethod('addNumber', function (n) {
