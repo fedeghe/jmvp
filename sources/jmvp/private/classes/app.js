@@ -45,8 +45,8 @@ App.prototype._addSetup = function (_setupName, _setup) {
         var p = JMVP.Presenter(),
             gotDefs = 'defs' in _setup,
             gotInit = 'init' in _setup,
-            model = _setup.model(params),
-            view = _setup.view(params),
+            model = typeof _setup.model === 'function' ? _setup.model(params) : _setup.model,
+            view = typeof _setup.view === 'function' ? _setup.view(params) : _setup.view,
             presenter = p(model, view);
 
         App.prototype[_setupName].presenter = presenter;

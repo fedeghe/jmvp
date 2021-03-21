@@ -13,6 +13,9 @@
             }, {
                 label: 'github widget',
                 link: 'sample2/'
+            }, {
+                label: 'playground',
+                link: 'sample3/'
             }]
         },
         listView = `<div>
@@ -83,8 +86,8 @@
         },
         first: {
             // route: '/first',
-            view: function (){ return viewListF(listView);},
-            model: function () {return modelListF(listModel);},
+            view: viewListF(listView),
+            model: modelListF(listModel),
             defs: commonDefs,
             init: function (params) {
                 console.log('first App init');
@@ -120,14 +123,19 @@
         second: {
             // route: '/second',
             view: function () {return viewListF(listView2);},
-            model: function () { return modelListF(listModel2);},
+            model: modelListF(listModel2),
             defs: commonDefs,
             init: function (params) {
                 console.log('second App init');
                 console.log(params);
                 this.loadList();
                 this.setHandler([2], 'click', function () {
-                    App.first({trg: trg, int: 4, surname:'ghedina', address: 'kudam 74'});
+                    App.first({
+                        trg: trg,
+                        int: 4,
+                        surname:'ghedina',
+                        address: 'kudam 74'
+                    });
                 });
             }
 

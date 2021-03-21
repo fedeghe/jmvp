@@ -66,6 +66,9 @@ View.prototype.setHandler = function (nodePath, ev, handler) {
     }
 };
 
+View.prototype.remove = function () {
+    this.node.parentNode.removeChild(this.node);
+};
 View.prototype.defineMethod = function (name, func) {
     this.constructor.prototype[name] = func; // no bind!!!
 };

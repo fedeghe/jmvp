@@ -3,5 +3,6 @@
     "sources/samples/script.js": "samples",
     "sources/samples/style.css": "samples",
     "sources/samples/sample1/build.json": true,
-    "sources/samples/sample2/build.json": true
+    "sources/samples/sample2/build.json": true,
+    "sources/samples/sample3/build.json": true
 }
