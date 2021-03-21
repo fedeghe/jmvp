@@ -2,7 +2,7 @@ var mFact = JMVP.Model(),
     vFact = JMVP.View(),
     pFact = JMVP.Presenter(),
     model1 = mFact({list: []}),
-    view1 = vFact(`<div><button>+</button><ul></ul></div>`),
+    view1 = vFact(`<div><button>Create a random number</button><ul></ul></div>`),
     presenter1 = pFact(model1, view1);
 
 view1.setModel(model1);
