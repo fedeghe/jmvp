@@ -1,5 +1,17 @@
 body {
     background-color: #37d;
-    color:blue;
+    color:white;
+    font-weight:bold;
     font-family:verdana;
+}
+span {
+    margin-right:10px
+}
+ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+ul li {
+    margin-top:10px
 }
