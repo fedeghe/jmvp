@@ -9,7 +9,7 @@ model1.setEmail('federico.ghedina@gmail.com');// use the setter to fix
 model1.defineMethod('summarize', function () {
     return `${this.getName()[0]}.${this.getSurame()[0]}. <${this.getEmail()}>`;
 });
-
+// ===============================================================================
 var vFact1 = JMVP.View(),
     view1 = vFact1(`
         <div>
@@ -19,7 +19,6 @@ var vFact1 = JMVP.View(),
             <button>add a ramdon number</button>
         </div>
     `);
-
 view1.setModel(model1);
 view1.defineMethod('addRandom', function (number) {
     var newNode = document.createElement('li'),
@@ -36,7 +35,7 @@ view1.defineMethod('setAddRandomHandler', function (cb) {
 view1.defineMethod('changeNumber', function (l) {
     view1.getNode(0).innerHTML = `The list contains ${l} number${l > 1 ? 's' : ''}`;
 })
-
+// ===============================================================================
 var pFact1 = JMVP.Presenter(),
     presenter1 = pFact1(model1, view1);
 presenter1.init = function () {
