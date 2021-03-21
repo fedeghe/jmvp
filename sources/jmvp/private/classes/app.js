@@ -17,12 +17,12 @@ function App (presenter, _setups) {
     this.presenter = presenter;
     var i;
     for (i in _setups) {
-        if (_setups.hasOwnProperty(i) && i !== 'initialize') {
+        if (_setups.hasOwnProperty(i) && i !== 'init') {
             this._addSetup(i, _setups[i]);
         }
     }
-    if ('initialize' in _setups) {
-        _setups['initialize'].call(this.presenter);
+    if ('init' in _setups) {
+        _setups['init'].call(this.presenter);
     }
     this._setups = _setups;
     this._routesApp = getRouteApp(_setups);

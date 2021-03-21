@@ -182,8 +182,8 @@ var App = (function () {
         presenter = presenterF(),
 
         MyApp =  presenter.getSetupsManager({
-            initialize: function () {
-                console.log('Initialize');
+            init: function () {
+                console.log('Initialize presenter manager');
             },
 
             /**

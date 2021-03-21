@@ -1,11 +1,17 @@
-var mFact1 = JMVP.Model();
-var model1 = mFact1({
-    name: 'Federico',
-    surname: 'Ghedina',
-    email: 'federico.ghedina@gmail.c',
-    list: [] // not a typo :D
-});
+// get a factory method
+var mFact1 = JMVP.Model(),
+
+    //use the factory to create a model
+    model1 = mFact1({
+        name: 'Federico',
+        surname: 'Ghedina',
+        email: 'federico.ghedina@gmail.c', // not a typo :D
+        list: []
+    });
+
+// use the setter
 model1.setEmail('federico.ghedina@gmail.com');
+
 model1.defineMethod('summarize', function () {
     // here the context is the model
     return `${this.getName()[0]}.${this.getSurame()[0]}. <${this.getEmail()}>`;
@@ -23,8 +29,12 @@ var vFact1 = JMVP.View(),
 
 view1.setModel(model1);
 view1.defineMethod('addRandom', function (number) {
-    var newNode = document.createElement('li');
+    var newNode = document.createElement('li'),
+        removeButton = document.createElement('button');
+    removeButton.innerText = '-';
+
     newNode.appendChild(document.createTextNode(number));
+    newNode.appendChild(removeButton);
     this.getNode(1).appendChild(newNode); // ? wtf ? ... wait
 });
 view1.defineMethod('setAddRandomHandler', function (cb) {

@@ -78,11 +78,11 @@
         });
     };
     var App = listPresenter.getSetupsManager({
-        initialize: function () {
+        init: function () {
             console.log('Started');
         },
         first: {
-            route: '/first',
+            // route: '/first',
             view: function (){ return viewListF(listView);},
             model: function () {return modelListF(listModel);},
             defs: commonDefs,
@@ -118,7 +118,7 @@
             
         },
         second: {
-            route: '/second',
+            // route: '/second',
             view: function () {return viewListF(listView2);},
             model: function () { return modelListF(listModel2);},
             defs: commonDefs,
