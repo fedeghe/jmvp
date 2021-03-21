@@ -16,7 +16,7 @@ view1.defineMethod('addRandom', function (number) {
     
     view2.setModel(model2);
     view2.setHandler([1], 'click', function () {
-        view2.remove()
+        view2.remove();
     });
     pres2.render(this.getNode(1))
 });
