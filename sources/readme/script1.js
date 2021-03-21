@@ -4,11 +4,11 @@ var mFact1 = JMVP.Model(),
         surname: 'Knuth',
         email: 'donald.knuth@gmail.com',
         list: []
-    });
+    }),
 
-// View
-//
-var vFact1 = JMVP.View(),
+    // View
+    //
+    vFact1 = JMVP.View(),
     view = vFact1(`
     <div>
         <p>A list of numbers</p>
@@ -19,10 +19,10 @@ var vFact1 = JMVP.View(),
 `, model);
 
 
-// define add Random 
+// define add Random
 view.defineMethod('onButtonClickSetHandler', function (handler) {
     this.setHandler([3], 'click', handler);
-})
+});
 view.defineMethod('addRandom', function (number) {
     var newNode = document.createElement('li');
     newNode.appendChild(document.createTextNode(number));
@@ -38,11 +38,11 @@ presenter.defineMethod('add', function () {
     var elements = presenter.model.getList(),
         newValue = Math.random().toFixed(3);
     elements.push(newValue);
-    //update model
+    // update model
     presenter.model.setList(elements);
-    //and view
+    // and view
     presenter.view.addRandom(newValue);
-})
+});
 
 presenter.init = function () {
     this.view.onButtonClickSetHandler(this.add);

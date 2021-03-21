@@ -9,7 +9,9 @@ var GH = (function () {
             userData: userData
         };
     }
-    var data = getData(),
+    var apiBase = 'https://api.github.com',
+        elsPerPage = $GH_RNUM$,
+        data = getData(),
         refreshData = function () {
             data = getData();
         },
@@ -60,7 +62,7 @@ var GH = (function () {
         login: function (usr, accessToken) {
             data.usr = usr;
             data.accessToken = accessToken;
-            return fetch('https://api.github.com/user', headers())
+            return fetch(`${apiBase}/user`, headers())
                 .then(getResponse)
                 .then(function (json) {
                     data.userData = json;
@@ -74,33 +76,33 @@ var GH = (function () {
         },
 
         getMyRepos: function () {
-            return fetch('https://api.github.com/users/' + data.usr + '/repos?per_page=100&type=owner', headers())
+            return fetch(`${apiBase}/users/${data.usr}/repos?per_page=${elsPerPage}&type=owner`, headers())
                 .then(getResponse)
                 .catch(err);
         },
 
         getMyStarred: function () {
-            return fetch('https://api.github.com/users/' + data.usr + '/starred', headers())
+            return fetch(`${apiBase}/users/${data.usr}/starred`, headers())
                 .then(getResponse)
                 .catch(err);
         },
 
         getMostStarred: function (lang) {
-            return fetch('https://api.github.com/search/repositories?q=language:' + lang + '&per_page=$GH_RNUM$&sort=stars&page=1', headers())
+            return fetch(`${apiBase}/search/repositories?q=language:${lang}&per_page=${elsPerPage}&sort=stars&page=1`, headers())
                 .then(getResponse)
                 .catch(err);
         },
 
         starRepo: function (repo, user) {
             user = user || data.usr;
-            return fetch('https://api.github.com/user/starred/' + user + '/' + repo , headers('PUT'))
+            return fetch(`${apiBase}/starred/${user}/${repo}` , headers('PUT'))
                 .then(checkResponse)
                 .catch(err);
         },
 
         unstarRepo: function (repo, user) {
             user = user || data.usr;
-            return fetch('https://api.github.com/user/starred/' + user + '/' + repo, headers('DELETE'))
+            return fetch(`${apiBase}/user/starred/${user}/${repo}`, headers('DELETE'))
                 .then(checkResponse)
                 .catch(err);
         },
