@@ -10,7 +10,7 @@ view1.defineMethod('addRandom', function (number) {
     var model2 = mFact({number: number}),
         view2 = vFact(`<li>
             <span>$[number]</span>
-            <button>-</button>
+            <button nid="x">-</button>
         </li>`),
         pres2 = pFact(model2, view2);
     
@@ -31,6 +31,7 @@ view1.defineMethod('addRandom', function (number) {
     pres2.init = function () {
         var view = this.view;
         view.setClickHandler(function () {
+            console.log(view.getNodeByNid('x'))
             view.remove()
         });
     };

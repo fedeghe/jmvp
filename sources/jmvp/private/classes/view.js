@@ -99,7 +99,7 @@ View.prototype.defineMethod = function (name, func) {
 //     }
 //     return this.cache[key];
 // };
-View.prototype.getNode = function () {
+View.prototype.getNode = function (nid) {
     var a = [].slice.call(arguments),
         ret = this,
         i = 0, l = a.length,
@@ -113,4 +113,13 @@ View.prototype.getNode = function () {
         childs = ret.childs;
     }
     return ret && ret.node;
+};
+
+View.prototype.getNodeByNid = function (nid) {
+    var id = `nid-${+new Date()}`,
+        res;
+    this.node.setAttribute('id', id);
+    res = this.node.querySelector(`#${id} [nid="${nid}"]`);
+    this.node.removeAttribute('id');
+    return res;
 };
