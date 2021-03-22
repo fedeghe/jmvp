@@ -4,7 +4,7 @@ var GH = (function () {
             userData = uData ? JSON.parse(uData) : {};
         return {
             usr: JMVP.storage.get('ghusr'),
-            pwd: JMVP.storage.get('ghpwd'),
+            accessToken: JMVP.storage.get('ghaccessToken'),
             loggedIn: JMVP.storage.get('ghlogged') || false,
             userData: userData
         };
@@ -45,7 +45,7 @@ var GH = (function () {
         },
         saveAuth = function () {
             JMVP.storage.set('ghusr', data.usr);
-            JMVP.storage.set('ghpwd', data.pwd);
+            JMVP.storage.set('ghaccessToken', data.accessToken);
             JMVP.storage.set('ghlogged', data.loggedIn);
             JMVP.storage.set('ghuserdata', JSON.stringify(data.userData));
         };

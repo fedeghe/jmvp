@@ -190,6 +190,8 @@ var App = (function () {
              * The login
              */
             login: {
+                // can also be simply
+                // view: viewF(viewLogin),
                 view: function () {return viewF(viewLogin);},
                 model: function () {return modelF(modelLogin);},
                 defs: function () {
@@ -595,7 +597,7 @@ var App = (function () {
                         ) : proceed();
 
                         function proceed() {
-                            var newStatus = !status;
+                            var newStatus = !status,
                                 name = pres.model.getName(),
                                 owner = pres.model.getOwner();
                             Toggle(false);
