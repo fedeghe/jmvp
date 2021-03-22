@@ -16,9 +16,8 @@ var GH = (function () {
             data = getData();
         },
         headers = function (method) {
-            method = method || 'GET';
             return {
-                method: method,
+                method: method || 'GET',
                 mode: "cors",
                 cache: "no-cache",
                 credentials: "same-origin",
