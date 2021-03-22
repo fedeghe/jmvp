@@ -15,10 +15,27 @@ view1.defineMethod('addRandom', function (number) {
         pres2 = pFact(model2, view2);
     
     view2.setModel(model2);
-    view2.setHandler([1], 'click', function () {
-        view2.remove();
+
+    /**
+     * here view could do it directly as 
+     */
+     // view2.setHandler([1], 'click', function () {view2.remove()})
+
+    /**
+     * instead the view must only allow the presenter
+     * to add a handler dynamically
+     */
+    view2.defineMethod('setClickHandler', function (cb){
+        view2.setHandler([1], 'click', cb)
     });
-    pres2.render(this.getNode(1))
+    pres2.init = function () {
+        var view = this.view;
+        view.setClickHandler(function () {
+            view.remove()
+        });
+    };
+
+    pres2.render(this.getNode(1));
 });
 
 view1.defineMethod('setAddRandomHandler', function (cb) {
@@ -39,3 +56,5 @@ presenter1.init = function () {
 };
 
 presenter1.render(document.getElementById('trg'));
+
+console.log(presenter1)
