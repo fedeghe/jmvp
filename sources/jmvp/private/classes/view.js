@@ -1,8 +1,9 @@
 function View (tpl, model) {
-    this.cnt = document.createElement('div');
+    this.cnt = document.createElement('template');
     this.tpl = tpl.replace(/\r?\n|\r|\t|\s\s/gm, '');
     this.cnt.innerHTML = this.tpl;
-    this.node = this.cnt.childNodes[0];
+    this.node = this.cnt.content.firstChild;
+    // debugger;
     this.childs = [];
     this.model = model ? Object.assign({}, model) : null;
     this.handlers = [];
@@ -11,9 +12,10 @@ function View (tpl, model) {
 };
 
 View.prototype._refs = function () {
+    // debugger;
     (function dig (node, acc) {
         var i = 0,
-            childs = node.childNodes,
+            childs = node.children,
             l = childs.length,
             tmp;
         for (null; i < l; i++) {
@@ -34,7 +36,7 @@ View.prototype.setModel = function (model) {
         return eval('(' + b + ')');
     });
     this.cnt.innerHTML = tpl;
-    this.node = this.cnt.childNodes[0];
+    this.node = this.cnt.content.firstChild;
     this._refs();
 };
 

@@ -4,17 +4,20 @@ var mFact = JMVP.Model(),
     model1 = mFact({list: []}),
     view1 = vFact(`<div>
         <button>Create a random number</button>
-        <table></table>
+        <ul></ul>
     </div>`),
     presenter1 = pFact(model1, view1);
 
 view1.setModel(model1);
 view1.defineMethod('addRandom', function (number) {
     var model2 = mFact({number: number}),
-        view2 = vFact(`<tr>
-            <td>$[number]</td>
-            <td><button nid="x">-</button></td>
-        </tr>`),
+        view2 = vFact(`<li>
+            <span>$[number]</span>
+            <p>
+                <strong>$[number]</strong>
+            </p>
+            <div><button nid="x">-</button></div>
+        </li>`),
         pres2 = pFact(model2, view2);
     
     view2.setModel(model2);
@@ -29,12 +32,16 @@ view1.defineMethod('addRandom', function (number) {
      * to add a handler dynamically
      */
     view2.defineMethod('setClickHandler', function (cb){
-        view2.setHandler([1, 0], 'click', cb)
+        view2.setHandler([2, 0], 'click', cb)
     });
     pres2.init = function () {
         var view = this.view;
         view.setClickHandler(function () {
             console.log(view.getNodeByNid('x'))
+            console.log(view.getNode(0))
+            console.log(view.getNode(1))
+            console.log(view.getNode(2))
+            console.log(view.getNode(2, 0))
             view.remove()
         });
         // or 
