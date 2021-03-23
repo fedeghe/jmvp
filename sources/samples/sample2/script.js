@@ -690,10 +690,10 @@ var App = (function () {
                 view: function () { return viewF(`
                     <div class="dialog">
                         <div class="dialog--box">
-                            <p class="dialog__message">$[message]</p>
+                            <p nid="message" class="dialog__message">$[message]</p>
                             <div>
-                                <button class="dialog__button dialog--confirm">$[confirmLabel]</button>
-                                <button class="dialog__button dialog--abort">$[abortLabel]</button>
+                                <button nid="confirm-button" class="dialog__button dialog--confirm">$[confirmLabel]</button>
+                                <button nid="abort-button" class="dialog__button dialog--abort">$[abortLabel]</button>
                             </div>
                         </div>
                     </div>
@@ -719,9 +719,9 @@ var App = (function () {
                         p.model.setMessage(msg || 'no message');
                         confirm && p.model.setConfirmLabel(confirm);
                         abort && p.model.setAbortLabel(abort);
-                        var $message = this.getNode(0, 0),
-                            $confirm = this.getNode(0, 1, 0),
-                            $abort = this.getNode(0, 1, 1);
+                        var $message = this.getNode('message'),
+                            $confirm = this.getNode('confirm-button'),
+                            $abort = this.getNode('abort-button');
                         $message.innerHTML = p.model.getMessage();
                         $confirm.innerHTML = p.model.getConfirmLabel();
                         $abort.innerHTML = p.model.getAbortLabel();
