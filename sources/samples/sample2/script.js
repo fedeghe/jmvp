@@ -149,7 +149,7 @@ var App = (function () {
         viewItem = `<li class="item{$[isFork] ? ' fork': ''}{$[isEmpty] ? ' emptyRepo': ''}" {$[isEmpty] ? 'data-tooltip="this repository is empty"': ''}>
             <a href="$[link]" target="_blank" class="item__name">$[name]</a>
             <p class="item__description">$[description]</p>
-            <span class="iconAfter {$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}" {$[isEmpty] ? 'data-tooltip="really want to star a empty repo???"': ''}></span>
+            <span nid="starred-icon" class="iconAfter {$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}" {$[isEmpty] ? 'data-tooltip="really want to star a empty repo???"': ''}></span>
             <div>
                 {$[stars] ? '<span data-tooltip="stars" class="icon iconAfter item_stars">$[stars]</span>' : ''}
                 {$[watchers] ? '<span data-tooltip="watchers" class="icon iconAfter item_watchers">$[watchers]</span>' : ''}
@@ -158,7 +158,7 @@ var App = (function () {
             </div>
             <hr>
             <details class="item__details">
-                <summary class="item__details_summary" data-tooltip="$[detailsTooltipMessage]">$[detailsLabel]</summary>
+                <summary nid="details" class="item__details_summary" data-tooltip="$[detailsTooltipMessage]">$[detailsLabel]</summary>
                 <ul class="item__details_summary_list">
                     <li class="item__details_summary_list__item">
                         <strong>Size:</strong> $[size]
@@ -419,8 +419,6 @@ var App = (function () {
                             break;
                     }
                     
-
-
                     //common
                     p.defineMethod('logout', function () {
                         GH.logout();
@@ -518,6 +516,7 @@ var App = (function () {
             },
 
             item : {
+                // view: viewF(viewItem), // <= could also be 
                 view: function () { return viewF(viewItem); },
                 model: function (params) {
                     var m  = modelF(modelItem),
@@ -545,24 +544,25 @@ var App = (function () {
                     return m;
                 },
                 defs: function () {
-                    var pres = this;
+                    var pres = this,
+                        $starredIcon = pres.view.getNode('starred-icon');
                     pres.view.defineMethod('updateDetailsLabels', function (label, tooltip) {
-                        var node = this.getNode(5, 0);
+                        var node = this.getNode('details');
                         node.innerHTML = label;
                         node.dataset.tooltip = tooltip;
                         MyApp.tooltip.presenter.updateMessage(tooltip);
                     });
                     pres.view.defineMethod('toggleStar', function (starred) {
-                        this.getNode(2).className = starred ? 'item_starredByMe' : 'item_notStarredByMe';
+                        $starredIcon.className = starred ? 'item_starredByMe' : 'item_notStarredByMe';
                     });
                     pres.view.defineMethod('setStarHandler', function (handler) {
-                        pres.setHandler([2], 'click', handler);
+                        pres.setHandler($starredIcon, 'click', handler);
                     });
                 },
                 init: function () {
                     var pres = this,
                         userData = GH.getData();
-                    pres.view.setHandler([5, 0], 'click', function () {
+                    pres.view.setHandler('details', 'click', function () {
                         var detailsVisible = pres.model.getDetailsVisible();
                         if (detailsVisible) {
                             pres.view.updateDetailsLabels(
@@ -576,13 +576,8 @@ var App = (function () {
                             );
                         }
                         pres.model.setDetailsVisible(!detailsVisible);
-                        /*
-                        detailsLabel: 'show more details',
-                        detailsTooltipMessage: 'show more details about the repo',
-                        detailsLabelClose: 'show less details',
-                        detailsTooltipMessageClose: 'hide details about the repo',
-                        */
                     });
+
                     pres.view.setStarHandler(function () {
 
                         var dialog = MyApp.dialog.presenter,
@@ -606,7 +601,9 @@ var App = (function () {
                             var newStatus = !status,
                                 name = pres.model.getName(),
                                 owner = pres.model.getOwner();
+                            
                             Toggle(false);
+
                             GH[newStatus ? 'starRepo' : 'unstarRepo'](name, owner).then(r => {
 
                                 /**
