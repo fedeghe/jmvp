@@ -34,19 +34,19 @@ var App = (function () {
                     <legend class="login__legend">Login</legend>
                     <div class="login__line">
                         <label class="login__label">Username</label>
-                        <input class="login__input"type="text"/>
+                        <input nid="user" class="login__input"type="text"/>
                     </div>
                     <div class="login__line">
                         <label class="login__label">Access token</label>
-                        <input class="login__input" type="password"/>
+                        <input nid="token" class="login__input" type="password"/>
                     </div>
                     <div class="login__line">
-                        <button class="login__submit">login</button>
+                        <button nid="login-button" class="login__submit">login</button>
                         <span> or </span>
-                        <button class="login__skip">skip</button> 
+                        <button nid="login-button-skip" class="login__skip">skip</button> 
                     </div>
                     <hr class="separator"/>
-                    <p class="login__message">$[message]</p>
+                    <p nid="login-message" class="login__message">$[message]</p>
                 </fieldset>
             </div>
         `,
@@ -66,17 +66,17 @@ var App = (function () {
                 <div class="panel__header">
                     <div class="hfMargin">
                         <p>
-                            <strong>$[username] </strong><i class="iconBefore panel__fame"></i>
+                            <strong>$[username] </strong><i nid="star_num"class="iconBefore panel__fame"></i>
                         </p>
                         <p>
                             <strong>#Repos: </strong>
-                            <span></span>
+                            <span nid="repos_count"></span>
                         </p>
                         <p>
-                            <input id="only_owned" type="checkbox" />
+                            <input nid="only-owned-checkbox" id="only_owned" type="checkbox" />
                             <label for="only_owned">Only owned</label>
                         </p>
-                        <div class="panel__header__switch" data-tooltip="switch to public">
+                        <div nid="mode-switch" class="panel__header__switch" data-tooltip="switch to public">
                             <span class="icon panel__header__switch__user"></span>
                             <span class="icon panel__header__switch__arrowdown"></span>
                             <span class="icon panel__header__switch__github"></span>
@@ -84,12 +84,12 @@ var App = (function () {
                     </div>
                 </div>
                 <div class="panel__body">
-                    <ul class="panel__list">
+                    <ul nid="body-list" class="panel__list">
                         <li class="spinner"></li>
                     </ul>
                 </div>
                 <div class="panel__footer">
-                    <span class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
+                    <span nid="logout" class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
                 </div>
         </div>`,
 
@@ -99,13 +99,13 @@ var App = (function () {
                         <p><strong>$[username] </strong></p>
                         <p>
                             <label>Language: </label>
-                            <select></select>
+                            <select nid="lang-list"></select>
                         </p>
                         <p><!--
                             <label>User</label>
                             <input type="text"/><i class="fa fa-close"></i>
                         --></p>
-                        <div class="panel__header__switch" data-tooltip="switch to Your user">
+                        <div nid="mode-switch" class="panel__header__switch" data-tooltip="switch to Your user">
                             <span class="icon panel__header__switch__user"></span>
                             <span class="icon panel__header__switch__arrowup"></span>
                             <span class="icon panel__header__switch__github"></span>
@@ -113,12 +113,12 @@ var App = (function () {
                     </div>
                 </div>
                 <div class="panel__body">
-                    <ul class="panel__list">
+                    <ul nid="body-list" class="panel__list">
                         <li class="spinner"></li>
                     </ul>
                 </div>
                 <div class="panel__footer">
-                    <span class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
+                    <span nid="logout" class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
                 </div>
         </div>`,
 
@@ -207,11 +207,11 @@ var App = (function () {
                     /**
                      * define the view interface
                      */
-    
+    // console.log(p.view.getNode('login-button-skip'))
+                    var bSub = p.view.getNode('login-button'),
+                        bSkip = p.view.getNode('login-button-skip');
                     p.view.defineMethod('toggleButtonsFunc', function(val) {
 
-                        var bSub = p.view.getNode(0, 3, 0),
-                            bSkip = p.view.getNode(0, 3, 2);
                         if (val) {
                             bSub.removeAttribute('disabled');
                             bSkip.removeAttribute('disabled');
@@ -221,17 +221,17 @@ var App = (function () {
                         }
                     });
                     p.view.defineMethod('updateMessage', function(m) {
-                        p.view.getNode(0, 5).innerHTML = m;
+                        p.view.getNode('login-message').innerHTML = m;
                     });
                     p.view.defineMethod('setSubmitHandler', function (handler) {
-                        p.view.setHandler([0, 3, 0], 'click', handler);
+                        p.view.setHandler('login-button', 'click', handler);
                     });
                     p.view.defineMethod('setSkipHandler', function (handler) {
-                        p.view.setHandler([0, 3, 2], 'click', handler);
+                        p.view.setHandler(bSkip, 'click', handler);
                     });
                     p.view.defineMethod('setOverOutSkipHandler', function (handlerOver, handlerOut) {
-                        p.view.setHandler([0, 3, 2], 'mouseover', handlerOver);
-                        p.view.setHandler([0, 3, 2], 'mouseout', handlerOut);
+                        p.view.setHandler(bSkip, 'mouseover', handlerOver);
+                        p.view.setHandler(bSkip, 'mouseout', handlerOut);
                     });
                     // end of view interface definition
                     
@@ -240,8 +240,11 @@ var App = (function () {
                         p.view.updateMessage(p.model.getMessage());
                     });
                     p.defineMethod('attemptLogin', function () {
-                        var usr = p.view.getNode(0, 1, 1).value.replace(/@.*/, ''),
-                            token = p.view.getNode(0, 2, 1).value;
+                        var $usr = p.view.getNode('user'),
+                            $token = p.view.getNode('token'),
+                            usr = $usr.value.replace(/@.*/, ''),
+                            token = $token.value;
+
                         p.view.toggleButtonsFunc(false);
 
                         GH.login(usr, token).then(() => {
@@ -311,33 +314,84 @@ var App = (function () {
                 },
                 defs: function (params) {
                     var p = this,
-                        mode = params.mode || p.model.getMode();
+                        mode = params.mode || p.model.getMode(),
+                        $bodyList = p.view.getNode('body-list'),
+                        $langList = p.view.getNode('lang-list');
+                        $logout = p.view.getNode('logout');
+
                     console.log('Mode is >>> ' + mode)
                     p.model.setMode(mode);
                     p.model.setLoggedIn(true);
                     
 
                     p.view.defineMethod('setSwitchModeHandler', function (func) {
-                        p.view.setHandler([0, 0, 3], 'click', func);
+                        p.view.setHandler('mode-switch', 'click', func);
                     });
                     switch (mode) {
+                        case CONSTANTS.MODES.GITHUB:
+                            console.log('defs github mode');
+                            p.view.defineMethod('setLogoutHandler', function (handler) {
+                                p.view.setHandler($logout, 'click', handler);
+                            });
+                            p.view.defineMethod('loadLanguagesList', function (list) {
+                                var trg = $langList;
+                                list.forEach(function (lang) {
+                                    var item = document.createElement('option');
+                                    item.innerHTML = lang;
+                                    if (lang == p.model.getDefaultLang()) item.setAttribute('selected', 'selected');
+                                    trg.appendChild(item);
+                                });
+                            });
+                            p.view.defineMethod('showSpinner', function (func) {
+                                var trg = $bodyList,
+                                    imgUrl = GH.getData().userData.avatar_url,
+                                    spinner = document.createElement('li');
+                                spinner.className = 'spinner';
+                                spinner.style.backgroundImage = 'url(' + imgUrl + ')';
+                                trg.innerHTML = '';
+                                trg.appendChild(spinner);
+                            });
+                            p.view.defineMethod('setChangeLanguageHandler', function (func) {
+                                this.setHandler($langList, 'change', func);
+                            });
+                            p.view.defineMethod('loadList', function (list, starred) {
+                                var trg = $bodyList,
+                                    
+                                    counter = {
+                                        own: 0,
+                                        fork: 0
+                                    };
+                                trg.innerHTML = '';
+
+                                list.items.forEach(function (item) {
+                                    counter[item.fork ? 'fork' : 'own']++;
+                                    MyApp.item({
+                                        append: true,
+                                        trg: trg,
+                                        item: item,
+                                        starred: starred.indexOf(item.id) >= 0
+                                    });
+                                });
+                                
+                            });
+                            break;
                         case CONSTANTS.MODES.USER: 
                             /**
                              * define view interface
                              */
 
                             p.view.defineMethod('setOnlyOwnedFilterHandler', function (handler) {
-                                p.view.setHandler([0, 0, 2, 0], 'change', handler);
+                                p.view.setHandler('only-owned-checkbox', 'change', handler);
                             })
                             p.view.defineMethod('setLogoutHandler', function (handler) {
-                                p.view.setHandler([2, 0], 'click', handler);
+                                p.view.setHandler($logout, 'click', handler);
                             });
                             p.view.defineMethod('setTotStars', function (n) {
-                                p.view.getNode(0, 0, 0, 1).innerHTML = n;
+                                p.view.getNode('star_num').innerHTML = n;
                             });
                             p.view.defineMethod('loadList', function (list, starred) {
-                                var trg = p.view.getNode(1, 0),
-                                    $counter = p.view.getNode(0, 0, 1, 1),
+                                var trg = $bodyList,
+                                    $counter = p.view.getNode('repos_count'),
                                     totStars = 0,
                                     counter = {
                                         own: 0,
@@ -358,54 +412,6 @@ var App = (function () {
                                 $counter.innerHTML = list.length + (counter.fork ? (' (' + counter.fork) + ' forks)' : '');
                                 p.model.setTotStarred(totStars);
                                 p.view.setTotStars(totStars);
-                            });
-                            break;
-                        case CONSTANTS.MODES.GITHUB:
-                            console.log('defs github mode');
-
-                            p.view.defineMethod('setLogoutHandler', function (handler) {
-                                p.view.setHandler([2, 0], 'click', handler);
-                            });
-                            p.view.defineMethod('loadLanguagesList', function (list) {
-                                var trg = p.view.getNode(0, 0, 1, 1);
-                                list.forEach(function (lang) {
-                                    var item = document.createElement('option');
-                                    item.innerHTML = lang;
-                                    if (lang == p.model.getDefaultLang()) item.setAttribute('selected', 'selected');
-                                    trg.appendChild(item);
-                                });
-                            });
-                            p.view.defineMethod('showSpinner', function (func) {
-                                var trg = this.getNode(1, 0),
-                                    imgUrl = GH.getData().userData.avatar_url,
-                                    spinner = document.createElement('li');
-                                spinner.className = 'spinner';
-                                spinner.style.backgroundImage = 'url(' + imgUrl + ')';
-                                trg.innerHTML = '';
-                                trg.appendChild(spinner);
-                            });
-                            p.view.defineMethod('setChangeLanguageHandler', function (func) {
-                                this.setHandler([0, 0, 1, 1], 'change', func);
-                            });
-                            p.view.defineMethod('loadList', function (list, starred) {
-                                var trg = p.view.getNode(1, 0),
-                                    
-                                    counter = {
-                                        own: 0,
-                                        fork: 0
-                                    };
-                                trg.innerHTML = '';
-
-                                list.items.forEach(function (item) {
-                                    counter[item.fork ? 'fork' : 'own']++;
-                                    MyApp.item({
-                                        append: true,
-                                        trg: trg,
-                                        item: item,
-                                        starred: starred.indexOf(item.id) >= 0
-                                    });
-                                });
-                                
                             });
                             break;
                         default: 

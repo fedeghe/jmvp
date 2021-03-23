@@ -37,3 +37,7 @@ NS.util.dateFormat = function (d) {
     var data = new Date(d);
     return data.toLocaleString(navigator.language);
 };
+
+NS.util.isElement = function (el) {
+    return !!(el && el.nodeType === 1);
+};

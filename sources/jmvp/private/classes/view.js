@@ -3,7 +3,6 @@ function View (tpl, model) {
     this.tpl = tpl.replace(/\r?\n|\r|\t|\s\s/gm, '');
     this.cnt.innerHTML = this.tpl;
     this.node = this.cnt.content.firstChild;
-    // debugger;
     this.childs = [];
     this.model = model ? Object.assign({}, model) : null;
     this.handlers = [];
@@ -12,7 +11,6 @@ function View (tpl, model) {
 };
 
 View.prototype._refs = function () {
-    // debugger;
     (function dig (node, acc) {
         var i = 0,
             childs = node.children,
@@ -51,10 +49,18 @@ View.prototype.reset = function () {
 View.prototype.setHandler = function (nodePath, ev, handler) {
     var resetHandler,
         n;
-    try {
-        n = this.getNode.apply(this, nodePath);
-    } catch (e) {
-        console.log(e);
+
+    // if a Element is passed
+    if (NS.util.isElement(nodePath)) {
+        n = nodePath;
+    } else {
+        try {
+            n = typeof nodePath === 'string'
+                ? this.getNodeByNid(nodePath)
+                : this.getNode.apply(this, nodePath);
+        } catch (e) {
+            console.log(e);
+        }
     }
     if (n) {
         n.addEventListener(ev, handler);
@@ -71,41 +77,20 @@ View.prototype.setHandler = function (nodePath, ev, handler) {
 View.prototype.remove = function () {
     this.node.parentNode.removeChild(this.node);
 };
+
 View.prototype.defineMethod = function (name, func) {
     this.constructor.prototype[name] = func; // no bind!!!
 };
 
-// what about memoization?
-
-// View.prototype.getNode = function () {
-//     var a = [].slice.call(arguments),
-//         key = a.join(':') || 'root',
-//         ret = this,
-//         i = 0, l = a.length,
-//         childs;
-//     if (!(key in this.cache)) {
-//         childs = this.childs;
-//         for (null; i < l; i++) {
-//             ret = childs[a[i]];
-//             if (!ret) {
-//                 throw a + ' not found, handler not settable';
-//             }
-//             childs = ret.childs;
-//         }
-//         this.cache[key] = ret && ret.node;
-//         // console.log("CACHED");
-//         // console.log(key, this.cache[key]);
-//     } else {
-//         // console.log("GOT IT");
-//         // console.log(key, this.cache[key]);
-//     }
-//     return this.cache[key];
-// };
 View.prototype.getNode = function () {
     var a = [].slice.call(arguments),
         ret = this,
         i = 0, l = a.length,
         childs = this.childs;
+    // nid ?
+    if (l === 1 && typeof a[0] === 'string') {
+        return this.getNodeByNid(a[0]);
+    }
 
     for (null; i < l; i++) {
         ret = childs[a[i]];
