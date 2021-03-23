@@ -94,7 +94,7 @@ var GH = (function () {
 
         starRepo: function (repo, user) {
             user = user || data.usr;
-            return fetch(`${apiBase}/starred/${user}/${repo}` , headers('PUT'))
+            return fetch(`${apiBase}/user/starred/${user}/${repo}` , headers('PUT'))
                 .then(checkResponse)
                 .catch(err);
         },
