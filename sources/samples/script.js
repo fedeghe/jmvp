@@ -13,9 +13,6 @@
             }, {
                 label: 'github widget',
                 link: 'sample2/'
-            }, {
-                label: 'playground',
-                link: 'sample3/'
             }]
         },
         listView = `<div>

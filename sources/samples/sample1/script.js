@@ -1,64 +1,59 @@
-// get a factory method
-var mFact1 = JMVP.Model(),
-
-    //use the factory to create a model
-    model1 = mFact1({
-        name: 'Federico',
-        surname: 'Ghedina',
-        email: 'federico.ghedina@gmail.c', // not a typo :D
-        list: []
-    });
-
-// use the setter
-model1.setEmail('federico.ghedina@gmail.com');
-
-model1.defineMethod('summarize', function () {
-    // here the context is the model
-    return `${this.getName()[0]}.${this.getSurame()[0]}. <${this.getEmail()}>`;
-});
-
-var vFact1 = JMVP.View(),
-    view1 = vFact1(`
-        <div>
-            <p>An empty list there</p>
-            <ul></ul>
-            <p>$[name] please ...</p>
-            <button>add a ramdon number</button>
-        </div>
-    `);
+var mFact = JMVP.Model(),
+    vFact = JMVP.View(),
+    pFact = JMVP.Presenter(),
+    model1 = mFact({list: []}),
+    view1 = vFact(`<div>
+        <button nid="add-button">Create a random number</button>
+        <p>Numbers in list: <span nid="num"></span></p>
+        <table nid="table"></table>
+    </div>`),
+    presenter1 = pFact(model1, view1);
 
 view1.setModel(model1);
-view1.defineMethod('addRandom', function (number) {
-    var newNode = document.createElement('li'),
-        removeButton = document.createElement('button');
-    removeButton.innerText = '-';
 
-    newNode.appendChild(document.createTextNode(number));
-    newNode.appendChild(removeButton);
-    this.getNode(1).appendChild(newNode); // ? wtf ? ... wait
+view1.defineMethod('setAddHandler', function (f) {
+    view1.setHandler(view1.getNode('add-button'), 'click', f)
 });
-view1.defineMethod('setAddRandomHandler', function (cb) {
-    view1.setHandler([3], 'click', cb);
+
+view1.defineMethod('addNode', function () {
+    var list = model1.getList(),
+        rnd = Math.random().toFixed(3),
+        $table = view1.getNode('table'),
+        $num = view1.getNode('num'),
+        model = mFact({number: rnd}),
+        view = vFact(`<tr nid="line">
+            <td>$[number]</td>
+            <td><button nid="remove">-</button></td>
+        </tr>`),
+        presenter = pFact(model, view);
+
+    list.push(rnd);
+    model1.setList(list);
+    $num.innerHTML = list.length;
+
+    view.setModel(model);
+    view.setHandler(view.getNode('remove'), 'click', function () {
+        view1.removeNode(view.node, rnd)
+    })   
+    presenter.render($table)
 });
-view1.defineMethod('changeNumber', function (l) {
-    view1.getNode(0).innerHTML = `The list contains ${l} number${l > 1 ? 's' : ''}`;
-})
 
-
-var pFact1 = JMVP.Presenter(),
-    presenter1 = pFact1(model1, view1);
+view1.defineMethod('removeNode', function ($n, n) {
+    var newList = model1.getList().filter(function (el) {
+            return el !== n
+        }),
+        $num = view1.getNode('num');
+    model1.setList(newList);
+    $n.parentNode.removeChild($n);
+    $num.innerHTML = newList.length;
+});
 
 presenter1.init = function () {
-    var self = this;
-    this.defineMethod('addNumber', function (n) {
-        var list = self.model.getList();
-        list.push(n);
-        self.model.setList(list);
-        self.view.addRandom(n);
-        self.view.changeNumber(list.length);
-    });
-    this.view.setAddRandomHandler(function () {
-        self.addNumber(Math.random().toFixed(3));
-    });
+    var self = this,
+        view = self.view;
+    view.setAddHandler(view.addNode)
 };
+
 presenter1.render(document.getElementById('trg'));
+
+console.log(presenter1)
