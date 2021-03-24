@@ -322,5 +322,5 @@ The App consists in a widget that will be rendered into a target container; the 
 
 
 In all cases
-- the list is dynamic thanks to a 5sec polling         
+- the list is dynamic thanks to a 5sec polling  
 - during the whole `mayupdate` request flow the UI is disabled, and a small spinner is shown somewhere
