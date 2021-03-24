@@ -101,10 +101,10 @@ var App = (function () {
                             <label>Language: </label>
                             <select nid="lang-list"></select>
                         </p>
-                        <p><!--
+                        <!--<p>
                             <label>User</label>
                             <input type="text"/><i class="fa fa-close"></i>
-                        --></p>
+                        </p>-->
                         <div nid="mode-switch" class="panel__header__switch" data-tooltip="switch to Your user">
                             <span class="icon panel__header__switch__user"></span>
                             <span class="icon panel__header__switch__arrowup"></span>
