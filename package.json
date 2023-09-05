@@ -24,7 +24,7 @@
         "eslint-plugin-standard": "^4.0.0",
         "malta": "^4.1.37",
         "malta-browser-refresh": "1.2.16",
-        "malta-dev-srv": "1.1.7",
+        "malta-dev-srv": "^1.1.8",
         "malta-header-comment": "1.0.9",
         "malta-js-uglify": "1.0.11",
         "malta-less": "1.0.11"
