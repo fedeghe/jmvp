@@ -166,8 +166,8 @@ The App consists in a widget that will be rendered into a target container; the 
 
 #### Login panel
 - [x] The panel manages online/offline mode, enabling and disabling the access buttons, and notifies the user about changes of the connection status.  
-- [x] In case the login fails, the usaer must be noticed about the problem.
-- [x] Data entered must be sanitized.
+- [x] In case the login fails, the user is noticed about the problem.
+- [x] Input is sanitized.
 
 ####  Authenticated version  
 - top panel

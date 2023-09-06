@@ -29,6 +29,7 @@ function App (presenter, _setups) {
     this.trg = null;
     this._initPopState();
 }
+
 App.prototype._initPopState = function () {
     var self = this;
     window.addEventListener('popstate', function (/* e */) {
