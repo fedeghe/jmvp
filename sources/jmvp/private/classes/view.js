@@ -10,6 +10,7 @@ function View (tpl, model) {
     this.cache = {};
 };
 
+
 View.prototype._refs = function () {
     (function dig (node, acc) {
         var i = 0,
@@ -103,5 +104,5 @@ View.prototype.getNode = function () {
 };
 
 View.prototype.getNodeByNid = function (nid) {
-    return this.node.querySelector('[nid="' + nid + '"]');
+    return this.node.querySelector('[data-nid="' + nid + '"]');
 };

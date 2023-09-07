@@ -3,9 +3,9 @@ var mFact = JMVP.Model(),
     pFact = JMVP.Presenter(),
     model1 = mFact({list: []}),
     view1 = vFact(`<div>
-        <button nid="add-button">Create a random number</button>
-        <p>Numbers in list: <span nid="num"></span></p>
-        <table nid="table"></table>
+        <button data-nid="add-button">Create a random number</button>
+        <p>Numbers in list: <span data-nid="num"></span></p>
+        <table data-nid="table"></table>
     </div>`),
     presenter1 = pFact(model1, view1);
 
@@ -21,9 +21,9 @@ view1.defineMethod('addNode', function () {
         $table = view1.getNode('table'),
         $num = view1.getNode('num'),
         model = mFact({number: rnd}),
-        view = vFact(`<tr nid="line">
+        view = vFact(`<tr data-nid="line">
             <td>$[number]</td>
-            <td><button nid="remove">-</button></td>
+            <td><button data-nid="remove">-</button></td>
         </tr>`),
         presenter = pFact(model, view);
 

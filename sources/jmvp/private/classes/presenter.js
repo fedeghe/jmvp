@@ -66,7 +66,6 @@ Presenter.prototype.render = function (trg) {
     this.trg = trg;
     this.defs && this.defs.call(this);
     this.init && this.init.call(this);
-
     this.active && trg.appendChild(this.getNode());
 };
 

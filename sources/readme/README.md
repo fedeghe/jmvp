@@ -96,7 +96,7 @@ console.log(view1.getNode());
 ```
 
 one of the most important principles about the _views_ in `MVP` is the definition of the interface methods of the view that will be used by the _presenter_ which plays a role or a mediator through the _model_ and the _view_.  
-For example the _presenter_ using a method of that interface should be allowed to set an `handler` function for an even occurring somewhere within the _view_.  
+For example the _presenter_ using a method of that interface should be allowed to set an `handler` function for an event occurring somewhere within the _view_.  
 
 Let's suppose we need to enable the user to add a random number to the list (initially empty); this needs to be managed by the view itself, the view needs to provide a method in his interface to accomplish that:
 ``` js  
@@ -123,7 +123,7 @@ which outputs
     <button>add one</button>        <!-- getNode(3) -->
 </div>
 ```
-before looking at how to set the handling function let's get back to the `getNode` _view_ function, it returns the view root if no parameters are passed, but if integers are passed then it digs the view tree, e.g. the first `<li>` tag can be reached passing `0,0`, the second passing `0,1` , ... and so on.
+before looking at how to set the handling function let's get back to the `getNode` _view_ function, it returns the view root if no parameters are passed, but if integers are passed then it digs the view tree, e.g. the first `<li>` tag can be reached passing `0,0`, the second passing `0,1` , ... and so on.  
 
 Now we need to set the actual handling function, using another method available in the _view_, the first argument is exactly the same as for `getNode` but passed as array:
 ``` js
@@ -131,7 +131,22 @@ view1.setHandler([3], 'click', function () {
     view1.addRandom(Math.random());
 });
 ```
+
+### _Nid_ a better way
+Clearly enough this might not really fit sometimes thus within a view one can assign a special data attribute called `data-nid` to a node and then get a reference to it passing that `data-nid` value to the `getNode` function:  
+
+``` html
+<div>
+    <ul><li>3.141592653589793</li></ul>                           
+    <p data-nid="res">An empty list there</p> <!-- getNode('res') -->
+    <p>Donald please ...</p>
+    <button data-nid="add">add one</button> <!-- getNode('add') -->
+</div>
+```
+
 and that's it about the _views_. ... for the moment.
+
+
 
 ---
 

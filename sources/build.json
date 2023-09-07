@@ -3,5 +3,5 @@
         "rm -rf dist",
         "mkdir -p dist"
     ],
-    "sources/jmvp/jmvp.js": "dist -plugins=malta-js-uglify...malta-header-comment[name:'sources/jmvp/header.txt'] -vars=sources/vars.json"
+    "#sources/jmvp/jmvp.js": "dist -plugins=malta-js-uglify...malta-header-comment[name:'sources/jmvp/header.txt'] -vars=sources/vars.json"
 }

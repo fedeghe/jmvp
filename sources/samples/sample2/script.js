@@ -34,19 +34,19 @@ var App = (function () {
                     <legend class="login__legend">Login</legend>
                     <div class="login__line">
                         <label class="login__label">Username</label>
-                        <input nid="user" class="login__input"type="text"/>
+                        <input data-nid="user" class="login__input"type="text"/>
                     </div>
                     <div class="login__line">
                         <label class="login__label">Access token</label>
-                        <input nid="token" class="login__input" type="password"/>
+                        <input data-nid="token" class="login__input" type="password"/>
                     </div>
                     <div class="login__line">
-                        <button nid="login-button" class="login__submit">login</button>
+                        <button data-nid="login-button" class="login__submit">login</button>
                         <span> or </span>
-                        <button nid="login-button-skip" class="login__skip">skip</button> 
+                        <button data-nid="login-button-skip" class="login__skip">skip</button> 
                     </div>
                     <hr class="separator"/>
-                    <p nid="login-message" class="login__message">$[message]</p>
+                    <p data-nid="login-message" class="login__message">$[message]</p>
                 </fieldset>
             </div>
         `,
@@ -66,17 +66,17 @@ var App = (function () {
                 <div class="panel__header">
                     <div class="hfMargin">
                         <p>
-                            <strong>$[username] </strong><i nid="star_num"class="iconBefore panel__fame"></i>
+                            <strong>$[username] </strong><i data-nid="star_num"class="iconBefore panel__fame"></i>
                         </p>
                         <p>
                             <strong>#Repos: </strong>
-                            <span nid="repos_count"></span>
+                            <span data-nid="repos_count"></span>
                         </p>
                         <p>
-                            <input nid="only-owned-checkbox" id="only_owned" type="checkbox" />
+                            <input data-nid="only-owned-checkbox" id="only_owned" type="checkbox" />
                             <label for="only_owned">Only owned</label>
                         </p>
-                        <div nid="mode-switch" class="panel__header__switch" data-tooltip="switch to public">
+                        <div data-nid="mode-switch" class="panel__header__switch" data-tooltip="switch to public">
                             <span class="icon panel__header__switch__user"></span>
                             <span class="icon panel__header__switch__arrowdown"></span>
                             <span class="icon panel__header__switch__github"></span>
@@ -84,12 +84,12 @@ var App = (function () {
                     </div>
                 </div>
                 <div class="panel__body">
-                    <ul nid="body-list" class="panel__list">
+                    <ul data-nid="body-list" class="panel__list">
                         <li class="spinner"></li>
                     </ul>
                 </div>
                 <div class="panel__footer">
-                    <span nid="logout" class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
+                    <span data-nid="logout" class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
                 </div>
         </div>`,
 
@@ -99,13 +99,13 @@ var App = (function () {
                         <p><strong>$[username] </strong></p>
                         <p>
                             <label>Language: </label>
-                            <select nid="lang-list"></select>
+                            <select data-nid="lang-list"></select>
                         </p>
                         <!--<p>
                             <label>User</label>
                             <input type="text"/><i class="fa fa-close"></i>
                         </p>-->
-                        <div nid="mode-switch" class="panel__header__switch" data-tooltip="switch to Your user">
+                        <div data-nid="mode-switch" class="panel__header__switch" data-tooltip="switch to Your user">
                             <span class="icon panel__header__switch__user"></span>
                             <span class="icon panel__header__switch__arrowup"></span>
                             <span class="icon panel__header__switch__github"></span>
@@ -113,12 +113,12 @@ var App = (function () {
                     </div>
                 </div>
                 <div class="panel__body">
-                    <ul nid="body-list" class="panel__list">
+                    <ul data-nid="body-list" class="panel__list">
                         <li class="spinner"></li>
                     </ul>
                 </div>
                 <div class="panel__footer">
-                    <span nid="logout" class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
+                    <span data-nid="logout" class="iconBefore panel__logout" data-tooltip="... where are you going?">EXIT</span>
                 </div>
         </div>`,
 
@@ -149,7 +149,7 @@ var App = (function () {
         viewItem = `<li class="item{$[isFork] ? ' fork': ''}{$[isEmpty] ? ' emptyRepo': ''}" {$[isEmpty] ? 'data-tooltip="this repository is empty"': ''}>
             <a href="$[link]" target="_blank" class="item__name">$[name]</a>
             <p class="item__description">$[description]</p>
-            <span nid="starred-icon" class="iconAfter {$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}" {$[isEmpty] ? 'data-tooltip="really want to star a empty repo???"': ''}></span>
+            <span data-nid="starred-icon" class="iconAfter {$[starredByMe] ? 'item_starredByMe' : 'item_notStarredByMe'}" {$[isEmpty] ? 'data-tooltip="really want to star a empty repo???"': ''}></span>
             <div>
                 {$[stars] ? '<span data-tooltip="stars" class="icon iconAfter item_stars">$[stars]</span>' : ''}
                 {$[watchers] ? '<span data-tooltip="watchers" class="icon iconAfter item_watchers">$[watchers]</span>' : ''}
@@ -158,7 +158,7 @@ var App = (function () {
             </div>
             <hr>
             <details class="item__details">
-                <summary nid="details" class="item__details_summary" data-tooltip="$[detailsTooltipMessage]">$[detailsLabel]</summary>
+                <summary data-nid="details" class="item__details_summary" data-tooltip="$[detailsTooltipMessage]">$[detailsLabel]</summary>
                 <ul class="item__details_summary_list">
                     <li class="item__details_summary_list__item">
                         <strong>Size:</strong> $[size]
@@ -690,10 +690,10 @@ var App = (function () {
                 view: function () { return viewF(`
                     <div class="dialog">
                         <div class="dialog--box">
-                            <p nid="message" class="dialog__message">$[message]</p>
+                            <p data-nid="message" class="dialog__message">$[message]</p>
                             <div>
-                                <button nid="confirm-button" class="dialog__button dialog--confirm">$[confirmLabel]</button>
-                                <button nid="abort-button" class="dialog__button dialog--abort">$[abortLabel]</button>
+                                <button data-nid="confirm-button" class="dialog__button dialog--confirm">$[confirmLabel]</button>
+                                <button data-nid="abort-button" class="dialog__button dialog--abort">$[abortLabel]</button>
                             </div>
                         </div>
                     </div>
